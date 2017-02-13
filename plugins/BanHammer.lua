@@ -106,18 +106,22 @@ local function kick_ban_res(extra, success, result)
 	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید خودتان را اخراج کنید !", ok_cb, false)	
 	     return
          end
-         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
+         if is_momod2(member_id, chat_id) or is_admin2(sender) then
 	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)	
 			return
          end
 		 kick_user(member_id, chat_id)
 	         reply_msg(extra.msg.id, "❌ کاربر "..extra.user.." اخراج شد ! ", ok_cb, false)	
       elseif get_cmd == 'ban' then
-        if is_momod2(member_id, chat_id) and not is_admin2(sender) then
-			send_large_msg(receiver, "You can't ban mods/owner/admins")
+         if member_id == from_id then
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید خودتان را محروم کنید !", ok_cb, false)	
+	     return
+         end
+         if is_momod2(member_id, chat_id) or is_admin2(sender) then
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
 			return
-        end
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] banned')
+         end
+                reply_msg(extra.msg.id, "❌ کاربر "..member.." ["..member_id.."] از گروه محروم شد !", ok_cb, false)
 		ban_user(member_id, chat_id)
       elseif get_cmd == 'unban' then
         send_large_msg(receiver, 'User @'..member..' ['..member_id..'] unbanned')
@@ -144,6 +148,20 @@ local function Kick_reply(extra, success, result)
 	else			
          reply_msg(extra.msg.id, "❌ کاربر اخراج شد !", ok_cb, false)	
          channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
+	end	
+end
+
+local function Ban_reply(extra, success, result)
+	if type(result) == 'boolean' then
+		print('This is a old message!')
+		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		return
+	end
+	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
+	else			
+         reply_msg(extra.msg.id, "❌ کاربر محروم شد !", ok_cb, false)	
+         ban_user(result.from.peer_id, result.to.peer_id)
 	end	
 end
 
@@ -185,37 +203,38 @@ local support_id = msg.from.id
     end
     return ban_list(chat_id)
   end
+	
   if matches[1]:lower() == 'ban' then-- /ban
-    if type(msg.reply_id)~="nil" and is_momod(msg) then
-      if is_admin1(msg) then
-		msgr = get_message(msg.reply_id,ban_by_reply_admins, false)
-      else
-        msgr = get_message(msg.reply_id,ban_by_reply, false)
+    if type(msg.reply_id) ~= "nil" and is_momod(msg) then
+     -- if is_admin1(msg) then
+	--	msgr = get_message(msg.reply_id,ban_by_reply_admins, false)
+      --else
+       -- msgr = get_message(msg.reply_id,ban_by_reply, false)
+       get_message(msg.reply_id, ban_reply, false)			
       end
       local user_id = matches[2]
       local chat_id = msg.to.id
     elseif string.match(matches[2], '^%d+$') then
-        if tonumber(matches[2]) == tonumber(our_id) then
-         	return
-        end
-        if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-          	return "you can't ban mods/owner/admins"
-        end
-        if tonumber(matches[2]) == tonumber(msg.from.id) then
-          	return "You can't ban your self !"
-        end
+		if is_momod2(tonumber(matches[2]), msg.from.id) or is_admin2(tonumber(matches[2])) then
+			return reply_msg(msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)
+		end
+		if tonumber(matches[2]) == tonumber(msg.from.id) then
+			return reply_msg(msg.id, "⛔️ شما نمی توانید خودتان را اخراج کنید !", ok_cb, false)
+		end
         local print_name = user_print_name(msg.from):gsub("‮", "")
 	    local name = print_name:gsub("_", "")
 		local receiver = get_receiver(msg)
-        savelog(msg.to.id, name.." ["..msg.from.id.."] baned user ".. matches[2])
-        ban_user(matches[2], msg.to.id)
-		send_large_msg(receiver, 'User ['..matches[2]..'] banned')
+        --savelog(msg.to.id, name.." ["..msg.from.id.."] baned user ".. matches[2])
+                ban_user(matches[2], msg.to.id)
+		reply_msg(msg.id, "❌ کاربر محروم شد !", ok_cb, false)
       else
 		local cbres_extra = {
 		chat_id = msg.to.id,
 		get_cmd = 'ban',
 		from_id = msg.from.id,
-		chat_type = msg.to.type
+		chat_type = msg.to.type,
+	        msg = msg,
+		user = matches[2]			
 		}
 		local username = string.gsub(matches[2], '@', '')
 		resolve_username(username, kick_ban_res, cbres_extra)
