@@ -146,7 +146,7 @@ local function Kick_reply(extra, success, result)
 		return "you can't kick mods,owner and admins"
 	end
 		chat_del_user(chat, 'user#id'..result.from.peer_id, ok_cb, false)
-		channel_kick(channel, 'user#id'..result.from.peer_id, ok_cb, false)
+		channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
 	else
 		return
   end
@@ -256,11 +256,12 @@ local support_id = msg.from.id
  end
 
 if matches[1]:lower() == 'kick' then
-    if type(msg.reply_id)~= "nil" and is_momod(msg) then
+    if type(msg.reply_id) ~= "nil" and is_momod(msg) then
       --if is_admin1(msg) then
         --msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
       --else
-        msgr = get_message(msg.reply_id, Kick_reply, false)
+        --msgr = get_message(msg.reply_id, Kick_reply, false)
+         get_message(msg.reply_id, Kick_reply, false)			
       --end
 	elseif string.match(matches[2], '^%d+$') then
 		if tonumber(matches[2]) == tonumber(our_id) then
