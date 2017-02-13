@@ -134,11 +134,16 @@ end
 
 local function Kick_reply(extra, success, result)
 	if type(result) == 'boolean' then
-		print('This is a old message!')
-		--reply_msg(extra.msg.id, "tesT", ok_cb, false)
-		return false
-	end
+		--print('This is a old message!')
+		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای اخراج کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		--return false
+	else
+	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)	
+	end		
+        reply_msg(extra.msg.id, "❌ کاربر اخراج شد !", ok_cb, false)	
         channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
+	end	
 end
 
 local function run(msg, matches)
