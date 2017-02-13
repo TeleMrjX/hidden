@@ -111,7 +111,7 @@ local function kick_ban_res(extra, success, result)
 			return
          end
 		 kick_user(member_id, chat_id)
-	         reply_msg(extra.msg.id, "❌ کاربر "..matches[2].." اخراج شد ! ", ok_cb, false)	
+	         reply_msg(extra.msg.id, "❌ کاربر "..extra.user.." اخراج شد ! ", ok_cb, false)	
       elseif get_cmd == 'ban' then
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
 			send_large_msg(receiver, "You can't ban mods/owner/admins")
