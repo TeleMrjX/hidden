@@ -118,16 +118,16 @@ local function kick_ban_res(extra, success, result)
 	     return
          end
          if is_momod2(member_id, chat_id) or is_admin2(sender) then
-	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
+	                reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
 			return
          end
-                reply_msg(extra.msg.id, "❌ کاربر "..member.." ["..member_id.."] از گروه محروم شد !", ok_cb, false)
+                reply_msg(extra.msg.id, "❌ کاربر @"..member.." ["..member_id.."] از گروه محروم شد !", ok_cb, false)
 		ban_user(member_id, chat_id)
       elseif get_cmd == 'unban' then
         send_large_msg(receiver, 'User @'..member..' ['..member_id..'] unbanned')
         local hash =  'banned:'..chat_id
         redis:srem(hash, member_id)
-        return 'User '..user_id..' unbanned'
+        --return 'User '..user_id..' unbanned'
       elseif get_cmd == 'banall' then
         send_large_msg(receiver, 'User @'..member..' ['..member_id..'] globally banned')
 		banall_user(member_id)
@@ -211,7 +211,7 @@ local support_id = msg.from.id
       --else
        -- msgr = get_message(msg.reply_id,ban_by_reply, false)
        get_message(msg.reply_id, ban_reply, false)			
-      end
+      --end
       local user_id = matches[2]
       local chat_id = msg.to.id
     elseif string.match(matches[2], '^%d+$') then
