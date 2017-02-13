@@ -1015,7 +1015,7 @@ if get_cmd == "channel_block" then
       return
     end
   end
-elseif get_cmd == "setadmin" then
+--[[elseif get_cmd == "setadmin" then
    for k,v in pairs(result) do
     vusername = v.username
     vpeer_id = tostring(v.peer_id)
@@ -1042,7 +1042,7 @@ elseif get_cmd == "setadmin" then
     end
     send_large_msg(channel_id, text)
     return
- end
+ end]]
  elseif get_cmd == 'setowner' then
 	for k,v in pairs(result) do
 		vusername = v.username
@@ -1060,11 +1060,13 @@ elseif get_cmd == "setadmin" then
 					channel_set_admin(receiver, user_id, ok_cb, false)
 					data[tostring(channel)]['set_owner'] = tostring(v.peer_id)
 					save_data(_config.moderation.data, data)
-					savelog(channel, name_log.."["..from_id.."] set ["..v.peer_id.."] as owner by username")
+					--savelog(channel, name_log.."["..from_id.."] set ["..v.peer_id.."] as owner by username")
 				if result.username then
-					text = member_username.." ["..v.peer_id.."] added as owner"
+					--text = member_username.." ["..v.peer_id.."] added as owner"
+                                        text = "✅ کاربر ["..v.peer_id.."] @"..member_username.." به عنوان صاحب گروه ذخیره شد !"						
 				else
-					text = "["..v.peer_id.."] added as owner"
+					--text = "["..v.peer_id.."] added as owner"
+					text = "✅ کاربر ["..v.peer_id.."] به عنوان صاحب گروه ذخیره شد !"
 				end
 			end
 		elseif memberid and vusername ~= member and vpeer_id ~= memberid then
@@ -1078,13 +1080,14 @@ elseif get_cmd == "setadmin" then
 				end
 				data[tostring(channel)]['set_owner'] = tostring(memberid)
 				save_data(_config.moderation.data, data)
-				savelog(channel, name_log.."["..from_id.."] set ["..memberid.."] as owner by username")
-				text = "["..memberid.."] added as owner"
+				--savelog(channel, name_log.."["..from_id.."] set ["..memberid.."] as owner by username")
+				text = "✅ کاربر ["..memberid.."] به عنوان صاحب گروه ذخیره شد !"
 			end
 		end
 	end
  end
-send_large_msg(receiver, text)
+--send_large_msg(receiver, text)
+reply_msg(extra.msg.id, text, ok_cb, false)	
 end
 --End non-channel_invite username actions
 
