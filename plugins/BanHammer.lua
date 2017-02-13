@@ -13,13 +13,7 @@ local function pre_process(msg)
       print('User is banned!')
       local print_name = user_print_name(msg.from):gsub("‮", "")
 	  local name = print_name:gsub("_", "")
-      --savelog(msg.to.id, name.." ["..msg.from.id.."] is banned and kicked ! ")-- Save to logs
-      if msg.from.username ~= nil then
-	name = msg.from.username
-       else
-	name = msg.from.first_name				
-      end					
-      reply_msg(msg.id, "⭕️ کاربر "..name.." از گروه محروم است و اخراج شد !", ok_cb, false)				
+      --savelog(msg.to.id, name.." ["..msg.from.id.."] is banned and kicked ! ")-- Save to logs				
       kick_user(user_id, msg.to.id)
       end
     end
@@ -83,7 +77,13 @@ local function pre_process(msg)
       print('Banned user talking!')
       local print_name = user_print_name(msg.from):gsub("‮", "")
 	  local name = print_name:gsub("_", "")
-      savelog(msg.to.id, name.." ["..msg.from.id.."] banned user is talking !")-- Save to logs
+     -- savelog(msg.to.id, name.." ["..msg.from.id.."] banned user is talking !")-- Save to logs
+      if msg.from.username ~= nil then
+	name = msg.from.username
+       else
+	name = msg.from.first_name				
+      end					
+      reply_msg(msg.id, "⭕️ کاربر "..name.." از گروه محروم است و اخراج شد !", ok_cb, false)			
       kick_user(user_id, chat_id)
       msg.text = ''
     end
