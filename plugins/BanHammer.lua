@@ -164,8 +164,8 @@ local function Ban_reply(extra, success, result)
 	else			
          --reply_msg(extra.msg.id, "❌ کاربر محروم شد !", ok_cb, false)	
          --send_large_msg(extra.chat_id, "❌ کاربر محروم شد !", ok_cb, false)	
-	 return "❌ کاربر محروم شد !"	
-         ban_user(result.from.peer_id, result.to.peer_id)
+	  ban_user(result.from.peer_id, result.to.peer_id)
+          return "❌ کاربر محروم شد !"			
 	end	
 end
 
