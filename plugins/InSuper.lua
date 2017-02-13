@@ -210,7 +210,7 @@ local function unlock_group_links(msg, data, target)
   end
   local group_link_lock = data[tostring(target)]['settings']['lock_link']
   if group_link_lock == 'no' then
-    return reply_msg(msg.id, '🔐 قفل #لینک فعال نیست !', ok_cb, false)
+    return reply_msg(msg.id, '🔓 قفل #لینک فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_link'] = 'no'
     save_data(_config.moderation.data, data)
@@ -252,11 +252,11 @@ local function lock_group_flood(msg, data, target)
   end
   local group_flood_lock = data[tostring(target)]['settings']['flood']
   if group_flood_lock == 'yes' then
-    return 'Flood is already locked'
+    return reply_msg(msg.id, '🔒 قفل #رگباری از قبل فعال است !', ok_cb, false)
   else
     data[tostring(target)]['settings']['flood'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Flood has been locked'
+    return reply_msg(msg.id, '🔒 قفل #رگباری فعال شد !\n از این پس کاربرانی که پیام رگباری بفرستند اخراج می شوند !', ok_cb, false)
   end
 end
 
@@ -266,11 +266,11 @@ local function unlock_group_flood(msg, data, target)
   end
   local group_flood_lock = data[tostring(target)]['settings']['flood']
   if group_flood_lock == 'no' then
-    return 'Flood is not locked'
+    return reply_msg(msg.id, '🔓 قفل #رگباری فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['flood'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Flood has been unlocked'
+    return reply_msg(msg.id,"🔏 قفل #رگباری غیرفعال شد !", ok_cb, false)
   end
 end
 
@@ -280,11 +280,11 @@ local function lock_group_arabic(msg, data, target)
   end
   local group_arabic_lock = data[tostring(target)]['settings']['lock_arabic']
   if group_arabic_lock == 'yes' then
-    return 'Arabic is already locked'
+    return reply_msg(msg.id,"🔐 قفل #پارسی از قبل فعال است !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_arabic'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Arabic has been locked'
+    return reply_msg(msg.id,"🔒 قفل #پارسی فعال شد !\nاز این پس پیام های به زبان پارسی که توسط کاربران فرستاده شوند، پاک می شوند !", ok_cb, false)
   end
 end
 
@@ -294,11 +294,11 @@ local function unlock_group_arabic(msg, data, target)
   end
   local group_arabic_lock = data[tostring(target)]['settings']['lock_arabic']
   if group_arabic_lock == 'no' then
-    return 'Arabic/Persian is already unlocked'
+    return reply_msg(msg.id,"🔓 قفل #پارسی فعال نیست !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_arabic'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Arabic/Persian has been unlocked'
+    return reply_msg(msg.id,"🔏 قفل #پارسی غیرفعال شد !", ok_cb, false)
   end
 end
 
@@ -364,11 +364,11 @@ local function lock_group_tgservice(msg, data, target)
   end
   local group_tgservice_lock = data[tostring(target)]['settings']['lock_tgservice']
   if group_tgservice_lock == 'yes' then
-    return 'Tgservice is already locked'
+    return reply_msg(msg.id,"🔐 قفل #سرویس تلگرام از قبل فعال است !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_tgservice'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Tgservice has been locked'
+    return reply_msg(msg.id,"🔒 قفل #سرویس تلگرام فعال شد !", ok_cb, false)
   end
 end
 
@@ -378,11 +378,11 @@ local function unlock_group_tgservice(msg, data, target)
   end
   local group_tgservice_lock = data[tostring(target)]['settings']['lock_tgservice']
   if group_tgservice_lock == 'no' then
-    return 'TgService Is Not Locked!'
+    return reply_msg(msg.id,"🔓 قفل #سرویس تلگرام فعال نیست !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_tgservice'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Tgservice has been unlocked'
+    return reply_msg(msg.id,"🔏 قفل #سرویس تلگرام غیرفعال شد !", ok_cb, false)
   end
 end
 
@@ -392,11 +392,11 @@ local function lock_group_sticker(msg, data, target)
   end
   local group_sticker_lock = data[tostring(target)]['settings']['lock_sticker']
   if group_sticker_lock == 'yes' then
-    return 'Sticker posting is already locked'
+    return reply_msg(msg.id,"🔐 قفل #استیکر از قبل فعال است !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_sticker'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Sticker posting has been locked'
+    return reply_msg(msg.id,"🔒 قفل #استیکر فعال شد !از این پس استیکر های فرستاده شده توسط کاربران پاک می شوند !", ok_cb, false)
   end
 end
 
@@ -406,11 +406,11 @@ local function unlock_group_sticker(msg, data, target)
   end
   local group_sticker_lock = data[tostring(target)]['settings']['lock_sticker']
   if group_sticker_lock == 'no' then
-    return 'Sticker posting is already unlocked'
+    return reply_msg(msg.id,"🔓 قفل #استیکر فعال نیست !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_sticker'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Sticker posting has been unlocked'
+    return reply_msg(msg.id,"🔏 قفل #استیکر غیرفعال شد !", ok_cb, false)
   end
 end
 
@@ -420,11 +420,11 @@ local function lock_group_contacts(msg, data, target)
   end
   local group_contacts_lock = data[tostring(target)]['settings']['lock_contacts']
   if group_contacts_lock == 'yes' then
-    return 'Contact posting is already locked'
+    return reply_msg(msg.id,"🔐 قفل #مخاطب از قبل فعال است !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_contacts'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Contact posting has been locked'
+    return reply_msg(msg.id,"🔒 قفل #مخاطب فعال شد !", ok_cb, false)
   end
 end
 
@@ -434,11 +434,11 @@ local function unlock_group_contacts(msg, data, target)
   end
   local group_contacts_lock = data[tostring(target)]['settings']['lock_contacts']
   if group_contacts_lock == 'no' then
-    return 'Contact posting is already unlocked'
+    return reply_msg(msg.id,"🔓 قفل #مخاطب فعال نیست !", ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_contacts'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Contact posting has been unlocked'
+    return reply_msg(msg.id,"🔏 قفل #مخاطب غیرفعال شد !", ok_cb, false)
   end
 end
 
@@ -448,11 +448,11 @@ local function enable_strict_rules(msg, data, target)
   end
   local group_strict_lock = data[tostring(target)]['settings']['strict']
   if group_strict_lock == 'yes' then
-    return 'Settings are already strictly enforced'
+    return reply_msg(msg.id,"🔐 قفل #سختگیرانه از قبل فعال است !", ok_cb, false)
   else
     data[tostring(target)]['settings']['strict'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Settings will be strictly enforced'
+    return reply_msg(msg.id,"🔒 قفل #سختگیرانه فعال شد !", ok_cb, false)
   end
 end
 
