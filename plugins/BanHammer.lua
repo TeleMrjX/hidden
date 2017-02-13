@@ -124,8 +124,8 @@ local function kick_ban_res(extra, success, result)
                 reply_msg(extra.msg.id, "❌ کاربر ["..member_id.."] @"..member.." از گروه محروم شد !", ok_cb, false)
 		ban_user(member_id, chat_id)
       elseif get_cmd == 'unban' then
-        --reply_msg(extra.msg.id, "🚫 کاربر ["..member_id.."] @"..member.." از محرومیت در آمد !", ok_cb, false)
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] unbanned')
+        reply_msg(extra.msg.id, "🚫 کاربر ["..member_id.."] @"..member.." از محرومیت در آمد !", ok_cb, false)
+        --send_large_msg(receiver, 'User @'..member..' ['..member_id..'] unbanned')
         local hash =  'banned:'..chat_id
         redis:srem(hash, member_id)
         --return 'User '..user_id..' unbanned'
@@ -172,7 +172,7 @@ local function Unban_reply(extra, success, result)
 		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای حذف محرومیت کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
 		return
 	end		
-          reply_msg(extra.msg.id, "❌ کاربر حذف محرومیت شد !", ok_cb, false)	
+          reply_msg(extra.msg.id, "❌ کاربر از محرومیت در آمد !", ok_cb, false)	
 	  local hash =  'banned:'..result.to.peer_id
 	  redis:srem(hash, result.from.peer_id)		
 end
@@ -268,13 +268,15 @@ local support_id = msg.from.id
         	local print_name = user_print_name(msg.from):gsub("‮", "")
 		local name = print_name:gsub("_", "")
         	--savelog(msg.to.id, name.." ["..msg.from.id.."] unbaned user ".. matches[2])
-        	return 'User '..user_id..' unbanned'
+        	return reply_msg(msg.id, "🚫 کاربر از محرومیت در آمد !", ok_cb, false)
       else
 		local cbres_extra = {
 			chat_id = msg.to.id,
 			get_cmd = 'unban',
 			from_id = msg.from.id,
-			chat_type = msg.to.type
+			chat_type = msg.to.type,
+			msg = msg,
+			user = matches[2]
 		}
 		local username = string.gsub(matches[2], '@', '')
 		resolve_username(username, kick_ban_res, cbres_extra)
