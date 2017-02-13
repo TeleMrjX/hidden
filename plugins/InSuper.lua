@@ -368,7 +368,7 @@ local function lock_group_tgservice(msg, data, target)
   else
     data[tostring(target)]['settings']['lock_tgservice'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id,"🔒 قفل #سرویس تلگرام فعال شد !", ok_cb, false)
+    return reply_msg(msg.id,"🔒 قفل #سرویس تلگرام فعال شد !\nاز این پس پیام های ورود و خروج کاربران پاک می شوند !", ok_cb, false)
   end
 end
 
