@@ -277,7 +277,7 @@ if matches[1]:lower() == 'kick' then
 			chat_id = msg.to.id,
 			get_cmd = 'kick',
 			from_id = msg.from.id,
-			chat_type = msg.to.typeو
+			chat_type = msg.to.type,
 			msg = msg,
 			user = matches[2]
 		}
