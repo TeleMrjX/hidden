@@ -163,7 +163,8 @@ local function Ban_reply(extra, success, result)
 	     send_large_msg(extra.chat_id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)			
 	else			
          --reply_msg(extra.msg.id, "❌ کاربر محروم شد !", ok_cb, false)	
-         send_large_msg(extra.chat_id, "❌ کاربر محروم شد !", ok_cb, false)			
+         --send_large_msg(extra.chat_id, "❌ کاربر محروم شد !", ok_cb, false)	
+	 return "❌ کاربر محروم شد !"	
          ban_user(result.from.peer_id, result.to.peer_id)
 	end	
 end
@@ -219,10 +220,10 @@ local support_id = msg.from.id
       local chat_id = msg.to.id
     elseif string.match(matches[2], '^%d+$') then
 		if is_momod2(tonumber(matches[2]), msg.from.id) or is_admin2(tonumber(matches[2])) then
-			return reply_msg(msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)
+			return reply_msg(msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)
 		end
 		if tonumber(matches[2]) == tonumber(msg.from.id) then
-			return reply_msg(msg.id, "⛔️ شما نمی توانید خودتان را اخراج کنید !", ok_cb, false)
+			return reply_msg(msg.id, "⛔️ شما نمی توانید خودتان را محروم کنید !", ok_cb, false)
 		end
         local print_name = user_print_name(msg.from):gsub("‮", "")
 	    local name = print_name:gsub("_", "")
