@@ -137,19 +137,7 @@ local function Kick_reply(extra, success, result)
 		print('This is a old message!')
 		return false
 	end
-	if result.to.type == 'chat' or result.to.type == 'channel' then
-		local chat = 'chat#id'..result.to.peer_id
-	if tonumber(result.from.peer_id) == tonumber(our_id) then -- Ignore bot
-		return
-	end
-	if is_momod2(result.from.peer_id, result.to.peer_id) then -- Ignore mods,owner,admin
-		return "you can't kick mods,owner and admins"
-	end
-		chat_del_user(chat, 'user#id'..result.from.peer_id, ok_cb, false)
-		channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
-	else
-		return
-  end
+        channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
 end
 
 local function run(msg, matches)
