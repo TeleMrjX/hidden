@@ -151,7 +151,7 @@ local function Kick_reply(extra, success, result)
 	end	
 end
 
-local function Ban_reply(extra, success, result)
+--[[local function Ban_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
 		--reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
@@ -166,6 +166,20 @@ local function Ban_reply(extra, success, result)
          --send_large_msg(extra.chat_id, "❌ کاربر محروم شد !", ok_cb, false)	
 	  ban_user(result.from.peer_id, result.to.peer_id)
           return "❌ کاربر محروم شد !"			
+	end	
+end]]
+
+local function Ban_reply(extra, success, result)
+	if type(result) == 'boolean' then
+		print('This is a old message!')
+		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای اخراج کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		return
+	end
+	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)	
+	else			
+         reply_msg(extra.msg.id, "❌ کاربر اخراج شد !", ok_cb, false)	
+         channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
 	end	
 end
 
