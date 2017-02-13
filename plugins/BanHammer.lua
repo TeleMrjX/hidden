@@ -135,7 +135,7 @@ end
 local function Kick_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
-		reply_msg(extra.msg.id, "tesT", ok_cb, false)
+		--reply_msg(extra.msg.id, "tesT", ok_cb, false)
 		--return false
 	end
         channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
