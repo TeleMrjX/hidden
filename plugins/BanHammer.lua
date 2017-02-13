@@ -140,9 +140,10 @@ local function Kick_reply(extra, success, result)
 	else
 	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
 	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)	
-	end		
-        reply_msg(extra.msg.id, "❌ کاربر اخراج شد !", ok_cb, false)	
-        channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
+	else		
+         reply_msg(extra.msg.id, "❌ کاربر اخراج شد !", ok_cb, false)	
+         channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
+	end
 	end	
 end
 
