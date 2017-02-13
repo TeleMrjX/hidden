@@ -116,11 +116,12 @@ local function callback_clean_bots (extra, success, result)
 	local i = 1
 	local text = ""
 	for k,v in pairs(result) do
+		i = i + 1
 		local bot_id = v.peer_id
 		kick_user(bot_id,channel_id)
-		text = text.."\n"..i.." - "..v.first_name.." "..v.username
+		text = text.."\n"..i.." - "..v.username
 	end
-        local text = "📋 "..i.." از گروه "..msg.to.title.." اخراج شدند !\n"..text
+        local text = "📋 "..i.." ربات از گروه "..msg.to.title.." اخراج شدند !\n"..text
         reply_msg(extra.msg.id, text, ok_cb ,false)
 end
 
