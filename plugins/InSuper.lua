@@ -1087,7 +1087,7 @@ if get_cmd == "channel_block" then
 	end
  end
 --send_large_msg(receiver, text)
-reply_msg(extra.msg.id, text, ok_cb, false)	
+reply_msg(cb_extra.msg.id, text, ok_cb, false)	
 end
 --End non-channel_invite username actions
 
@@ -1402,7 +1402,7 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1] == 'demoteadmin' then
+		--[[if matches[1] == 'demoteadmin' then
 			if not is_support(msg.from.id) and not is_owner(msg) then
 				return
 			end
@@ -1424,10 +1424,10 @@ local function run(msg, matches)
 				}
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted admin @"..username)
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted admin @"..username)
 				resolve_username(username, callbackres, cbres_extra)
 			end
-		end
+		end]]
 
 		if matches[1] == 'setowner' and is_owner(msg) then
 			if type(msg.reply_id) ~= "nil" then
@@ -1457,8 +1457,8 @@ local function run(msg, matches)
 				local user_id = matches[2]
 				channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, user_id=user_id})
 			elseif matches[1] == 'setowner' and matches[2] and not string.match(matches[2], '^%d+$') then
-				local	get_cmd = 'setowner'
-				local	msg = msg
+				local get_cmd = 'setowner'
+				local msg = msg
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
 				channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, username=username})
