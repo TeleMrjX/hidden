@@ -6,10 +6,10 @@ local function check_member_super(cb_extra, success, result)
   local msg = cb_extra.msg
   if type(result) == 'boolean' then
     print('This is a old message!')
-    return reply_msg(msg.id, '[Not supported] This is a old message!', ok_cb, false)
+    return reply_msg(msg.id, '🌀 پیام قدیمی است !', ok_cb, false)
   end
   if success == 0 then
-	send_large_msg(receiver, "Promote me to admin first!")
+	send_large_msg(receiver, "⚠️ نخست من را مدیر گروه کنید !")
   end
   for k,v in pairs(result) do
     local member_id = v.peer_id
@@ -19,17 +19,14 @@ local function check_member_super(cb_extra, success, result)
         group_type = 'SuperGroup',
 		long_id = msg.to.peer_id,
 		moderators = {},
-        set_owner = member_id ,
+                set_owner = member_id ,
         settings = {
           set_name = string.gsub(msg.to.title, '_', ' '),
 		  lock_arabic = 'no',
 		  lock_link = "no",
-          flood = 'yes',
+                  flood = 'yes',
 		  lock_spam = 'yes',
 		  lock_sticker = 'no',
-		  member = 'no',
-		  public = 'no',
-		  lock_rtl = 'no',
 		  lock_tgservice = 'yes',
 		  lock_contacts = 'no',
 		  strict = 'no'
@@ -56,7 +53,7 @@ local function check_member_superrem(cb_extra, success, result)
   local msg = cb_extra.msg
   if type(result) == 'boolean' then
     print('This is a old message!')
-    return reply_msg(msg.id, '[Not supported] This is a old message!', ok_cb, false)
+    return reply_msg(msg.id, '🌀 پیام قدیمی است !', ok_cb, false)
   end
   for k,v in pairs(result) do
     local member_id = v.id
@@ -71,8 +68,9 @@ local function check_member_superrem(cb_extra, success, result)
       end
       data[tostring(groups)][tostring(msg.to.id)] = nil
       save_data(_config.moderation.data, data)
-	  local text = 'SuperGroup has been removed'
-      return reply_msg(msg.id, text, ok_cb, false)
+     -- local text = 'SuperGroup has been removed'
+      reply_msg(msg.id, "🚫 گروه "..msg.to.title.." از لیست گروه های تحت مدیریت ربات پاک شد !", ok_cb, false)
+      send_large_msg('user#id'..250877155, 'گروه\n'..msg.to.title..'\nتوسط\n'..msg.from.id..'\nحذف شد.', ok_cb, false)			
     end
   end
 end
