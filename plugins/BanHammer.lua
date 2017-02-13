@@ -284,8 +284,7 @@ local support_id = msg.from.id
 		}
 		local username = string.gsub(matches[2], '@', '')
 		resolve_username(username, kick_ban_res, cbres_extra)
-	end
-    end		
+	end	
  end
 
 if matches[1]:lower() == 'kick' then
