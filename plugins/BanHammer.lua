@@ -121,18 +121,18 @@ local function kick_ban_res(extra, success, result)
 	                reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
 			return
          end
-                reply_msg(extra.msg.id, "❌ کاربر @"..member.." ["..member_id.."] از گروه محروم شد !", ok_cb, false)
+                reply_msg(extra.msg.id, "❌ کاربر ["..member_id.."] @"..member.." از گروه محروم شد !", ok_cb, false)
 		ban_user(member_id, chat_id)
       elseif get_cmd == 'unban' then
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] unbanned')
+        reply_msg(extra.msg.id, "🚫 کاربر ["..member_id.."] @"..member.." از محرومیت در آمد !", ok_cb, false)
         local hash =  'banned:'..chat_id
         redis:srem(hash, member_id)
         --return 'User '..user_id..' unbanned'
       elseif get_cmd == 'banall' then
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] globally banned')
+                reply_msg(extra.msg.id, "❌ کاربر ["..member_id.."] @"..member.." سوپر بن شد !", ok_cb, false)
 		banall_user(member_id)
       elseif get_cmd == 'unbanall' then
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] globally unbanned')
+            reply_msg(extra.msg.id, "🚫 کاربر ["..member_id.."] @"..member.." از سوپر بن در آمد !", ok_cb, false)
 	    unbanall_user(member_id)
     end
 end
@@ -366,16 +366,16 @@ return {
     "^([Bb]anlist) (.*)$",
     "^([Bb]anlist)$",
     "^([Gg]banlist)$",
-	"^([Kk]ickme)",
+    --"^([Kk]ickme)",
     "^([Kk]ick)$",
-	"^([Bb]an)$",
+    "^([Bb]an)$",
     "^([Bb]an) (.*)$",
     "^([Uu]nban) (.*)$",
     "^([Uu]nbanall) (.*)$",
     "^([Uu]nbanall)$",
     "^([Kk]ick) (.*)$",
     "^([Uu]nban)$",
-    "^([Ii]d)$",
+    --"^([Ii]d)$",
     "^!!tgservice (.+)$"
   },
   run = run,
