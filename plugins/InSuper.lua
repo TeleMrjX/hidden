@@ -601,14 +601,14 @@ local function demote_admin(receiver, member_username, user_id)
 end
 
 local function promote2(receiver, member_username, user_id)
-  local data = load_data(_config.moderation.data)
-  local group = string.gsub(receiver, 'channel#id', '')
+  --local data = load_data(_config.moderation.data)
+  --local group = string.gsub(receiver, 'channel#id', '')
   local member_tag_username = string.gsub(member_username, '@', '(at)')
-  if not data[group] then
-    return send_large_msg(receiver, 'SuperGroup is not added.')
-  end
+  --if not data[group] then
+  --  return send_large_msg(receiver, 'SuperGroup is not added.')
+  --end
   if data[group]['moderators'][tostring(user_id)] then
-    return send_large_msg(receiver, member_username..' is already a moderator.')
+    return send_large_msg(receiver, '⚠️ کاربر '..member_username..' از قبل مدیر است !')
   end
   data[group]['moderators'][tostring(user_id)] = member_tag_username
   save_data(_config.moderation.data, data)
@@ -657,12 +657,13 @@ function get_message_callback(extra, success, result)
 	local name_log = print_name:gsub("_", " ")
 	if type(result) == 'boolean' then
 		print('This is a old message!')
-		return
+		return reply_msg(extra.msg.id, '🌀 پیام قدیمی می باشد !\nبرای مدیر کردن کاربر از شناسه یا نام کاربری استفاده کنید.', ok_cb, false)
 	end
 	if get_cmd == "id" and not result.action then
-		local channel = 'channel#id'..result.to.peer_id
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for: ["..result.from.peer_id.."]")
-		id1 = send_large_msg(channel, result.from.peer_id)
+		--local channel = 'channel#id'..result.to.peer_id
+		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for: ["..result.from.peer_id.."]")
+		--id1 = send_large_msg(channel, result.from.peer_id)
+		id1 = reply_msg(extra.msg.id, result.from.peer_id, ok_cb, false)
 	elseif get_cmd == 'id' and result.action then
 		local action = result.action.type
 		if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then
@@ -672,14 +673,16 @@ function get_message_callback(extra, success, result)
 				user_id = result.peer_id
 			end
 			local channel = 'channel#id'..result.to.peer_id
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id by service msg for: ["..user_id.."]")
-			id1 = send_large_msg(channel, user_id)
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id by service msg for: ["..user_id.."]")
+			--id1 = send_large_msg(channel, user_id)
+			id1 = reply_msg(extra.msg.id, user_id, ok_cb, false)
 		end
 	elseif get_cmd == "idfrom" then
 		local channel = 'channel#id'..result.to.peer_id
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for msg fwd from: ["..result.fwd_from.peer_id.."]")
-		id2 = send_large_msg(channel, result.fwd_from.peer_id)
-	elseif get_cmd == 'channel_block' and not result.action then
+		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for msg fwd from: ["..result.fwd_from.peer_id.."]")
+		--id2 = send_large_msg(channel, result.fwd_from.peer_id)
+		id2 = reply_msg(extra.msg.id, result.fwd_from.peer_id, ok_cb, false)
+	--[[elseif get_cmd == 'channel_block' and not result.action then
 		local member_id = result.from.peer_id
 		local channel_id = result.to.peer_id
     if member_id == msg.from.id then
@@ -709,8 +712,8 @@ function get_message_callback(extra, success, result)
 		kick_user(user_id, channel_id)
 	elseif get_cmd == "del" then
 		delete_msg(result.id, ok_cb, false)
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] deleted a message by reply")
-	elseif get_cmd == "setadmin" then
+		savelog(msg.to.id, name_log.." ["..msg.from.id.."] deleted a message by reply")]]
+	--[[elseif get_cmd == "setadmin" then
 		local user_id = result.from.peer_id
 		local channel_id = "channel#id"..result.to.peer_id
 		channel_set_admin(channel_id, "user#id"..user_id, ok_cb, false)
@@ -734,7 +737,7 @@ function get_message_callback(extra, success, result)
 			text = "[ "..user_id.." ] has been demoted from admin"
 		end
 		savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted: ["..user_id.."] from admin by reply")
-		send_large_msg(channel_id, text)
+		send_large_msg(channel_id, text)]]
 	elseif get_cmd == "setowner" then
 		local group_owner = data[tostring(result.to.peer_id)]['set_owner']
 		if group_owner then
@@ -747,13 +750,15 @@ function get_message_callback(extra, success, result)
 			channel_set_admin(channel_id, user_id, ok_cb, false)
 			data[tostring(result.to.peer_id)]['set_owner'] = tostring(result.from.peer_id)
 			save_data(_config.moderation.data, data)
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] set: ["..result.from.peer_id.."] as owner by reply")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] set: ["..result.from.peer_id.."] as owner by reply")
 			if result.from.username then
-				text = "@"..result.from.username.." [ "..result.from.peer_id.." ] added as owner"
+				text = "✅ کاربر ["..result.from.peer_id.."] @"..result.from.username.." به عنوان صاحب گروه ذخیره شد !"
+				--text = "@"..result.from.username.." [ "..result.from.peer_id.." ] added as owner"				
 			else
-				text = "[ "..result.from.peer_id.." ] added as owner"
+				text = "✅ کاربر ["..result.from.peer_id.."] به عنوان صاحب گروه ذخیره شد !"
 			end
-			send_large_msg(channel_id, text)
+			--send_large_msg(channel_id, text)
+			reply_msg(extra.msg.id, text, ok_cb, false)			
 		end
 	elseif get_cmd == "promote" then
 		local receiver = result.to.peer_id
@@ -765,7 +770,7 @@ function get_message_callback(extra, success, result)
 		end
 		local member_id = result.from.peer_id
 		if result.to.peer_type == 'channel' then
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted mod: @"..member_username.."["..result.from.peer_id.."] by reply")
+		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted mod: @"..member_username.."["..result.from.peer_id.."] by reply")
 		promote2("channel#id"..result.to.peer_id, member_username, member_id)
 	    --channel_set_mod(channel_id, user, ok_cb, false)
 		end
@@ -1458,11 +1463,8 @@ local function run(msg, matches)
 		end
 
 		if matches[1] == 'promote' then
-		  if not is_momod(msg) then
-				return
-			end
 			if not is_owner(msg) then
-				return "Only owner/admin can promote"
+				return
 			end
 			if type(msg.reply_id) ~= "nil" then
 				local cbreply_extra = {
@@ -1474,7 +1476,7 @@ local function run(msg, matches)
 				local receiver = get_receiver(msg)
 				local user_id = "user#id"..matches[2]
 				local get_cmd = 'promote'
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted user#id"..matches[2])
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted user#id"..matches[2])
 				user_info(user_id, cb_user_info, {receiver = receiver, get_cmd = get_cmd})
 			elseif matches[1] == 'promote' and matches[2] and not string.match(matches[2], '^%d+$') then
 				local cbres_extra = {
