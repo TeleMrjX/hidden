@@ -132,6 +132,26 @@ local function kick_ban_res(extra, success, result)
     end
 end
 
+local function Kick_reply(extra, success, result)
+	if type(result) == 'boolean' then
+		print('This is a old message!')
+		return false
+	end
+	if result.to.type == 'chat' or result.to.type == 'channel' then
+		local chat = 'chat#id'..result.to.peer_id
+	if tonumber(result.from.peer_id) == tonumber(our_id) then -- Ignore bot
+		return
+	end
+	if is_momod2(result.from.peer_id, result.to.peer_id) then -- Ignore mods,owner,admin
+		return "you can't kick mods,owner and admins"
+	end
+		chat_del_user(chat, 'user#id'..result.from.peer_id, ok_cb, false)
+		channel_kick(channel, 'user#id'..result.from.peer_id, ok_cb, false)
+	else
+		return
+  end
+end
+
 local function run(msg, matches)
 local support_id = msg.from.id
  if matches[1]:lower() == 'id' and msg.to.type == "chat" or msg.to.type == "user" then
@@ -237,11 +257,11 @@ local support_id = msg.from.id
 
 if matches[1]:lower() == 'kick' then
     if type(msg.reply_id)~= "nil" and is_momod(msg) then
-      if is_admin1(msg) then
-        msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
-      else
-        msgr = get_message(msg.reply_id,Kick_by_reply, false)
-      end
+      --if is_admin1(msg) then
+        --msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
+      --else
+        msgr = get_message(msg.reply_id, Kick_reply, false)
+      --end
 	elseif string.match(matches[2], '^%d+$') then
 		if tonumber(matches[2]) == tonumber(our_id) then
 			return
