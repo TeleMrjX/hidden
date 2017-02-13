@@ -622,11 +622,11 @@ local function demote2(receiver, member_username, user_id)
     return send_large_msg(receiver, 'Group is not added.')
   end
   if not data[group]['moderators'][tostring(user_id)] then
-    return send_large_msg(receiver, member_tag_username..' is not a moderator.')
+    return send_large_msg(receiver, '⛔️ کاربر '..member_username..' مدیر نیست !')
   end
   data[group]['moderators'][tostring(user_id)] = nil
   save_data(_config.moderation.data, data)
-  send_large_msg(receiver, member_username..' has been demoted.')
+  send_large_msg(receiver, '❌ کاربر '..member_username..' از لیست مدیران گروه پاک شد !')
 end
 
 local function modlist(msg)
@@ -637,15 +637,15 @@ local function modlist(msg)
   end
   -- determine if table is empty
   if next(data[tostring(msg.to.id)]['moderators']) == nil then
-    return 'No moderator in this group.'
+    return reply_msg(msg.id, '⚠️ لیست مدیران گروه خالی است !', ok_cb, false)
   end
   local i = 1
-  local message = '\nList of moderators for ' .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
+  local message = '\n📜 لیست مدیران گروه '..msg.to.title..' :\n'
   for k,v in pairs(data[tostring(msg.to.id)]['moderators']) do
     message = message ..i..' - '..v..' [' ..k.. '] \n'
     i = i + 1
   end
-  return message
+  return reply_msg(msg.id, message, ok_cb, false)
 end
 
 -- Start by reply actions
@@ -783,7 +783,7 @@ function get_message_callback(extra, success, result)
     end
 		local member_id = result.from.peer_id
 		--local user = "user#id"..result.peer_id
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted mod: @"..member_username.."["..user_id.."] by reply")
+		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted mod: @"..member_username.."["..user_id.."] by reply")
 		demote2("channel#id"..result.to.peer_id, member_username, member_id)
 		--channel_demote(channel_id, user, ok_cb, false)
 	elseif get_cmd == 'mute_user' then
@@ -832,7 +832,7 @@ local function cb_user_info(extra, success, result)
 			text = "[ "..result.peer_id.." ] has been set as an admin"
 		end
 			send_large_msg(receiver, text)]]
-	if get_cmd == "demoteadmin" then
+	--[[if get_cmd == "demoteadmin" then
 		if is_admin2(result.peer_id) then
 			return send_large_msg(receiver, "You can't demote global admins!")
 		end
@@ -844,7 +844,7 @@ local function cb_user_info(extra, success, result)
 		else
 			text = "[ "..result.peer_id.." ] has been demoted from admin"
 			send_large_msg(receiver, text)
-		end
+		end]]
 	elseif get_cmd == "promote" then
 		if result.username then
 			member_username = "@"..result.username
