@@ -177,6 +177,30 @@ local function Unban_reply(extra, success, result)
 	  redis:srem(hash, result.from.peer_id)		
 end
 
+local function Banall_reply(extra, success, result)
+	if type(result) == 'boolean' then
+		print('This is a old message!')
+		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای سوپر بن کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		return
+	end
+	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را سوپر بن کنید !", ok_cb, false)	
+	else	
+          reply_msg(extra.msg.id, "❌ کاربر سوپر بن شد !", ok_cb, false)	
+          banall_user(result.from.peer_id)
+	end	
+end
+
+local function Unbanall_reply(extra, success, result)
+	if type(result) == 'boolean' then
+		print('This is a old message!')
+		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای حذف سوپر بن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		return
+	end		
+          reply_msg(extra.msg.id, "❌ کاربر از سوپر بن در آمد !", ok_cb, false)	
+          banall_user(result.from.peer_id)	
+end
+
 local function run(msg, matches)
 local support_id = msg.from.id
  if matches[1]:lower() == 'id' and msg.to.type == "chat" or msg.to.type == "user" then
@@ -325,44 +349,51 @@ end
 	end
 
   if matches[1]:lower() == 'banall' and is_admin1(msg) then -- Global ban
-    if type(msg.reply_id) ~="nil" and is_admin1(msg) then
-      banall = get_message(msg.reply_id,banall_by_reply, false)
-    end
+    if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
+       get_message(msg.reply_id, Banall_reply, false)
     local user_id = matches[2]
     local chat_id = msg.to.id
       local targetuser = matches[2]
       if string.match(targetuser, '^%d+$') then
-        if tonumber(matches[2]) == tonumber(our_id) then
-         	return false
-        end
+		if is_momod2(tonumber(matches[2]), msg.from.id) or is_admin2(tonumber(matches[2])) then
+			return reply_msg(msg.id, "⛔️ شما نمی توانید مدیران را سوپر بن کنید !", ok_cb, false)
+		end
+		if tonumber(matches[2]) == tonumber(msg.from.id) then
+			return reply_msg(msg.id, "⛔️ شما نمی توانید خودتان را سوپر بن کنید !", ok_cb, false)
+		end
         	banall_user(targetuser)
-       		return 'User ['..user_id..' ] globally banned'
+       		return reply_msg(msg.id, "❌ کاربر سوپر بن شد !", ok_cb, false)
      else
 	local cbres_extra = {
 		chat_id = msg.to.id,
 		get_cmd = 'banall',
 		from_id = msg.from.id,
-		chat_type = msg.to.type
+		chat_type = msg.to.type,
+		msg = msg,
+		user = matches[2]
 	}
 		local username = string.gsub(matches[2], '@', '')
 		resolve_username(username, kick_ban_res, cbres_extra)
       end
+    end			
   end
   if matches[1]:lower() == 'unbanall' then -- Global unban
     local user_id = matches[2]
     local chat_id = msg.to.id
       if string.match(matches[2], '^%d+$') then
-        if tonumber(matches[2]) == tonumber(our_id) then
-          	return false
-        end
+        --if tonumber(matches[2]) == tonumber(our_id) then
+        --  	return false
+        --end
        		unbanall_user(user_id)
-        	return 'User ['..user_id..' ] globally unbanned'
+        	return reply_msg(msg.id, "❌ کاربر از سوپر بن در آمد !", ok_cb, false)
     else
 		local cbres_extra = {
 			chat_id = msg.to.id,
 			get_cmd = 'unbanall',
 			from_id = msg.from.id,
-			chat_type = msg.to.type
+			chat_type = msg.to.type,
+			msg = msg,
+			user = matches[2]
 		}
 		local username = string.gsub(matches[2], '@', '')
 		resolve_username(username, kick_ban_res, cbres_extra)
