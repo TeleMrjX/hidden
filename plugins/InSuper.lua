@@ -196,11 +196,11 @@ local function lock_group_links(msg, data, target)
   end
   local group_link_lock = data[tostring(target)]['settings']['lock_link']
   if group_link_lock == 'yes' then
-    return 'Link posting is already locked'
+    return reply_msg(msg.id, '🔐 قفل #لینک از قبل فعال است !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_link'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'Link posting has been locked'
+    return reply_msg(msg.id, '🔒 قفل #لینک فعال شد !\n🔸از این پس لینک های فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
   end
 end
 
@@ -210,11 +210,11 @@ local function unlock_group_links(msg, data, target)
   end
   local group_link_lock = data[tostring(target)]['settings']['lock_link']
   if group_link_lock == 'no' then
-    return 'Link posting is not locked'
+    return reply_msg(msg.id, '🔐 قفل #لینک فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_link'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Link posting has been unlocked'
+    return reply_msg(msg.id, '🔏 قفل #لینک غیر فعال شد !', ok_cb, false)
   end
 end
 
@@ -222,16 +222,13 @@ local function lock_group_spam(msg, data, target)
   if not is_momod(msg) then
     return
   end
-  if not is_owner(msg) then
-    return "Owners only!"
-  end
   local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
   if group_spam_lock == 'yes' then
-    return 'SuperGroup spam is already locked'
+    return reply_msg(msg.id, '🔐 قفل پیام های #طولانی از قبل فعال است !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_spam'] = 'yes'
     save_data(_config.moderation.data, data)
-    return 'SuperGroup spam has been locked'
+    return reply_msg(msg.id, '🔒 قفل پیام های #طولانی فعال شد !\n🔸از این پس پیام های طولانی فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
   end
 end
 
@@ -241,11 +238,11 @@ local function unlock_group_spam(msg, data, target)
   end
   local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
   if group_spam_lock == 'no' then
-    return 'SuperGroup spam is not locked'
+    return reply_msg(msg.id, '🔓 قفل پیام های #طولانی فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_spam'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'SuperGroup spam has been unlocked'
+    return reply_msg(msg.id, '🔏 قفل پیام های #طولانی غیر فعال شد !', ok_cb, false)
   end
 end
 
