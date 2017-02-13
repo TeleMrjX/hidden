@@ -113,10 +113,14 @@ local function callback_clean_bots (extra, success, result)
 	local msg = extra.msg
 	local receiver = 'channel#id'..msg.to.id
 	local channel_id = msg.to.id
+	local i = 1
 	for k,v in pairs(result) do
 		local bot_id = v.peer_id
 		kick_user(bot_id,channel_id)
+		text = text.."\n""..i.." - "..v.first_name.." "..v.username
 	end
+        local text = "📋 "..i.." از گروه "..msg.to.title.." اخراج شدند !\n"..text
+        reply_msg(extra.msg.id, text, ok_cb ,false)
 end
 
 --Get and output info about supergroup
@@ -1488,7 +1492,7 @@ local function run(msg, matches)
 				}
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted @"..username)
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted @"..username)
 				return resolve_username(username, callbackres, cbres_extra)
 			end
 		end
@@ -1507,11 +1511,8 @@ local function run(msg, matches)
 		end
 
 		if matches[1] == 'demote' then
-			if not is_momod(msg) then
-				return
-			end
 			if not is_owner(msg) then
-				return "Only owner/support/admin can promote"
+				return 
 			end
 			if type(msg.reply_id) ~= "nil" then
 				local cbreply_extra = {
@@ -1523,7 +1524,7 @@ local function run(msg, matches)
 				local receiver = get_receiver(msg)
 				local user_id = "user#id"..matches[2]
 				local get_cmd = 'demote'
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted user#id"..matches[2])
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted user#id"..matches[2])
 				user_info(user_id, cb_user_info, {receiver = receiver, get_cmd = get_cmd})
 			elseif matches[1] == 'demote' and matches[2] and not string.match(matches[2], '^%d+$') then
 				local cbres_extra = {
@@ -1532,7 +1533,7 @@ local function run(msg, matches)
 				}
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted @"..username)
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] demoted @"..username)
 				return resolve_username(username, callbackres, cbres_extra)
 			end
 		end
@@ -1540,12 +1541,12 @@ local function run(msg, matches)
 		if matches[1] == "setname" and is_momod(msg) then
 			local receiver = get_receiver(msg)
 			local set_name = string.gsub(matches[2], '_', '')
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] renamed SuperGroup to: "..matches[2])
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] renamed SuperGroup to: "..matches[2])
 			rename_channel(receiver, set_name, ok_cb, false)
 		end
 
 		if msg.service and msg.action.type == 'chat_rename' then
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] renamed SuperGroup to: "..msg.to.title)
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] renamed SuperGroup to: "..msg.to.title)
 			data[tostring(msg.to.id)]['settings']['set_name'] = msg.to.title
 			save_data(_config.moderation.data, data)
 		end
@@ -1584,7 +1585,7 @@ local function run(msg, matches)
 
 		if msg.media then
 			if msg.media.type == 'photo' and data[tostring(msg.to.id)]['settings']['set_photo'] == 'waiting' and is_momod(msg) then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] set new SuperGroup photo")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] set new SuperGroup photo")
 				load_photo(msg.id, set_supergroup_photo, msg)
 				return
 			end
