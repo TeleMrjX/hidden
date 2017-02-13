@@ -136,7 +136,7 @@ local function Kick_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
 		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای اخراج کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
-		return false
+		return
 	end
 	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
 	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)	
