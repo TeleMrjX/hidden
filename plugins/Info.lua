@@ -1,4 +1,4 @@
-function run(msg,matches , result)
+function run(msg, matches , result)
     local user_id = msg.from.id
     local chat_id = get_receiver(msg)
     local token = "236823773:AAHuvA1wudU3hStv2Qq4RjD-MtSZoiTRPf4"
@@ -9,7 +9,7 @@ function run(msg,matches , result)
       local jdat = json:decode(res)
       local fileid = jdat.result.photos[1][3].file_id
     local count = jdat.result.total_count
-    if tonumber(count) == 0 then
+    if result == nil then
       send_large_msg(chat_id,"Image Not Found",ok_cb,false)
     else
       local pt, code = https.request(path..fileid)
