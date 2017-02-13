@@ -156,17 +156,13 @@ local function Ban_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
 		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
-		send_large_msg(extra.chat_id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)		
 		return
 	end
 	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
 	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
-	     send_large_msg(extra.chat_id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)			
 	else			
           reply_msg(extra.msg.id, "❌ کاربر محروم شد !", ok_cb, false)	
-          send_large_msg(extra.chat_id, "❌ کاربر محروم شد !", ok_cb, false)	
 	  ban_user(result.from.peer_id, result.to.peer_id)
-          return "❌ کاربر محروم شد !"			
 	end	
 end
 
@@ -174,11 +170,9 @@ local function Unban_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
 		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای حذف محرومیت کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
-		send_large_msg(extra.chat_id, "🌀 پیام قدیمی می باشد !\n برای حذف محرومیت کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)		
 		return
 	end		
           reply_msg(extra.msg.id, "❌ کاربر حذف محرومیت شد !", ok_cb, false)	
-          send_large_msg(extra.chat_id, "❌ کاربر حذف محرومیت شد !", ok_cb, false)	
 	  local hash =  'banned:'..result.to.peer_id
 	  redis:srem(hash, result.from.peer_id)		
 end
@@ -228,7 +222,7 @@ local support_id = msg.from.id
 	--	msgr = get_message(msg.reply_id,ban_by_reply_admins, false)
       --else
        -- msgr = get_message(msg.reply_id,ban_by_reply, false)
-       get_message(msg.reply_id, Ban_reply, false)			
+       get_message(msg.reply_id, Ban_reply, {msg=msg})			
       --end
       local user_id = matches[2]
       local chat_id = msg.to.id
@@ -272,8 +266,8 @@ local support_id = msg.from.id
         	local hash =  'banned:'..chat_id
         	redis:srem(hash, user_id)
         	local print_name = user_print_name(msg.from):gsub("‮", "")
-			local name = print_name:gsub("_", "")
-        	savelog(msg.to.id, name.." ["..msg.from.id.."] unbaned user ".. matches[2])
+		local name = print_name:gsub("_", "")
+        	--savelog(msg.to.id, name.." ["..msg.from.id.."] unbaned user ".. matches[2])
         	return 'User '..user_id..' unbanned'
       else
 		local cbres_extra = {
