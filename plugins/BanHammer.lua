@@ -258,21 +258,19 @@ if matches[1]:lower() == 'kick' then
          get_message(msg.reply_id, Kick_reply, {msg = msg})			
       --end
 	elseif string.match(matches[2], '^%d+$') then
-		if tonumber(matches[2]) == tonumber(our_id) then
-			return
-		end
-		if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-			return "you can't kick mods/owner/admins"
+		if is_momod2(tonumber(matches[2]), msg.from.id) or is_admin2(tonumber(matches[2])) then
+			return reply_msg(msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)
 		end
 		if tonumber(matches[2]) == tonumber(msg.from.id) then
-			return "You can't kick your self !"
+			return reply_msg(msg.id, "⛔️ شما نمی توانید خودتان را اخراج کنید !", ok_cb, false)
 		end
     local user_id = matches[2]
     local chat_id = msg.to.id
 		local print_name = user_print_name(msg.from):gsub("‮", "")
 		local name = print_name:gsub("_", "")
-		savelog(msg.to.id, name.." ["..msg.from.id.."] kicked user ".. matches[2])
+		--savelog(msg.to.id, name.." ["..msg.from.id.."] kicked user ".. matches[2])
 		kick_user(user_id, chat_id)
+                reply_msg(msg.id, "❌ کاربر اخراج شد !", ok_cb, false)			
 	else
 		local cbres_extra = {
 			chat_id = msg.to.id,
