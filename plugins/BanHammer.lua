@@ -124,7 +124,7 @@ local function kick_ban_res(extra, success, result)
                 reply_msg(extra.msg.id, "❌ کاربر ["..member_id.."] @"..member.." از گروه محروم شد !", ok_cb, false)
 		ban_user(member_id, chat_id)
       elseif get_cmd == 'unban' then
-        reply_msg(extra.msg.id, "🚫 کاربر ["..member_id.."] @"..member.." از محرومیت در آمد !", ok_cb, false)
+        --reply_msg(extra.msg.id, "🚫 کاربر ["..member_id.."] @"..member.." از محرومیت در آمد !", ok_cb, false)
         local hash =  'banned:'..chat_id
         redis:srem(hash, member_id)
         --return 'User '..user_id..' unbanned'
