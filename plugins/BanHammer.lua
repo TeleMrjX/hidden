@@ -135,7 +135,7 @@ end
 local function Kick_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
-		send_large_msg(result.to.peer_id, "tesT", ok_cb, false)
+		reply_msg(extra.msg.id, "tesT", ok_cb, false)
 		--return false
 	end
         channel_kick('channel#id'..result.to.peer_id, 'user#id'..result.from.peer_id, ok_cb, false)
@@ -245,12 +245,12 @@ local support_id = msg.from.id
  end
 
 if matches[1]:lower() == 'kick' then
-    if type(msg.reply_id) ~= "nil" and is_momod(msg) then
+    if type(msg.reply_id) ~= "nil" and is_momod(msg) then			
       --if is_admin1(msg) then
         --msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
       --else
         --msgr = get_message(msg.reply_id, Kick_reply, false)
-         get_message(msg.reply_id, Kick_reply, false)			
+         get_message(msg.reply_id, Kick_reply, {msg = msg})			
       --end
 	elseif string.match(matches[2], '^%d+$') then
 		if tonumber(matches[2]) == tonumber(our_id) then
