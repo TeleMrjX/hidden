@@ -114,6 +114,7 @@ local function callback_clean_bots (extra, success, result)
 	local receiver = 'channel#id'..msg.to.id
 	local channel_id = msg.to.id
 	local i = 1
+	local text = ""
 	for k,v in pairs(result) do
 		local bot_id = v.peer_id
 		kick_user(bot_id,channel_id)
