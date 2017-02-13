@@ -113,7 +113,7 @@ local function callback_clean_bots (extra, success, result)
 	local msg = extra.msg
 	local receiver = 'channel#id'..msg.to.id
 	local channel_id = msg.to.id
-	local i = 1
+	local i = 0
 	local text = ""
 	for k,v in pairs(result) do
 		i = i + 1
