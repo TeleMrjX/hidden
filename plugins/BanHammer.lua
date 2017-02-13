@@ -210,7 +210,7 @@ local support_id = msg.from.id
 	--	msgr = get_message(msg.reply_id,ban_by_reply_admins, false)
       --else
        -- msgr = get_message(msg.reply_id,ban_by_reply, false)
-       get_message(msg.reply_id, ban_reply, false)			
+       get_message(msg.reply_id, Ban_reply, false)			
       --end
       local user_id = matches[2]
       local chat_id = msg.to.id
