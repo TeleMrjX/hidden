@@ -13,17 +13,14 @@ if jdat.result == nil then
  local path2 = jdat2.result.file_path  
  local link = img..path2
  local photo = download_to_file(link,"ax"..msg.from.id..".jpg")
-     send_photo2(get_receiver(msg), photo, "- نام : "..msg.from.first_name.."\n"
-.."- آیدی : "..msg.from.id.."\n"
-.."- نام کاربری : @"..msg.from.username.."\n"
-.."- نام گروه : "..msg.to.title.."\n"
-.."️- کانال :  \n@TeleGold_Team", ok_cb, false)       
+ local caption = "» نام : "..msg.from.first_name.."\n» شناسه : "..msg.from.id.."\n» نام کاربری : "..("@"..msg.from.username or '--').."\n» نام گروه : "..msg.to.title.."\n» شناسه گروه : "..msg.to.id.."\n"     
+ send_photo2(get_receiver(msg), photo, caption, ok_cb, false)       
 end        
 end
 return {
 patterns = {
-"^(عکس من)$",
-"^(پروفایل من)$"
+"^([Ii][Dd])$",
+"^(شناسه)$",      
 },
 run = run
 }
