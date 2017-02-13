@@ -823,7 +823,7 @@ local function cb_user_info(extra, success, result)
 	local user_id = result.peer_id
 	local get_cmd = extra.get_cmd
 	local data = load_data(_config.moderation.data)
-	--[[if get_cmd == "setadmin" then
+	if get_cmd == "setadmin" then
 		local user_id = "user#id"..result.peer_id
 		channel_set_admin(receiver, user_id, ok_cb, false)
 		if result.username then
@@ -831,7 +831,7 @@ local function cb_user_info(extra, success, result)
 		else
 			text = "[ "..result.peer_id.." ] has been set as an admin"
 		end
-			send_large_msg(receiver, text)]]
+			send_large_msg(receiver, text)
 	--[[if get_cmd == "demoteadmin" then
 		if is_admin2(result.peer_id) then
 			return send_large_msg(receiver, "You can't demote global admins!")
