@@ -154,13 +154,16 @@ end
 local function Ban_reply(extra, success, result)
 	if type(result) == 'boolean' then
 		print('This is a old message!')
-		reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		--reply_msg(extra.msg.id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)
+		send_large_msg(extra.chat_id, "🌀 پیام قدیمی می باشد !\n برای محروم کردن کاربر از شناسه یا نام کاربری استفاده کنید .", ok_cb, false)		
 		return
 	end
 	if is_momod2(result.from.peer_id, result.to.peer_id) or is_admin2(result.from.peer_id) then
-	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
+	     --reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)	
+	     send_large_msg(extra.chat_id, "⛔️ شما نمی توانید مدیران را محروم کنید !", ok_cb, false)			
 	else			
-         reply_msg(extra.msg.id, "❌ کاربر محروم شد !", ok_cb, false)	
+         --reply_msg(extra.msg.id, "❌ کاربر محروم شد !", ok_cb, false)	
+         send_large_msg(extra.chat_id, "❌ کاربر محروم شد !", ok_cb, false)			
          ban_user(result.from.peer_id, result.to.peer_id)
 	end	
 end
