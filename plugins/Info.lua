@@ -8,7 +8,7 @@ if jdat.result == nil then
    reply_msg(msg.id, "» نام : "..msg.from.first_name.."\n» شناسه : "..msg.from.id.."\n» نام کاربری : "..("@"..msg.from.username or '--').."\n» نام گروه : "..msg.to.title.."\n» شناسه گروه : "..msg.to.id.."\n", ok_cb, false)    
  else
 print(serpent.block(jdat.result))      
- local fileid = jdat.result.photos[1].file_id
+ local fileid = jdat.result.photos[1][2].file_id
  local pt, code = https.request(path..fileid)
  local jdat2 = json:decode(pt)
  local path2 = jdat2.result.file_path  
