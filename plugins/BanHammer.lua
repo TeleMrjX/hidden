@@ -94,7 +94,7 @@ local function kick_ban_res(extra, success, result)
 		receiver = 'channel#id'..chat_id
 	  end
 	  if success == 0 then
-		return send_large_msg(receiver, "Cannot find user by that username!")
+		return reply_msg(extra.msg.id, "⛔️ نام کاربری اشتباه است !", ok_cb, false)
 	  end
       local member_id = result.peer_id
       local user_id = member_id
@@ -103,14 +103,15 @@ local function kick_ban_res(extra, success, result)
       local get_cmd = extra.get_cmd
        if get_cmd == "kick" then
          if member_id == from_id then
-            send_large_msg(receiver, "You can't kick yourself")
-			return
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید خودتان را اخراج کنید !", ok_cb, false)	
+	     return
          end
          if is_momod2(member_id, chat_id) and not is_admin2(sender) then
-            send_large_msg(receiver, "You can't kick mods/owner/admins")
+	     reply_msg(extra.msg.id, "⛔️ شما نمی توانید مدیران را اخراج کنید !", ok_cb, false)	
 			return
          end
 		 kick_user(member_id, chat_id)
+	         reply_msg(extra.msg.id, "❌ کاربر "..matches[2].." اخراج شد ! ", ok_cb, false)	
       elseif get_cmd == 'ban' then
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
 			send_large_msg(receiver, "You can't ban mods/owner/admins")
@@ -276,7 +277,9 @@ if matches[1]:lower() == 'kick' then
 			chat_id = msg.to.id,
 			get_cmd = 'kick',
 			from_id = msg.from.id,
-			chat_type = msg.to.type
+			chat_type = msg.to.typeو
+			msg = msg,
+			user = matches[2]
 		}
 		local username = string.gsub(matches[2], '@', '')
 		resolve_username(username, kick_ban_res, cbres_extra)
