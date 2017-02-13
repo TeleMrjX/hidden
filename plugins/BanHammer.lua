@@ -263,7 +263,7 @@ local support_id = msg.from.id
   if matches[1]:lower() == 'unban' then -- /unban
     if type(msg.reply_id) ~= "nil" and is_momod(msg) then
       --local msgr = get_message(msg.reply_id,unban_by_reply, false)
-      get_message(msg.reply_id, Unban_reply, false)			
+      get_message(msg.reply_id, Unban_reply, {msg=msg})			
       local user_id = matches[2]
       local chat_id = msg.to.id
       local targetuser = matches[2]
