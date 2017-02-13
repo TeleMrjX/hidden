@@ -246,7 +246,7 @@ local support_id = msg.from.id
     return ban_list(chat_id)
   end
 	
-  if matches[1]:lower() == 'ban' then-- /ban
+  if matches[1]:lower() == 'ban' or matches[1] == 'محروم' then-- /ban
     if type(msg.reply_id) ~= "nil" and is_momod(msg) then
      -- if is_admin1(msg) then
 	--	msgr = get_message(msg.reply_id,ban_by_reply_admins, false)
@@ -284,7 +284,7 @@ local support_id = msg.from.id
   end
 
 
-  if matches[1]:lower() == 'unban' then -- /unban
+  if matches[1]:lower() == 'unban' or matches[1] == 'حذف محروم' then -- /unban
     if type(msg.reply_id) ~= "nil" and is_momod(msg) then
       --local msgr = get_message(msg.reply_id,unban_by_reply, false)
       get_message(msg.reply_id, Unban_reply, {msg=msg})			
@@ -313,7 +313,7 @@ local support_id = msg.from.id
 	end	
  end
 
-if matches[1]:lower() == 'kick' then
+if matches[1]:lower() == 'kick' or matches[1] == 'اخراج' then
     if type(msg.reply_id) ~= "nil" and is_momod(msg) then			
       --if is_admin1(msg) then
         --msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
@@ -354,7 +354,7 @@ end
 		return
 	end
 
-  if matches[1]:lower() == 'banall' and is_admin1(msg) then -- Global ban
+ if matches[1]:lower() == 'banall' or matches[1] == 'سوپر بن' then -- Global ban
     if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
        get_message(msg.reply_id, Banall_reply, false)
     local user_id = matches[2]
@@ -383,7 +383,7 @@ end
       end
     end			
   end
-  if matches[1]:lower() == 'unbanall' then -- Global unban
+  if matches[1]:lower() == 'unbanall' or matches[1] == 'حذف سوپر بن' then -- Global unban
     local user_id = matches[2]
     local chat_id = msg.to.id
       if string.match(matches[2], '^%d+$') then
@@ -412,20 +412,42 @@ end
 
 return {
   patterns = {
-    "^([Bb]anall) (.*)$",
-    "^([Bb]anall)$",
+    "^([Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn]) (.*)$",
+    "^(سوپر بن) (.*)$",	
+		
+    "^([Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
+    "^(سوپر بن)$",
+		
     "^([Bb]anlist) (.*)$",
     "^([Bb]anlist)$",
+		
     "^([Gg]banlist)$",
+		
     --"^([Kk]ickme)",
-    "^([Kk]ick)$",
-    "^([Bb]an)$",
-    "^([Bb]an) (.*)$",
-    "^([Uu]nban) (.*)$",
-    "^([Uu]nbanall) (.*)$",
-    "^([Uu]nbanall)$",
-    "^([Kk]ick) (.*)$",
-    "^([Uu]nban)$",
+    "^([Kk][Ii][Cc][Kk])$",
+    "^(اخراج)$",
+		
+    "^([Bb][Aa][Nn])$",
+    "^(محروم)$",
+		
+    "^([Bb][Aa][Nn]) (.*)$",
+    "^(محروم) (.*)$",
+		
+    "^([Uu][Nn][Bb][Aa][Nn]) (.*)$",
+    "^(حذف محروم) (.*)$",
+		
+    "^([Uu][Nn][Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn]) (.*)$",
+    "^(حذف سوپر بن) (.*)$",
+		
+    "^([Uu][Nn][Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
+    "^(حذف سوپر بن)$",
+		
+    "^([Kk][Ii][Cc][Kk]) (.*)$",
+    "^(اخراج) (.*)$",
+		
+    "^([Uu][Nn][Bb][Aa][Nn])$",
+    "^(حذف محروم)$",
+		
     --"^([Ii]d)$",
     "^!!tgservice (.+)$"
   },
