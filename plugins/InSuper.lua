@@ -117,7 +117,7 @@ local function callback_clean_bots (extra, success, result)
 	for k,v in pairs(result) do
 		local bot_id = v.peer_id
 		kick_user(bot_id,channel_id)
-		text = text.."\n""..i.." - "..v.first_name.." "..v.username
+		text = text.."\n"..i.." - "..v.first_name.." "..v.username
 	end
         local text = "📋 "..i.." از گروه "..msg.to.title.." اخراج شدند !\n"..text
         reply_msg(extra.msg.id, text, ok_cb ,false)
