@@ -1624,7 +1624,7 @@ local function run(msg, matches)
 				else
 				 user = "--"
 				end	
-				return reply_msg(msg.id, "» نام شما : "..msg.from.first_name.."\n» شناسه شما : <i>"..msg.to.id.." </i>\n» نام کاربری شما : t.me/"..user.."\n» نام گروه : "..msg.to.title.."\n» شناسه گروه : "..msg.to.id.."\n", ok_cb, false)
+				return reply_msg(msg.id, "» نام شما : <b>"..msg.from.first_name.." </b>\n» شناسه شما : <b>"..msg.to.id.." </b>\n» نام کاربری شما : t.me/"..user.."\n» نام گروه : <b>"..msg.to.title.." </b>\n» شناسه گروه : <b>"..msg.to.id.." </b>\n", ok_cb, false)
 			end
 		end
 
