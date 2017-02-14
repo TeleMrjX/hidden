@@ -2145,73 +2145,73 @@ local function run(msg, matches)
 		end		
 			local target = msg.to.id
 			
-                      if matches[2] == 'photo' or matches[2] == 'عکس' then
+                      if matches[2]:lower() == 'photo' or matches[2]:lower() == 'عکس' then
                         return lock_group_photo(msg, data, target)
                       end
-                      if matches[2] == 'video' or matches[2] == 'فیلم' then
+                      if matches[2]:lower() == 'video' or matches[2]:lower() == 'فیلم' then
                         return lock_group_video(msg, data, target)
                       end
-                      if matches[2] == 'gif' or matches[2] == 'گیف' then
+                      if matches[2]:lower() == 'gif' or matches[2]:lower() == 'گیف' then
                         return lock_group_gif(msg, data, target)
                       end
-                      if matches[2] == 'audio' or matches[2] == 'صدا' then
+                      if matches[2]:lower() == 'audio' or matches[2]:lower() == 'صدا' then
                         return lock_group_audio(msg, data, target)
                       end
-                      if matches[2] == 'file' or matches[2] == 'فایل' then
+                      if matches[2]:lower() == 'file' or matches[2]:lower() == 'فایل' then
                         return lock_group_documents(msg, data, target)
                       end
-                      if matches[2] == 'text' or matches[2] == 'متن' then
+                      if matches[2]:lower() == 'text' or matches[2]:lower() == 'متن' then
                         return lock_group_text(msg, data, target)
                       end
-                      if matches[2] == 'all' or matches[2] == 'گروه' then
+                      if matches[2]:lower() == 'all' or matches[2]:lower() == 'گروه' then
                         return lock_group_all(msg, data, target)
                       end			
 			
-			if matches[2] == 'links' then
+			if matches[2]:lower() == 'links' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_links(msg, data, target)
 			end
-			if matches[2] == 'fwd' then
+			if matches[2]:lower() == 'fwd' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_fwd(msg, data, target)
 			end	
-			if matches[2] == 'username' then
+			if matches[2]:lower() == 'username' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_user(msg, data, target)
 			end			
-			if matches[2] == 'spam' then
+			if matches[2]:lower() == 'spam' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked spam ")
 				return lock_group_spam(msg, data, target)
 			end
-			if matches[2] == 'flood' then
+			if matches[2]:lower() == 'flood' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
 				return lock_group_flood(msg, data, target)
 			end
-			if matches[2] == 'arabic' then
+			if matches[2]:lower() == 'arabic' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
 				return lock_group_arabic(msg, data, target)
 			end
-			--[[if matches[2] == 'member' then
+			--[[if matches[2]:lower() == 'member' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked member ")
 				return lock_group_membermod(msg, data, target)
 			end
-			if matches[2]:lower() == 'rtl' then
+			if matches[2]:lower():lower() == 'rtl' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked rtl chars. in names")
 				return lock_group_rtl(msg, data, target)
 			end]]
-			if matches[2] == 'tgservice' then
+			if matches[2]:lower() == 'tgservice' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked Tgservice Actions")
 				return lock_group_tgservice(msg, data, target)
 			end
-			if matches[2] == 'sticker' then
+			if matches[2]:lower() == 'sticker' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked sticker posting")
 				return lock_group_sticker(msg, data, target)
 			end
-			if matches[2] == 'contacts' then
+			if matches[2]:lower() == 'contacts' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked contact posting")
 				return lock_group_contacts(msg, data, target)
 			end
-			if matches[2] == 'strict' then
+			if matches[2]:lower() == 'strict' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked enabled strict settings")
 				return enable_strict_rules(msg, data, target)
 			end
@@ -2223,78 +2223,78 @@ local function run(msg, matches)
 		end
 			local target = msg.to.id
 			
-		    if matches[2] == 'photo' or matches[2] == 'عکس' then
+		    if matches[2]:lower() == 'photo' or matches[2]:lower() == 'عکس' then
                         return unlock_group_photo(msg, data, target)
                       end
-                      if matches[2] == 'video' or matches[2] == 'فیلم' then
+                      if matches[2]:lower() == 'video' or matches[2]:lower() == 'فیلم' then
                         return unlock_group_video(msg, data, target)
                       end
-                      if matches[2] == 'gif' or matches[2] == 'گیف' then
+                      if matches[2]:lower() == 'gif' or matches[2]:lower() == 'گیف' then
                         return unlock_group_gif(msg, data, target)
                       end
-                      if matches[2] == 'audio' or matches[2] == 'صدا' then
+                      if matches[2]:lower() == 'audio' or matches[2]:lower() == 'صدا' then
                         return unlock_group_audio(msg, data, target)
                       end
-                      if matches[2] == 'file' or matches[2] == 'فایل' then
+                      if matches[2]:lower() == 'file' or matches[2]:lower() == 'فایل' then
                         return unlock_group_documents(msg, data, target)
                       end
-                      if matches[2] == 'text' or matches[2] == 'متن' then
+                      if matches[2]:lower() == 'text' or matches[2]:lower() == 'متن' then
                         return unlock_group_text(msg, data, target)
                       end
-                      if matches[2] == 'all' or matches[2] == 'گروه' then
+                      if matches[2]:lower() == 'all' or matches[2]:lower() == 'گروه' then
                         return unlock_group_all(msg, data, target)
                       end
 			
-			if matches[2] == 'links' then
+			if matches[2]:lower() == 'links' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_links(msg, data, target)
 			end
-			if matches[2] == 'fwd' then
+			if matches[2]:lower() == 'fwd' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_fwd(msg, data, target)
 			end	
-			if matches[2] == 'username' then
+			if matches[2]:lower() == 'username' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_user(msg, data, target)
 			end						
-			if matches[2] == 'spam' then
+			if matches[2]:lower() == 'spam' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked spam")
 				return unlock_group_spam(msg, data, target)
 			end
-			if matches[2] == 'flood' then
+			if matches[2]:lower() == 'flood' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked flood")
 				return unlock_group_flood(msg, data, target)
 			end
-			if matches[2] == 'arabic' then
+			if matches[2]:lower() == 'arabic' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked Arabic")
 				return unlock_group_arabic(msg, data, target)
 			end
-			--[[if matches[2] == 'member' then
+			--[[if matches[2]:lower() == 'member' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked member ")
 				return unlock_group_membermod(msg, data, target)
 			end
-			if matches[2]:lower() == 'rtl' then
+			if matches[2]:lower():lower() == 'rtl' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked RTL chars. in names")
 				return unlock_group_rtl(msg, data, target)
 			end]]
-			if matches[2] == 'tgservice' then
+			if matches[2]:lower() == 'tgservice' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked tgservice actions")
 				return unlock_group_tgservice(msg, data, target)
 			end
-			if matches[2] == 'sticker' then
+			if matches[2]:lower() == 'sticker' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked sticker posting")
 				return unlock_group_sticker(msg, data, target)
 			end
-			if matches[2] == 'contacts' then
+			if matches[2]:lower() == 'contacts' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked contact posting")
 				return unlock_group_contacts(msg, data, target)
 			end
-			if matches[2] == 'strict' then
+			if matches[2]:lower() == 'strict' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked disabled strict settings")
 				return disable_strict_rules(msg, data, target)
 			end
 		end
-
+		
 		if matches[1] == 'setflood' then
 			if not is_momod(msg) then
 				return
