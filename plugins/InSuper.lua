@@ -1628,14 +1628,14 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1] == 'kickme' then
+		--[[if matches[1] == 'kickme' then
 			if msg.to.type == 'channel' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] left via kickme")
 				channel_kick("channel#id"..msg.to.id, "user#id"..msg.from.id, ok_cb, false)
 			end
-		end
+		end]]
 
-		if matches[1] == 'newlink' and is_momod(msg)then
+		--[[if matches[1] == 'newlink' and is_momod(msg)then
 			local function callback_link (extra , success, result)
 			local receiver = get_receiver(msg)
 				if success == 0 then
@@ -1650,20 +1650,28 @@ local function run(msg, matches)
 			end
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] attempted to create a new SuperGroup link")
 			export_channel_link(receiver, callback_link, false)
-		end
+		end]]
 
-		if matches[1] == 'setlink' and is_owner(msg) then
+		if matches[1] == 'setlink' or matches[1] == 'تنظیم لینک' then
+		if not is_momod(msg) then
+		 return
+                end				
 			data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
 			save_data(_config.moderation.data, data)
-			return 'Please send the new group link now'
+			return reply_msg(msg.id, '💠 لینک گروه را بفرستید :', ok_cb, false)
 		end
 
 		if msg.text then
-			if msg.text:match("^([https?://w]*.?telegram.me/joinchat/%S+)$") and data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' and is_owner(msg) then
+			if msg.text:match("^([https?://w]*.?telegram.me/joinchat/%S+)$") or msg.text:match("^([https?://w]*.?t.me/joinchat/%S+)$") then
+		         if not is_momod(msg) then
+			  return
+			 end
+			if data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' then
 				data[tostring(msg.to.id)]['settings']['set_link'] = msg.text
 				save_data(_config.moderation.data, data)
-				return "New link set"
-			end
+				return reply_msg(msg.id, '✅ لینک گروه تنظیم شد !\n'..msg.text..'\n', ok_cb, false)
+			 end
+			end	
 		end
 
 		if matches[1] == 'link' then
@@ -1672,13 +1680,13 @@ local function run(msg, matches)
 			end
 			local group_link = data[tostring(msg.to.id)]['settings']['set_link']
 			if not group_link then
-				return "Create a link using /newlink first!\n\nOr if I am not creator use /setlink to set your link"
+				return reply_msg(msg.id, '❌ لینک گروه را با دستور <b>SetLink </b>یا <i>تنظیم لینک </i>تنظیم کنید !', ok_cb, false)
 			end
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group link ["..group_link.."]")
-			return "Group link:\n"..group_link
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group link ["..group_link.."]")
+			return reply_msg(msg.id, '♐️ لینک گروه <b>'..msg.to.title..' </b>:\n'..group_link..'\n', ok_cb, false)
 		end
 
-		if matches[1] == "invite" and is_sudo(msg) then
+		--[[if matches[1] == "invite" and is_sudo(msg) then
 			local cbres_extra = {
 				channel = get_receiver(msg),
 				get_cmd = "invite"
@@ -1687,9 +1695,9 @@ local function run(msg, matches)
 			local username = username:gsub("@","")
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] invited @"..username)
 			resolve_username(username,  callbackres, cbres_extra)
-		end
+		end]]
 
-		if matches[1] == 'res' and is_owner(msg) then
+		--[[if matches[1] == 'res' and is_owner(msg) then
 			local cbres_extra = {
 				channelid = msg.to.id,
 				get_cmd = 'res'
@@ -1698,7 +1706,7 @@ local function run(msg, matches)
 			local username = username:gsub("@","")
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] resolved username: @"..username)
 			resolve_username(username,  callbackres, cbres_extra)
-		end
+		end]]
 
 		--[[if matches[1] == 'kick' and is_momod(msg) then
 			local receiver = channel..matches[3]
@@ -1792,8 +1800,8 @@ local function run(msg, matches)
 					local text = "[ "..matches[2].." ] added as owner"
 					return text
 				end]]
-				local	get_cmd = 'setowner'
-				local	msg = msg
+				local get_cmd = 'setowner'
+				local msg = msg
 				local user_id = matches[2]
 				channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, user_id=user_id})
 			elseif matches[1] == 'setowner' and matches[2] and not string.match(matches[2], '^%d+$') then
@@ -1833,7 +1841,7 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1] == 'mp' and is_sudo(msg) then
+		--[[if matches[1] == 'mp' and is_sudo(msg) then
 			channel = get_receiver(msg)
 			user_id = 'user#id'..matches[2]
 			channel_set_mod(channel, user_id, ok_cb, false)
@@ -1844,7 +1852,7 @@ local function run(msg, matches)
 			user_id = 'user#id'..matches[2]
 			channel_demote(channel, user_id, ok_cb, false)
 			return "ok"
-		end
+		end]]
 
 		if matches[1] == 'demote' then
 			if not is_owner(msg) then
@@ -1912,10 +1920,13 @@ local function run(msg, matches)
 			channel_set_username(receiver, username, ok_username_cb, {receiver=receiver})
 		end
 
-		if matches[1] == 'setrules' and is_momod(msg) then
+		if matches[1] == 'setrules' or matches[1] == 'تنظیم قوانین' then
+		if not is_momod(msg) then
+		 return		
+		end		
 			rules = matches[2]
 			local target = msg.to.id
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] has changed group rules to ["..matches[2].."]")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] has changed group rules to ["..matches[2].."]")
 			return set_rulesmod(msg, data, target)
 		end
 
@@ -1937,28 +1948,25 @@ local function run(msg, matches)
 			if not is_momod(msg) then
 				return
 			end
-			if not is_momod(msg) then
-				return "Only owner can clean"
-			end
-			if matches[2] == 'modlist' then
+			if matches[2] == 'modlist' or matches[2] == 'لیست مدیران' then
 				if next(data[tostring(msg.to.id)]['moderators']) == nil then
-					return 'No moderator(s) in this SuperGroup.'
+					return reply_msg(msg.id, '⚠️ لیست مدیران گروه خالی است !', ok_cb, false)
 				end
 				for k,v in pairs(data[tostring(msg.to.id)]['moderators']) do
 					data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
 					save_data(_config.moderation.data, data)
 				end
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] cleaned modlist")
-				return 'Modlist has been cleaned'
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] cleaned modlist")
+				return reply_msg(msg.id, '🗑 لیست مدیران گروه خالی شد !', ok_cb, false)
 			end
-			if matches[2] == 'rules' then
+			if matches[2] == 'rules' or matches[2] == 'قوانین' then
 				local data_cat = 'rules'
 				if data[tostring(msg.to.id)][data_cat] == nil then
-					return "Rules have not been set"
+					return reply_msg(msg.id, '⚠️ قوانین گروه تنظیم نشده است !', ok_cb, false)
 				end
 				data[tostring(msg.to.id)][data_cat] = nil
 				save_data(_config.moderation.data, data)
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] cleaned rules")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] cleaned rules")
 				return 'Rules have been cleaned'
 			end
 			if matches[2] == 'about' then
@@ -1980,7 +1988,7 @@ local function run(msg, matches)
 					redis:del(hash)
 				return "Mutelist Cleaned"
 			end
-			if matches[2] == 'username' and is_admin1(msg) then
+			--[[if matches[2] == 'username' and is_admin1(msg) then
 				local function ok_username_cb (extra, success, result)
 					local receiver = extra.receiver
 					if success == 1 then
@@ -1991,7 +1999,7 @@ local function run(msg, matches)
 				end
 				local username = ""
 				channel_set_username(receiver, username, ok_username_cb, {receiver=receiver})
-			end
+			end]]
 			if matches[2] == "bots" and is_momod(msg) then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked all SuperGroup bots")
 				channel_get_bots(receiver, callback_clean_bots, {msg = msg})
