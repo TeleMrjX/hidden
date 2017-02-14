@@ -83,7 +83,7 @@ local function pre_process(msg)
        else
 	name = msg.from.first_name				
       end					
-      reply_msg(msg.id, "⭕️ کاربر "..name.." از گروه محروم است و اخراج شد !", ok_cb, false)			
+      --reply_msg(msg.id, "⭕️ کاربر "..name.." از گروه محروم است و اخراج شد !", ok_cb, false)			
       kick_user(user_id, chat_id)
       msg.text = ''
     end
