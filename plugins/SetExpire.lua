@@ -33,7 +33,7 @@ local function pre_process(msg)
   local now = tonumber(os.time())
   if expiretime then
     timetoexpire = math.floor((tonumber(expiretime) - tonumber(now)) / 86400) + 1
-    if tonumber("0") > tonumber(timetoexpire) then
+    if tonumber("0") >= tonumber(timetoexpire) then
       if get_receiver(msg) then
         redis:del('expiretime', get_receiver(msg))
         rem_mutes(msg.to.id)
