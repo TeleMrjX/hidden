@@ -2083,7 +2083,7 @@ local function run(msg, matches)
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_links(msg, data, target)
 			end
-			if matches[2] == 'fwdthen
+			if matches[2] == 'fwd' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_fwd(msg, data, target)
 			end			
