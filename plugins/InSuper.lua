@@ -23,7 +23,8 @@ local function check_member_super(cb_extra, success, result)
         settings = {
           set_name = string.gsub(msg.to.title, '_', ' '),
 		  lock_arabic = 'no',
-		  lock_link = "no",
+		  lock_link = "yes",
+		  lock_fwd = "yes",					
                   flood = 'yes',
 		  lock_spam = 'yes',
 		  lock_sticker = 'no',
