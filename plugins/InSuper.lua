@@ -286,6 +286,35 @@ local function unlock_group_links(msg, data, target)
   end
 end
 
+local function lock_group_fwd(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_fwd_lock = data[tostring(target)]['settings']['lock_fwd']
+  if group_fwd_lock == 'yes' then
+    return reply_msg(msg.id, '🔐 قفل #فروارد از قبل فعال است !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_fwd'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔒 قفل #فروارد فعال شد !\n🔸از این پس پیام های فرواردی فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
+  end
+end
+
+local function unlock_group_fwd(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_link_lock = data[tostring(target)]['settings']['lock_fwd']
+  if group_fwd_lock == 'no' then
+    return reply_msg(msg.id, '🔓 قفل #فروارد فعال نیست !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_fwd'] = 'no'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔏 قفل #فروارد غیر فعال شد !', ok_cb, false)
+  end
+end
+
+
 local function lock_group_user(msg, data, target)
   if not is_momod(msg) then
     return
