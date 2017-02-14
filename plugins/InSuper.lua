@@ -1456,25 +1456,28 @@ local function run(msg, matches)
 	local print_name = user_print_name(msg.from):gsub("‮", "")
 	local name_log = print_name:gsub("_", " ")
 	local data = load_data(_config.moderation.data)
-		if matches[1] == 'add' and not matches[2] then
+		if matches[1] == 'add' or matches[1] == 'افزودن' and not matches[2] then
 			if not is_admin1(msg) and not is_support(support_id) then
 				return
 			end
 			if is_super_group(msg) then
-				return reply_msg(msg.id, 'SuperGroup is already added.', ok_cb, false)
+				return reply_msg(msg.id, '⚠️ گروه <i>'..msg.to.title..' </i> از قبل در لیست گروه های تحت مدیریت ربات است !', ok_cb, false)
 			end
-			print("SuperGroup "..msg.to.print_name.."("..msg.to.id..") added")
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] added SuperGroup")
+			--print("SuperGroup "..msg.to.print_name.."("..msg.to.id..") added")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] added SuperGroup")
 			superadd(msg)
 			set_mutes(msg.to.id)
 			channel_set_admin(receiver, 'user#id'..msg.from.id, ok_cb, false)
 		end
 
-		if matches[1] == 'rem' and is_admin1(msg) and not matches[2] then
+		if matches[1] == 'rem' or matches[1] == 'حذف گروه' then
+		 if not is_admin1(msg) then
+		  return
+		 end		
 			if not is_super_group(msg) then
-				return reply_msg(msg.id, 'SuperGroup is not added.', ok_cb, false)
+				return reply_msg(msg.id, '❌ گروه <i>'..msg.to.title..' </i> در لیست گروه های تحت مدیریت ربات نیست !', ok_cb, false)
 			end
-			print("SuperGroup "..msg.to.print_name.."("..msg.to.id..") removed")
+			--print("SuperGroup "..msg.to.print_name.."("..msg.to.id..") removed")
 			superrem(msg)
 			rem_mutes(msg.to.id)
 		end
@@ -1482,20 +1485,20 @@ local function run(msg, matches)
 		if not data[tostring(msg.to.id)] then
 			return
 		end
-		if matches[1] == "info" then
-			if not is_owner(msg) then
+		if matches[1] == "info" or matches[1] == "اطلاعات گروه" then
+			if not is_momod(msg) then
 				return
 			end
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup info")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup info")
 			channel_info(receiver, callback_info, {receiver = receiver, msg = msg})
 		end
 
-		if matches[1] == "admins" then
-			if not is_owner(msg) and not is_support(msg.from.id) then
+		if matches[1] == "admins" or matches[1] == "ادمین ها" then
+			if not is_momod(msg) then
 				return
 			end
 			member_type = 'Admins'
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup Admins list")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup Admins list")
 			admins = channel_get_admins(receiver,callback, {receiver = receiver, msg = msg, member_type = member_type})
 		end
 
@@ -1509,40 +1512,47 @@ local function run(msg, matches)
 		end
 
 		if matches[1] == "modlist" then
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group modlist")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group modlist")
 			return modlist(msg)
 			-- channel_get_admins(receiver,callback, {receiver = receiver})
 		end
 
-		if matches[1] == "bots" and is_momod(msg) then
+		if matches[1] == "bots" or matches[1] == "ربات ها" then
+		 if not is_momod(msg) then
+			return	
+		 end		
 			member_type = 'Bots'
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup bots list")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup bots list")
 			channel_get_bots(receiver, callback, {receiver = receiver, msg = msg, member_type = member_type})
 		end
 
-		if matches[1] == "who" and not matches[2] and is_momod(msg) then
+		--[[if matches[1] == "who" and not matches[2] and is_momod(msg) then
 			local user_id = msg.from.peer_id
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup users list")
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup users list")
 			channel_get_users(receiver, callback_who, {receiver = receiver})
 		end
 
 		if matches[1] == "kicked" and is_momod(msg) then
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested Kicked users list")
 			channel_get_kicked(receiver, callback_kicked, {receiver = receiver})
-		end
+		end]]
 
-		if matches[1] == 'del' and is_momod(msg) then
-			if type(msg.reply_id) ~= "nil" then
-				local cbreply_extra = {
-					get_cmd = 'del',
-					msg = msg
-				}
+		if matches[1] == 'del' or matches[1] == 'حذف' then
+		if not is_momod(msg) then
+		  return	
+		end		
+			--if type(msg.reply_id) ~= "nil" then
+				--local cbreply_extra = {
+				--	get_cmd = 'del',
+				--	msg = msg
+				--}
 				delete_msg(msg.id, ok_cb, false)
-				get_message(msg.reply_id, get_message_callback, cbreply_extra)
-			end
+				delete_msg(msg.reply_id, ok_cb, false)			
+				--get_message(msg.reply_id, get_message_callback, cbreply_extra)
+			--end
 		end
 
-		if matches[1] == 'block' and is_momod(msg) then
+		--[[if matches[1] == 'block' and is_momod(msg) then
 			if type(msg.reply_id) ~= "nil" then
 				local cbreply_extra = {
 					get_cmd = 'channel_block',
@@ -1557,11 +1567,11 @@ local function run(msg, matches)
 				end
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: [ user#id"..user_id.." ]")
 				kick_user(user_id, channel_id)]]
-				local get_cmd = 'channel_block'
-				local msg = msg
-				local user_id = matches[2]
-				channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, user_id=user_id})
-			elseif matches[1] == "block" and matches[2] and not string.match(matches[2], '^%d+$') then
+				--local get_cmd = 'channel_block'
+				--local msg = msg
+				--local user_id = matches[2]
+				--channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, user_id=user_id})
+			--elseif matches[1] == "block" and matches[2] and not string.match(matches[2], '^%d+$') then
 			--[[local cbres_extra = {
 					channelid = msg.to.id,
 					get_cmd = 'channel_block',
@@ -1571,39 +1581,50 @@ local function run(msg, matches)
 				local username = string.gsub(matches[2], '@', '')
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: @"..username)
 				resolve_username(username, callbackres, cbres_extra)]]
-			local get_cmd = 'channel_block'
-			local msg = msg
-			local username = matches[2]
-			local username = string.gsub(matches[2], '@', '')
-			channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, username=username})
-			end
-		end
+			--local get_cmd = 'channel_block'
+			--local msg = msg
+			--local username = matches[2]
+			--local username = string.gsub(matches[2], '@', '')
+			--channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, username=username})
+			--end
+		--end
 
-		if matches[1] == 'id' then
+		if matches[1] == 'id' or matches[1] == 'شناسه' then
 			if type(msg.reply_id) ~= "nil" and is_momod(msg) and not matches[2] then
 				local cbreply_extra = {
 					get_cmd = 'id',
 					msg = msg
 				}
 				get_message(msg.reply_id, get_message_callback, cbreply_extra)
-			elseif type(msg.reply_id) ~= "nil" and matches[2] == "from" and is_momod(msg) then
+			elseif type(msg.reply_id) ~= "nil" and matches[2] == "from" or matches[1] == "از" then
+				if not is_momod(msg) then
+			          return
+				end	
 				local cbreply_extra = {
 					get_cmd = 'idfrom',
 					msg = msg
 				}
 				get_message(msg.reply_id, get_message_callback, cbreply_extra)
 			elseif msg.text:match("@[%a%d]") then
+				if not is_momod(msg) then
+					return
+				end	
 				local cbres_extra = {
 					channelid = msg.to.id,
 					get_cmd = 'id'
 				}
 				local username = matches[2]
 				local username = username:gsub("@","")
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested ID for: @"..username)
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested ID for: @"..username)
 				resolve_username(username,  callbackres, cbres_extra)
 			else
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup ID")
-				return "SuperGroup ID for " ..string.gsub(msg.to.print_name, "_", " ").. ":\n\n"..msg.to.id
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup ID")
+				if msg.from.username ~= nil then
+				 user = msg.from.username
+				else
+				 user = "--"
+				end	
+				return reply_msg(msg.id, "» نام شما : "..msg.from.first_name.."\n» شناسه شما : <i>"..msg.to.id.." </i>\n» نام کاربری شما : t.me/"..user.."\n» نام گروه : "..msg.to.title.."\n» شناسه گروه : "..msg.to.id.."\n", ok_cb, false)
 			end
 		end
 
@@ -2421,8 +2442,11 @@ end
 
 return {
   patterns = {
-	"^([Aa]dd)$",
-	"^([Rr]em)$",
+	"^([Aa][Dd][Dd])$",
+	"^([Rr][Ee][Mm])$",
+	"^(افزودن)$",
+	"^(حذف گروه)$",
+		
 	"^([Mm]ove) (.*)$",
 	"^([Ii]nfo)$",
 	"^([Aa]dmins)$",
