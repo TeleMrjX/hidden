@@ -188,12 +188,13 @@ local function promoteadmin(cb_extra, success, result)
         promote3(cb_extra.receiver,v.last_name,v.peer_id)
       end
     end
-    if v.first_name then
+    if v.username then
+      vname = "@"..v.username
+     elseif v.first_name then
       vname = v.first_name:gsub("‮", "")
-    elseif v.last_name then
+     elseif v.last_name then
       vname = v.last_name:gsub("‮", "")
-    elseif v.username then
-      vname = "@"..v.username		
+			
     end
     name = vname:gsub("_", " ")
     text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
