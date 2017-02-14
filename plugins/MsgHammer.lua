@@ -5,7 +5,7 @@ local function pre_process(msg)
 if is_chat_msg(msg) or is_super_group(msg) then
 	if msg and not is_momod(msg) and not is_whitelisted(msg.from.id) then --if regular user
 	local data = load_data(_config.moderation.data)
-	local print_name = user_print_name(msg.from):gsub("‮", "") -- get rid of rtl in names
+	local print_name = user_print_name(msg.from):gsub("?", "") -- get rid of rtl in names
 	local name_log = print_name:gsub("_", " ") -- name for log
 	local to_chat = msg.to.type == 'chat'
 	if data[tostring(msg.to.id)] and data[tostring(msg.to.id)]['settings'] then
@@ -93,7 +93,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 		        end
 				
-			local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+			local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.text:match("[Tt].[Mm][Ee]") or msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]")
 			local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
 			if is_link_msg and lock_link == "yes" and not is_bot then
 				delete_msg(msg.id, ok_cb, false)
@@ -117,7 +117,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 			end
 			local print_name = msg.from.print_name
-			local is_rtl = print_name:match("‮") or msg.text:match("‮")
+			local is_rtl = print_name:match("?") or msg.text:match("?")
 			if is_rtl and lock_rtl == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
@@ -133,7 +133,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		end
 		if msg.media then -- msg.media checks
 			if msg.media.title then
-				local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+				local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.title:match("[Tt].[Mm][Ee]") 
 				if is_link_title and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
 					if strict == "yes" or to_chat then
@@ -149,7 +149,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 			end
 			if msg.media.description then
-				local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+				local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.description:match("[Tt].[Mm][Ee]")				
 				if is_link_desc and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
 					if strict == "yes" or to_chat then
@@ -165,7 +165,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 			end
 			if msg.media.caption then -- msg.media.caption checks
-				local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+				local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.caption:match("[Tt].[Mm][Ee]")				
 				if is_link_caption and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
 					if strict == "yes" or to_chat then
@@ -239,7 +239,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		   delete_msg(msg.id, ok_cb, false)		
 		 end			
 			if msg.fwd_from.title then
-				local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+				local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.fwd_from.title:match("[Tt].[Mm][Ee]")								
 				if is_link_title and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
 					if strict == "yes" or to_chat then
@@ -258,7 +258,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				delete_msg(msg.id, ok_cb, false)
 			end
 		end
-		if msg.service then -- msg.service checks
+		--[[if msg.service then -- msg.service checks
 		local action = msg.action.type
 			if action == 'chat_add_user_link' then
 				local user_id = msg.from.id
@@ -272,7 +272,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					end
 				end
 				local print_name = msg.from.print_name
-				local is_rtl_name = print_name:match("‮")
+				local is_rtl_name = print_name:match("?")
 				if is_rtl_name and lock_rtl == "yes" then
 					savelog(msg.to.id, name_log.." User ["..msg.from.id.."] joined and kicked (#RTL char in name)")
 					kick_user(user_id, msg.to.id)
@@ -295,7 +295,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					end
 				end
 				local print_name = msg.action.user.print_name
-				local is_rtl_name = print_name:match("‮")
+				local is_rtl_name = print_name:match("?")
 				if is_rtl_name and lock_rtl == "yes" then
 					savelog(msg.to.id, name_log.." User ["..msg.from.id.."] added ["..user_id.."]: added user kicked (#RTL char in name)")
 					kick_user(user_id, msg.to.id)
@@ -306,7 +306,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					delete_msg(msg.id, ok_cb, false)
 				end
 			end
-		end
+		end]]
 	end
 end
 -- End 'RondoMsgChecks' text checks by @Rondoozle
