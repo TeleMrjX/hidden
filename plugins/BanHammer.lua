@@ -291,8 +291,8 @@ local support_id = msg.from.id
       local user_id = matches[2]
       local chat_id = msg.to.id
       local targetuser = matches[2]
-      elseif string.match(targetuser, '^%d+$') then
-        	local user_id = targetuser
+      elseif string.match(matches[2], '^%d+$') then
+        	local user_id = matches[2]
         	local hash =  'banned:'..chat_id
         	redis:srem(hash, user_id)
         	local print_name = user_print_name(msg.from):gsub("‮", "")
