@@ -33,6 +33,11 @@ if is_chat_msg(msg) or is_super_group(msg) then
 	else
 		lock_link = 'no'
 	end
+	if settings.lock_user then
+		lock_user = settings.lock_user
+	else
+		lock_user = 'no'
+	end			
 	if settings.lock_fwd then
 		lock_fwd = settings.lock_fwd
 	else
@@ -79,6 +84,15 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					kick_user(msg.from.id, msg.to.id)
 				end
 			end
+				
+			local is_username_msg = msg.text:match("@")
+			if is_username_msg and lock_user == "yes" then
+				 delete_msg(msg.id, ok_cb, false)
+				if strict == "yes" or to_chat then
+					kick_user(msg.from.id, msg.to.id)
+				end
+		        end
+				
 			local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
 			local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
 			if is_link_msg and lock_link == "yes" and not is_bot then
