@@ -18,11 +18,11 @@ if is_chat_msg(msg) or is_super_group(msg) then
 	else
 		lock_arabic = 'no'
 	end
-	if settings.lock_rtl then
+	--[[if settings.lock_rtl then
 		lock_rtl = settings.lock_rtl
 	else
 		lock_rtl = 'no'
-	end
+	end]]
 		if settings.lock_tgservice then
 		lock_tgservice = settings.lock_tgservice
 	else
@@ -33,11 +33,16 @@ if is_chat_msg(msg) or is_super_group(msg) then
 	else
 		lock_link = 'no'
 	end
-	if settings.lock_member then
+	if settings.lock_fwd then
+		lock_fwd = settings.lock_fwd
+	else
+		lock_fwd = 'no'
+	end			
+	--[[if settings.lock_member then
 		lock_member = settings.lock_member
 	else
 		lock_member = 'no'
-	end
+	end]]
 	if settings.lock_spam then
 		lock_spam = settings.lock_spam
 	else
@@ -215,6 +220,10 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 		end
 		if msg.fwd_from then
+				
+		 if lock_fwd == "yes" then
+		   delete_msg(msg.id, ok_cb, false)		
+		 end			
 			if msg.fwd_from.title then
 				local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
 				if is_link_title and lock_link == "yes" then
