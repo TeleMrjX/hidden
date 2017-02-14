@@ -192,7 +192,8 @@ local function promoteadmin(cb_extra, success, result)
       vname = v.first_name:gsub("‮", "")
     elseif v.last_name then
       vname = v.last_name:gsub("‮", "")
-
+    elseif v.username then
+      vname = "@"..v.username		
     end
     name = vname:gsub("_", " ")
     text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
