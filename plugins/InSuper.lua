@@ -227,6 +227,34 @@ local function unlock_group_links(msg, data, target)
   end
 end
 
+local function lock_group_fwd(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_fwd_lock = data[tostring(target)]['settings']['lock_fwd']
+  if group_fwd_lock == 'yes' then
+    return reply_msg(msg.id, '🔐 قفل #فروارد از قبل فعال است !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_fwd'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔒 قفل #فروارد فعال شد !\n🔸از این پس پیام های فرواردی فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
+  end
+end
+
+local function unlock_group_fwd(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_link_lock = data[tostring(target)]['settings']['lock_fwd']
+  if group_fwd_lock == 'no' then
+    return reply_msg(msg.id, '🔓 قفل #فروارد فعال نیست !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_fwd'] = 'no'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔏 قفل #فروارد غیر فعال شد !', ok_cb, false)
+  end
+end
+
 local function lock_group_spam(msg, data, target)
   if not is_momod(msg) then
     return
@@ -478,6 +506,287 @@ local function disable_strict_rules(msg, data, target)
     return 'Settings will not be strictly enforced'
   end
 end
+
+-- //Photo Lock\\ --
+local function lock_group_photo(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Photo'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #عکس فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #عکس از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_photo(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Photo'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #عکس غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #عکس فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Photo Lock\\ --
+
+-- //Video Lock\\ --
+local function lock_group_video(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Video'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #فیلم فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #فیلم از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_video(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Video'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #فیلم غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #فیلم فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Video Lock\\ --
+
+-- //Audio Lock\\ --
+local function lock_group_audio(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Audio'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #صدا فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #صدا از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_audio(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Audio'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #صدا غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #صدا فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Audio Lock\\ --
+
+-- //File Lock\\ --
+local function lock_group_documents(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Documents'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #فایل فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #فایل از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_documents(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Documents'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #فایل غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #فایل فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //File Lock\\ --
+
+-- //Gif Lock\\ --
+local function lock_group_gif(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Gifs'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #گیف فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #گیف از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_gif(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Gifs'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #گیف غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #گیف فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Gif Lock\\ --
+
+-- //Gif Lock\\ --
+local function lock_group_gif(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Gifs'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #گیف فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #گیف از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_gif(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Gifs'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #گیف غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #گیف فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Gif Lock\\ --
+
+-- //Text Lock\\ --
+local function lock_group_text(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Text'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #متن فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #متن از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_text(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Text'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #متن غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #متن فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Text Lock\\ --
+
+-- //All Lock\\ --
+local function lock_group_all(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'All'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #گروه فعال شد !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #گروه از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_all(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'All'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #گروه غیرفعال شد !", ok_cb, false)
+
+
+  else
+    return reply_msg(msg.id,"🔓 قفل #گروه فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //All Lock\\ --
+
 --End supergroup locks
 
 --'Set supergroup rules' function
@@ -1667,90 +1976,151 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1] == 'lock' and is_momod(msg) then
+		if matches[1] == 'lock' then
+			
+		if not is_momod(msg) then
+		 return
+		end		
 			local target = msg.to.id
+			
+                      if matches[2] == 'photo' or matches[2] == 'عکس' then
+                        return lock_group_photo(msg, data, target)
+                      end
+                      if matches[2] == 'video' or matches[2] == 'فیلم' then
+                        return lock_group_video(msg, data, target)
+                      end
+                      if matches[2] == 'gif' or matches[2] == 'گیف' then
+                        return lock_group_gif(msg, data, target)
+                      end
+                      if matches[2] == 'audio' or matches[2] == 'صدا' then
+                        return lock_group_audio(msg, data, target)
+                      end
+                      if matches[2] == 'file' or matches[2] == 'فایل' then
+                        return lock_group_documents(msg, data, target)
+                      end
+                      if matches[2] == 'text' or matches[2] == 'متن' then
+                        return lock_group_text(msg, data, target)
+                      end
+                      if matches[2] == 'all' or matches[2] == 'گروه' then
+                        return lock_group_all(msg, data, target)
+                      end			
+			
 			if matches[2] == 'links' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_links(msg, data, target)
 			end
+			if matches[2] == 'fwd' then
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
+				return lock_group_fwd(msg, data, target)
+			end			
 			if matches[2] == 'spam' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked spam ")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked spam ")
 				return lock_group_spam(msg, data, target)
 			end
 			if matches[2] == 'flood' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
 				return lock_group_flood(msg, data, target)
 			end
 			if matches[2] == 'arabic' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
 				return lock_group_arabic(msg, data, target)
 			end
-			if matches[2] == 'member' then
+			--[[if matches[2] == 'member' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked member ")
 				return lock_group_membermod(msg, data, target)
 			end
 			if matches[2]:lower() == 'rtl' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked rtl chars. in names")
 				return lock_group_rtl(msg, data, target)
-			end
+			end]]
 			if matches[2] == 'tgservice' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked Tgservice Actions")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked Tgservice Actions")
 				return lock_group_tgservice(msg, data, target)
 			end
 			if matches[2] == 'sticker' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked sticker posting")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked sticker posting")
 				return lock_group_sticker(msg, data, target)
 			end
 			if matches[2] == 'contacts' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked contact posting")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked contact posting")
 				return lock_group_contacts(msg, data, target)
 			end
 			if matches[2] == 'strict' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked enabled strict settings")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked enabled strict settings")
 				return enable_strict_rules(msg, data, target)
 			end
 		end
 
-		if matches[1] == 'unlock' and is_momod(msg) then
+		if matches[1] == 'unlock' then
+		if not is_momod(msg) then
+		 return
+		end
 			local target = msg.to.id
+			
+		    if matches[2] == 'photo' or matches[2] == 'عکس' then
+                        return unlock_group_photo(msg, data, target)
+                      end
+                      if matches[2] == 'video' or matches[2] == 'فیلم' then
+                        return unlock_group_video(msg, data, target)
+                      end
+                      if matches[2] == 'gif' or matches[2] == 'گیف' then
+                        return unlock_group_gif(msg, data, target)
+                      end
+                      if matches[2] == 'audio' or matches[2] == 'صدا' then
+                        return unlock_group_audio(msg, data, target)
+                      end
+                      if matches[2] == 'file' or matches[2] == 'فایل' then
+                        return unlock_group_documents(msg, data, target)
+                      end
+                      if matches[2] == 'text' or matches[2] == 'متن' then
+                        return unlock_group_text(msg, data, target)
+                      end
+                      if matches[2] == 'all' or matches[2] == 'گروه' then
+                        return unlock_group_all(msg, data, target)
+                      end
+			
 			if matches[2] == 'links' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_links(msg, data, target)
 			end
+			if matches[2] == 'fwdthen
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
+				return unlock_group_fwd(msg, data, target)
+			end			
 			if matches[2] == 'spam' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked spam")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked spam")
 				return unlock_group_spam(msg, data, target)
 			end
 			if matches[2] == 'flood' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked flood")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked flood")
 				return unlock_group_flood(msg, data, target)
 			end
 			if matches[2] == 'arabic' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked Arabic")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked Arabic")
 				return unlock_group_arabic(msg, data, target)
 			end
-			if matches[2] == 'member' then
+			--[[if matches[2] == 'member' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked member ")
 				return unlock_group_membermod(msg, data, target)
 			end
 			if matches[2]:lower() == 'rtl' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked RTL chars. in names")
 				return unlock_group_rtl(msg, data, target)
-			end
-				if matches[2] == 'tgservice' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked tgservice actions")
+			end]]
+			if matches[2] == 'tgservice' then
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked tgservice actions")
 				return unlock_group_tgservice(msg, data, target)
 			end
 			if matches[2] == 'sticker' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked sticker posting")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked sticker posting")
 				return unlock_group_sticker(msg, data, target)
 			end
 			if matches[2] == 'contacts' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked contact posting")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked contact posting")
 				return unlock_group_contacts(msg, data, target)
 			end
 			if matches[2] == 'strict' then
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked disabled strict settings")
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked disabled strict settings")
 				return disable_strict_rules(msg, data, target)
 			end
 		end
