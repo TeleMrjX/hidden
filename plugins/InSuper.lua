@@ -488,14 +488,14 @@ local function set_rulesmod(msg, data, target)
   local data_cat = 'rules'
   data[tostring(target)][data_cat] = rules
   save_data(_config.moderation.data, data)
-  return reply_msg(msg.id, "✅ قوانین گروه تنظیم شد !\n"..msg.text.."\n", ok_cb, false)
+  return reply_msg(msg.id, "✅ قوانین گروه تنظیم شد !", ok_cb, false)
 end
 
 --'Get supergroup rules' function
 local function get_rules(msg, data)
   local data_cat = 'rules'
   if not data[tostring(msg.to.id)][data_cat] then
-    return reply_msg(msg.id, "⚠️ قوانین گروه تنظیم نشده است !\nبا دستور setrules [متن] یا تنظیم قوانین [متن] قوانین گروه را تنظیم کنید .", ok_cb, false)
+    return reply_msg(msg.id, "⚠️ قوانین گروه تنظیم نشده است !\nبا دستور [متن] setrules یا تنظیم قوانین [متن] قوانین گروه را تنظیم کنید .", ok_cb, false)
   end
   local rules = data[tostring(msg.to.id)][data_cat]
   local group_name = data[tostring(msg.to.id)]['settings']['set_name']
