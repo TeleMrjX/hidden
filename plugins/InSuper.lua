@@ -145,6 +145,62 @@ local kicked_num = "♨️ تعداد اعضای اخراج شده : "..result.k
  reply_msg(cb_extra.msg.id, text, ok_cb,false)
 end
 
+local function promote(receiver, member_username, user_id)
+  local data = load_data(_config.moderation.data)
+  local group = string.gsub(receiver, 'channel#id', '')
+  local member_tag_username = "@"..member_username
+  if not data[group] then
+    return
+  end
+  if data[group]['moderators'][tostring(user_id)] then
+    return
+  end
+  data[group]['moderators'][tostring(user_id)] = member_tag_username
+  save_data(_config.moderation.data, data)
+end
+
+local function promote3(receiver, member_name, user_id)
+  local data = load_data(_config.moderation.data)
+  local group = string.gsub(receiver, 'channel#id', '')
+  local name = member_name
+  if not data[group] then
+    return
+  end
+  if data[group]['moderators'][tostring(user_id)] then
+    return
+  end
+  data[group]['moderators'][tostring(user_id)] = name
+  save_data(_config.moderation.data, data)
+end
+
+local function promoteadmin(cb_extra, success, result)
+  local i = 1
+  local chat_name = string.gsub(cb_extra.msg.to.print_name, "_", " ")
+  local member_type = cb_extra.member_type
+  local text = "✳️ ادمین های گروه در ربات به عنوان مدیر ذخیره شدند :"
+  for k,v in pairsByKeys(result) do
+    if v.username then
+      promote(cb_extra.receiver,v.username,v.peer_id)
+    elseif not v.username then
+      if v.first_name then
+        promote3(cb_extra.receiver,v.first_name,v.peer_id)
+      elseif v.last_name then
+        promote3(cb_extra.receiver,v.last_name,v.peer_id)
+      end
+    end
+    if v.first_name then
+      vname = v.first_name:gsub("‮", "")
+    elseif v.last_name then
+      vname = v.last_name:gsub("‮", "")
+
+    end
+    name = vname:gsub("_", " ")
+    text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
+    i = i + 1
+  end
+  send_large_msg(cb_extra.receiver, text)
+end
+
 --Get and output members of supergroup
 local function callback_who(cb_extra, success, result)
 local text = "Members for "..cb_extra.receiver
@@ -228,31 +284,31 @@ local function unlock_group_links(msg, data, target)
   end
 end
 
-local function lock_group_fwd(msg, data, target)
+local function lock_group_user(msg, data, target)
   if not is_momod(msg) then
     return
   end
-  local group_fwd_lock = data[tostring(target)]['settings']['lock_fwd']
-  if group_fwd_lock == 'yes' then
-    return reply_msg(msg.id, '🔐 قفل #فروارد از قبل فعال است !', ok_cb, false)
+  local group_user_lock = data[tostring(target)]['settings']['lock_user']
+  if group_user_lock == 'yes' then
+    return reply_msg(msg.id, '🔐 قفل #یوزرنیم از قبل فعال است !', ok_cb, false)
   else
-    data[tostring(target)]['settings']['lock_fwd'] = 'yes'
+    data[tostring(target)]['settings']['lock_user'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id, '🔒 قفل #فروارد فعال شد !\n🔸از این پس پیام های فرواردی فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
+    return reply_msg(msg.id, '🔒 قفل #یوزرنیم فعال شد !\n🔸از این پس پیام های دارای یوزرنیم فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
   end
 end
 
-local function unlock_group_fwd(msg, data, target)
+local function unlock_group_user(msg, data, target)
   if not is_momod(msg) then
     return
   end
-  local group_link_lock = data[tostring(target)]['settings']['lock_fwd']
-  if group_fwd_lock == 'no' then
-    return reply_msg(msg.id, '🔓 قفل #فروارد فعال نیست !', ok_cb, false)
+  local group_link_lock = data[tostring(target)]['settings']['lock_user']
+  if group_user_lock == 'no' then
+    return reply_msg(msg.id, '🔓 قفل #یوزرنیم فعال نیست !', ok_cb, false)
   else
-    data[tostring(target)]['settings']['lock_fwd'] = 'no'
+    data[tostring(target)]['settings']['lock_user'] = 'no'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id, '🔏 قفل #فروارد غیر فعال شد !', ok_cb, false)
+    return reply_msg(msg.id, '🔏 قفل #یوزرنیم غیر فعال شد !', ok_cb, false)
   end
 end
 
@@ -434,7 +490,7 @@ local function lock_group_sticker(msg, data, target)
   else
     data[tostring(target)]['settings']['lock_sticker'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id,"🔒 قفل #استیکر فعال شد !از این پس استیکر های فرستاده شده توسط کاربران پاک می شوند !", ok_cb, false)
+    return reply_msg(msg.id,"🔒 قفل #استیکر فعال شد !\nاز این پس استیکر های فرستاده شده توسط کاربران پاک می شوند !", ok_cb, false)
   end
 end
 
@@ -2421,7 +2477,12 @@ local function run(msg, matches)
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup settings ")
 			return show_supergroup_settingsmod(msg, target)
 		end
-
+		
+		if matches[1] == 'config' and is_owner(msg) then
+                  member_type = 'Admins'
+                  admins = channel_get_admins(receiver,promoteadmin, {receiver = receiver, msg = msg, member_type = member_type})
+		end
+		
 		if matches[1] == 'rules' then
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group rules")
 			return get_rules(msg, data)
@@ -2508,6 +2569,7 @@ return {
 	"^([Bb]ots)$",
 	"^([Ww]ho)$",
 	"^([Kk]icked)$",
+	"^(config)$",		
         "^([Bb]lock) (.*)",
 	"^([Bb]lock)",
 	"^([Tt]osuper)$",
