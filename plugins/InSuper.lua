@@ -2145,6 +2145,10 @@ local function run(msg, matches)
 			if matches[2] == 'fwd' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_fwd(msg, data, target)
+			end	
+			if matches[2] == 'username' then
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
+				return lock_group_user(msg, data, target)
 			end			
 			if matches[2] == 'spam' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked spam ")
@@ -2219,7 +2223,11 @@ local function run(msg, matches)
 			if matches[2] == 'fwd' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_fwd(msg, data, target)
-			end			
+			end	
+			if matches[2] == 'username' then
+				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
+				return unlock_group_user(msg, data, target)
+			end						
 			if matches[2] == 'spam' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked spam")
 				return unlock_group_spam(msg, data, target)
