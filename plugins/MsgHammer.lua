@@ -94,8 +94,8 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		        end
 				
 			local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.text:match("[Tt].[Mm][Ee]") or msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]")
-			local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
-			if is_link_msg and lock_link == "yes" and not is_bot then
+			--local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
+			if is_link_msg and lock_link == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
 					kick_user(msg.from.id, msg.to.id)
@@ -116,14 +116,14 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					kick_user(msg.from.id, msg.to.id)
 				end
 			end
-			local print_name = msg.from.print_name
+			--[[local print_name = msg.from.print_name
 			local is_rtl = print_name:match("?") or msg.text:match("?")
 			if is_rtl and lock_rtl == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
 					kick_user(msg.from.id, msg.to.id)
 				end
-			end
+			end]]
 			if is_muted(msg.to.id, "Text: yes") and msg.text and not msg.media and not msg.service then
 				delete_msg(msg.id, ok_cb, false)
 				if to_chat then
