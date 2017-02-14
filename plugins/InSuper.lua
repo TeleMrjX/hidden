@@ -189,18 +189,17 @@ local function promoteadmin(cb_extra, success, result)
       end
     end
     if v.username then
-      vname = "@"..v.username
+      name = "@"..v.username
      elseif v.first_name then
-      vname = v.first_name:gsub("‮", "")
+      name = v.first_name
      elseif v.last_name then
-      vname = v.last_name:gsub("‮", "")
-			
+      name = v.last_name			
     end
-    name = vname:gsub("_", " ")
     text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
     i = i + 1
   end
-  send_large_msg(cb_extra.receiver, text)
+  --send_large_msg(cb_extra.receiver, text)
+  reply_msg(cb_extra.msg.id, text, ok_cb, false)	
 end
 
 --Get and output members of supergroup
