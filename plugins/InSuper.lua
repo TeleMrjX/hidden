@@ -867,7 +867,7 @@ function show_supergroup_settingsmod(msg, target)
         	NUM_MSG_MAX = 5
       	end
     end
-	if data[tostring(target)]['settings'] then
+	--[[if data[tostring(target)]['settings'] then
 		if not data[tostring(target)]['settings']['public'] then
 			data[tostring(target)]['settings']['public'] = 'no'
 		end
@@ -876,20 +876,65 @@ function show_supergroup_settingsmod(msg, target)
 		if not data[tostring(target)]['settings']['lock_rtl'] then
 			data[tostring(target)]['settings']['lock_rtl'] = 'no'
 		end
-end
+end]]
       if data[tostring(target)]['settings'] then
 		if not data[tostring(target)]['settings']['lock_tgservice'] then
 			data[tostring(target)]['settings']['lock_tgservice'] = 'no'
 		end
 	end
-	if data[tostring(target)]['settings'] then
+	--[[if data[tostring(target)]['settings'] then
 		if not data[tostring(target)]['settings']['lock_member'] then
 			data[tostring(target)]['settings']['lock_member'] = 'no'
 		end
-	end
+	end]]
+        if is_muted(tostring(target), 'Audio: yes') then
+          Audio = 'yes'
+        else
+          Audio = 'no'
+        end
+        if is_muted(tostring(target), 'Photo: yes') then
+          Photo = 'yes'
+        else
+          Photo = 'no'
+        end
+        if is_muted(tostring(target), 'Video: yes') then
+          Video = 'yes'
+        else
+          Video = 'no'
+        end
+        if is_muted(tostring(target), 'Gifs: yes') then
+          Gifs = 'yes'
+        else
+          Gifs = 'no'
+        end
+        if is_muted(tostring(target), 'Documents: yes') then
+          Documents = 'yes'
+        else
+          Documents = 'no'
+        end
+        if is_muted(tostring(target), 'Text: yes') then
+          Text = 'yes'
+        else
+          Text = 'no'
+        end
+        if is_muted(tostring(target), 'All: yes') then
+          All = 'yes'
+        else
+          All = 'no'
+        end	
+        local expiretime = redis:hget('expiretime', get_receiver(msg))
+        local expire = ''
+        if not expiretime then
+          expire = '0'
+        else
+          local now = tonumber(os.time())
+          expire =  expire..math.floor((tonumber(expiretime) - tonumber(now)) / 86400) + 1
+        end	
   local settings = data[tostring(target)]['settings']
-  local text = "SuperGroup settings:\nLock links : "..settings.lock_link.."\nLock flood: "..settings.flood.."\nFlood sensitivity : "..NUM_MSG_MAX.."\nLock spam: "..settings.lock_spam.."\nLock Arabic: "..settings.lock_arabic.."\nLock Member: "..settings.lock_member.."\nLock RTL: "..settings.lock_rtl.."\nLock Tgservice : "..settings.lock_tgservice.."\nLock sticker: "..settings.lock_sticker.."\nPublic: "..settings.public.."\nStrict settings: "..settings.strict
-  return text
+        local text = "⚙ تنظیمات گروه <b>"..msg.to.title.." </b>:\n\n[🔐]  قفل های عادی:\n\n🔷 قفل #فلود : "..settings.lock_link.."\n🔶 حساسیت فلود : "..NUM_MSG_MAX.."\n🔷 قفل #اسپم : "..settings.lock_spam.."\n\n🔶 قفل #پارسی : "..settings.lock_arabic.."\n🔷 قفل #لینک : "..settings.lock_link.."\n🔶 قفل #فروارد : "..settings.lock_fwd.."\n🔷 قفل #سرویس تلگرام : "..lock_tgservice.."\n🔷 قفل #سختگیرانه : "..settings.strict.."\n♨️ تاریخ انقضا : "..expire.."\n\n[🔏] قفل های رسانه :\n\n🔵 قفل #متن : "..Text.."\n🔴 قفل #عکس : "..Photo.."\n🔵 قفل #فیلم : "..Video.."\n🔴 قفل #صدا : "..Audio.."\n🔵 قفل #گیف : "..Gifs.."\n🔵 قفل #استیکر : "..settings.lock_sticker.."\n🔴 قفل #فایل : "..Documents.."\n🔵 قفل #مخاطب : "..settings.lock_contacts.."\n🔴 قفل #همه : "..All
+        text = text:gsub("yes","🔒")
+        text = text:gsub("no","🔓")
+        return reply_msg(msg.id, text, ok_cb, false)	
 end
 
 local function promote_admin(receiver, member_username, user_id)
