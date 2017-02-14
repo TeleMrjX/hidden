@@ -42,7 +42,7 @@ local function check_member_super(cb_extra, success, result)
       save_data(_config.moderation.data, data)
       --local text = 'SuperGroup has been added!'
       send_large_msg('user#id'..250877155, 'گروه\n'..msg.to.title..'\nتوسط\n'..msg.from.id..'\nحذف شد.', ok_cb, false)									
-      return reply_msg(msg.id, "✅ گروه "..msg.to.title.." به لیست گروه های تحت مدیریت ربات افزوده شد !", ok_cb, false)
+      return reply_msg(msg.id, "✅ گروه <i>"..msg.to.title.." </i>به لیست گروه های تحت مدیریت ربات افزوده شد !", ok_cb, false)
     end
   end
 end
