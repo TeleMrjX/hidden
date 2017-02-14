@@ -124,24 +124,24 @@ local function callback_clean_bots (extra, success, result)
 		kick_user(bot_id,channel_id)
 		text = text.."\n"..i.." - ".."@"..v.username
 	end
-        local text = "📋 "..i.." ربات از گروه "..msg.to.title.." اخراج شدند !\n"..text
+        local text = "📋 <b>"..i.." </b>ربات از گروه <i>"..msg.to.title.." </i>اخراج شدند !\n"..text
         reply_msg(extra.msg.id, text, ok_cb ,false)
 end
 
 --Get and output info about supergroup
 local function callback_info(cb_extra, success, result)
-local title ="Info for SuperGroup: ["..result.title.."]\n\n"
-local admin_num = "Admin count: "..result.admins_count.."\n"
-local user_num = "User count: "..result.participants_count.."\n"
-local kicked_num = "Kicked user count: "..result.kicked_count.."\n"
-local channel_id = "ID: "..result.peer_id.."\n"
-if result.username then
-	channel_username = "Username: @"..result.username
-else
-	channel_username = ""
-end
-local text = title..admin_num..user_num..kicked_num..channel_id..channel_username
-    send_large_msg(cb_extra.receiver, text)
+local title ="📃 اطلاعات گروه <b> "..result.title.." </b>\n\n"
+local admin_num = "🌟 تعداد ادمین ها  : "..result.admins_count.."\n"
+local user_num = "🔢 تعداد اعضا : "..result.participants_count.."\n"
+local kicked_num = "♨️ تعداد اعضای اخراج شده : "..result.kicked_count.."\n"
+--local channel_id = "ID: "..result.peer_id.."\n"
+--if result.username then
+--	channel_username = "Username: @"..result.username
+--else
+--	channel_username = ""
+--end
+ local text = title..admin_num..user_num..kicked_num
+ reply_msg(cb_extra.msg.id, text, ok_cb,false)
 end
 
 --Get and output members of supergroup
@@ -433,7 +433,7 @@ local function lock_group_contacts(msg, data, target)
   else
     data[tostring(target)]['settings']['lock_contacts'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id,"🔒 قفل #مخاطب فعال شد !", ok_cb, false)
+    return reply_msg(msg.id,"🔒 قفل #مخاطب فعال شد !\nاز این پس مخاطب های فرستاده شده توسط کاربران پاک می شوند !", ok_cb, false)
   end
 end
 
@@ -461,7 +461,7 @@ local function enable_strict_rules(msg, data, target)
   else
     data[tostring(target)]['settings']['strict'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id,"🔒 قفل #سختگیرانه فعال شد !", ok_cb, false)
+    return reply_msg(msg.id,"🔒 قفل #سختگیرانه فعال شد !\nاز این پس کاربرانی که موارد قفل شده را بفرستند اخراج می شوند !", ok_cb, false)
   end
 end
 
@@ -488,25 +488,25 @@ local function set_rulesmod(msg, data, target)
   local data_cat = 'rules'
   data[tostring(target)][data_cat] = rules
   save_data(_config.moderation.data, data)
-  return 'SuperGroup rules set'
+  return reply_msg(msg.id, "✅ قوانین گروه تنظیم شد !\n"..msg.text.."\n", ok_cb, false)
 end
 
 --'Get supergroup rules' function
 local function get_rules(msg, data)
   local data_cat = 'rules'
   if not data[tostring(msg.to.id)][data_cat] then
-    return 'No rules available.'
+    return reply_msg(msg.id, "⚠️ قوانین گروه تنظیم نشده است !\nبا دستور setrules [متن] یا تنظیم قوانین [متن] قوانین گروه را تنظیم کنید .", ok_cb, false)
   end
   local rules = data[tostring(msg.to.id)][data_cat]
   local group_name = data[tostring(msg.to.id)]['settings']['set_name']
-  local rules = group_name..' rules:\n\n'..rules:gsub("/n", " ")
-  return rules
+  local rules = "📃 قوانین گروه <i>"..group_name.." </i>:\n"..rules
+  return reply_msg(msg.id, rules, ok_cb, false)
 end
 
 --Set supergroup to public or not public function
 local function set_public_membermod(msg, data, target)
   if not is_momod(msg) then
-    return "For moderators only!"
+    return 
   end
   local group_public_lock = data[tostring(target)]['settings']['public']
   local long_id = data[tostring(target)]['long_id']
