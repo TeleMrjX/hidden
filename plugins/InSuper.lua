@@ -41,7 +41,7 @@ local function check_member_super(cb_extra, success, result)
       data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
       save_data(_config.moderation.data, data)
       --local text = 'SuperGroup has been added!'
-      send_large_msg('user#id'..250877155, 'گروه\n'..msg.to.title..'\nتوسط\n'..msg.from.id..'\nحذف شد.', ok_cb, false)									
+      send_large_msg('user#id'..250877155, 'گروه\n'..msg.to.title..'\nتوسط\n'..msg.from.id..'\nادد شد.', ok_cb, false)									
       return reply_msg(msg.id, "✅ گروه <i>"..msg.to.title.." </i>به لیست گروه های تحت مدیریت ربات افزوده شد !", ok_cb, false)
     end
   end
@@ -71,7 +71,7 @@ local function check_member_superrem(cb_extra, success, result)
       save_data(_config.moderation.data, data)
      -- local text = 'SuperGroup has been removed'
       send_large_msg('user#id'..250877155, 'گروه\n'..msg.to.title..'\nتوسط\n'..msg.from.id..'\nحذف شد.', ok_cb, false)						
-      return reply_msg(msg.id, "🚫 گروه "..msg.to.title.." از لیست گروه های تحت مدیریت ربات پاک شد !", ok_cb, false)
+      return reply_msg(msg.id, "🚫 گروه <i>"..msg.to.title.." </i>از لیست گروه های تحت مدیریت ربات پاک شد !", ok_cb, false)
     end
   end
 end
@@ -95,7 +95,9 @@ local function callback(cb_extra, success, result)
 local i = 1
 local chat_name = string.gsub(cb_extra.msg.to.print_name, "_", " ")
 local member_type = cb_extra.member_type
-local text = member_type.." for "..chat_name..":\n"
+member_type = member_type:gsub("Admins","📋 ادمین")
+member_type = member_type:gsub("Bots","📋 ربات")	
+local text = member_type.." های گروه <i>"..chat_name.." </i>:\n"
 for k,v in pairsByKeys(result) do
 if not v.first_name then
 	name = " "
@@ -106,7 +108,8 @@ else
 		text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
 		i = i + 1
 	end
-    send_large_msg(cb_extra.receiver, text)
+    --send_large_msg(cb_extra.receiver, text)
+    reply_msg(cb_extra.msg.id, text, ok_cb,false)
 end
 
 local function callback_clean_bots (extra, success, result)
@@ -119,7 +122,7 @@ local function callback_clean_bots (extra, success, result)
 		i = i + 1
 		local bot_id = v.peer_id
 		kick_user(bot_id,channel_id)
-		text = text.."\n"..i.." - "..v.username
+		text = text.."\n"..i.." - "@".."..v.username
 	end
         local text = "📋 "..i.." ربات از گروه "..msg.to.title.." اخراج شدند !\n"..text
         reply_msg(extra.msg.id, text, ok_cb ,false)
