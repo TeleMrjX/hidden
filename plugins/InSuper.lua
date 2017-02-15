@@ -78,6 +78,23 @@ local function check_member_superrem(cb_extra, success, result)
   end
 end
 
+local function check_member_super_deleted(cb_extra, success, result)	
+  local receiver = cb_extra.receiver
+  local msg = cb_extra.msg
+  local deleted = 0
+  for k,v in pairs(result) do
+    if not v.first_name and not v.last_name and not v.username then
+      deleted = deleted + 1
+      kick_user(v.peer_id, msg.to.id)
+    end
+  end
+  if deleted == 0 then
+    reply_msg(msg.id, "‼️ کسی در این گروه دلیت اکانت نکرده است !", ok_cb, false)
+  else
+    reply_msg(msg.id, "♨️ <b>"..deleted.." </b> دلیت اکانت اخراج شدند !", ok_cb, false)
+  end
+end
+
 --Function to Add supergroup
 local function superadd(msg)
 	local data = load_data(_config.moderation.data)
@@ -2114,6 +2131,10 @@ local function run(msg, matches)
 				channel_set_about(receiver, about_text, ok_cb, false)
 				return "About has been cleaned"
 			end
+                      if matches[2]:lower() == 'deleted' and is_momod(msg) then
+                        local receiver = get_receiver(msg)
+                        channel_get_users(receiver, check_member_super_deleted, {receiver = receiver, msg = msg})
+                      end			
 			if matches[2] == 'mutelist' then
 				chat_id = msg.to.id
 				local hash =  'mute_user:'..chat_id
