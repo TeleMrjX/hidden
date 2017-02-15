@@ -1131,6 +1131,7 @@ function get_message_callback(extra, success, result)
 		--local channel = 'channel#id'..result.to.peer_id
 		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for: ["..result.from.peer_id.."]")
 		--id1 = send_large_msg(channel, result.from.peer_id)
+		print(serpent.block(result))
 		id1 = reply_msg(extra.msg.id, '<i> '..result.from.peer_id..'</i>', ok_cb, false)
 	elseif get_cmd == 'id' and result.action then
 		local action = result.action.type
