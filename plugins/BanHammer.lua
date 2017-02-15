@@ -54,7 +54,7 @@ local function pre_process(msg)
       if string.sub(msg.action.user.username:lower(), -3) == 'bot' and not is_momod(msg) and bots_protection == "yes" then --- Will kick bots added by normal users
           local print_name = user_print_name(msg.from):gsub("‮", "")
 		  local name = print_name:gsub("_", "")
-          savelog(msg.to.id, name.." ["..msg.from.id.."] added a bot > @".. msg.action.user.username)-- Save to logs
+          --savelog(msg.to.id, name.." ["..msg.from.id.."] added a bot > @".. msg.action.user.username)-- Save to logs
           kick_user(msg.action.user.id, msg.to.id)
       end
     end
@@ -449,7 +449,9 @@ return {
     "^(حذف محروم)$",
 		
     --"^([Ii]d)$",
-    "^!!tgservice (.+)$"
+    --"^!!tgservice (.+)$"
+    "^!!tgservice (chat_add_user)$",	
+    "^!!tgservice (chat_add_user_link)$",				
   },
   run = run,
   pre_process = pre_process
