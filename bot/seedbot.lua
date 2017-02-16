@@ -220,7 +220,9 @@ function create_config( )
     enabled_plugins = {
 	"AntiSpam",
 	"BanHammer",
-	"supergroup",			
+	"InSuper",			
+	"SetExpire",
+	"Tools"		
     },
     sudo_users = {250877155,261997079,0,tonumber(our_id)},--Sudo users
     moderation = {data = 'data/moderation.json'},
