@@ -54,7 +54,7 @@ function msg_valid(msg)
   -- Don't process outgoing messages
   if msg.out then		
     print('\27[36mNot valid: Bot Message\27[39m')
-    return sendtype(get_receiver(msg))
+    return false
   end
 
   -- Before bot was started
@@ -157,6 +157,9 @@ function match_plugin(plugin, plugin_name, msg)
   for k, pattern in pairs(plugin.patterns) do
     local matches = match_pattern(pattern, msg.text)
     if matches then
+    if is_momod(msg) then			
+      sendtype(get_receiver(msg))
+    end				
       print("msg matches: ", pattern)
 
       if is_plugin_disabled_on_chat(plugin_name, receiver) then
