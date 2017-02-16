@@ -506,11 +506,11 @@ do
           local file = download_to_file(url, 'voice.ogg')
           --reply_file(msg.id, file, ok_cb,false)
           --send_audio(get_receiver(msg), file, ok_cb, false)
-          if not msg.reply_id then
+          --if not msg.reply_id then
             reply_file(msg.id, file, ok_cb, false)
-          else
-            reply_file(msg.reply_id, file, ok_cb, false)
-          end
+          --else
+           -- reply_file(msg.reply_id, file, ok_cb, false)
+          --end
         end
         --------------------------
         if matches[1]:lower() == "update" and is_sudo(msg) then
