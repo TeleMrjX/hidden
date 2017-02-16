@@ -28,6 +28,10 @@ function get_receiver(msg)
   end
 end
 
+function sendtype( id )
+ send_typing(id, ok_cb, false)	
+end	
+
 function is_chat_msg( msg )
   if msg.to.type == 'chat' then
     return true
