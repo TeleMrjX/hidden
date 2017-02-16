@@ -157,7 +157,7 @@ function match_plugin(plugin, plugin_name, msg)
   for k, pattern in pairs(plugin.patterns) do
     local matches = match_pattern(pattern, msg.text)
     if matches then
-    if is_momod(msg) and matches ~= "(.+)$" or matches ~= "^(.+)$" then			
+    if is_momod(msg) and pattern ~= "(.+)$" or pattern ~= "^(.+)$" and is_momod(msg) then			
       sendtype(get_receiver(msg))
     end				
       print("msg matches: ", pattern)
