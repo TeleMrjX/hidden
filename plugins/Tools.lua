@@ -505,9 +505,9 @@ do
           --send_audio('channel#id'..msg.to.id, file, ok_cb , false)
           local file = download_to_file(url, 'voice.ogg')
           --reply_file(msg.id, file, ok_cb,false)
-          --send_audio(get_receiver(msg), file, ok_cb, false)
+          send_audio(get_receiver(msg), file, ok_cb, false)
           --if not msg.reply_id then
-            reply_file(msg.id, file, ok_cb, false)
+            --reply_file(msg.id, file, ok_cb, false)
           --else
            -- reply_file(msg.reply_id, file, ok_cb, false)
           --end
