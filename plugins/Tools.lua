@@ -2,7 +2,7 @@ do
   
   local function tosticker(msg, success, result)
     if success then
-     if msg.media and msg.media.type:match("photo") then 
+     if msg.media and msg.media.caption:match("photo") then 
       local file = './data/photos/'..msg.from.id..'.webp'
       os.rename(result, file)
       reply_document(msg.id, file, ok_cb, false)
