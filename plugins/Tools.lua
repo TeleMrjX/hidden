@@ -27,6 +27,81 @@ do
       end
     end
   end
+   -------------------------------------
+local function addword(msg, name)
+  local hash = 'chat:'..msg.to.id..':badword'
+  redis:hset(hash, name, 'newword')
+  local text = "🚫 واژه <b>"..name.." </b>فیلتر شد !"
+  return reply_msg(msg.id, text, ok_cb, false)
+end
+
+local function get_variables_hash(msg)
+
+  return 'chat:'..msg.to.id..':badword'
+
+end
+
+local function list_variablesbad(msg)
+  local hash = get_variables_hash(msg)
+
+  if hash then
+    local names = redis:hkeys(hash)
+    local text = '💢 لیست واژه های فیلتر شده :\n\n'
+    for i=1, #names do
+      text = text..'> '..names[i]..'\n'
+    end
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    return
+  end
+end
+
+function clear_commandbad(msg, var_name)
+  --Save on redis
+  local hash = get_variables_hash(msg)
+  redis:del(hash, var_name)
+  local text = '🗑 لیست واژه های فیلتر شده خالی شد !'
+  return reply_msg(msg.id, text, ok_cb, false)
+end
+
+local function list_variables2(msg, value)
+  local hash = get_variables_hash(msg)
+
+  if hash then
+    local names = redis:hkeys(hash)
+    local text = ''
+    for i=1, #names do
+      if string.match(value, names[i]) and not is_momod(msg) then
+        if msg.to.type == 'channel' then
+          delete_msg(msg.id,ok_cb,false)
+        else
+          kick_user(msg.from.id, msg.to.id)
+
+        end
+        return
+      end
+      --text = text..names[i]..'\n'
+    end
+  end
+end
+local function get_valuebad(msg, var_name)
+  local hash = get_variables_hash(msg)
+  if hash then
+    local value = redis:hget(hash, var_name)
+    if not value then
+      return
+    else
+      return value
+    end
+  end
+end
+function clear_commandsbad(msg, cmd_name)
+  --Save on redis
+  local hash = get_variables_hash(msg)
+  redis:hdel(hash, cmd_name)
+  local text = '♨️ واژه <b>'..cmd_name..' </b>از لیست واژه های فیلتر شده حذف شد !'
+  return reply_msg(msg.id, text, ok_cb, false)
+end
   -------------------------------------
   local function chat_list(msg)
     local data = load_data(_config.moderation.data)
@@ -433,6 +508,38 @@ do
         return reply_msg(msg.id,text, ok_cb, false)
       end
       --------------------------
+      if matches[1]:lower() == 'filter' or matches[1] == 'فیلتر' then
+  if not is_momod(msg) then
+   return
+  end
+    local name = string.sub(matches[2], 1, 50)
+    local text = addword(msg, name)
+    return text
+  end
+
+  if matches[1] == 'filterlist' or matches[1] == 'لیست فیلتر' then
+    if not is_momod(msg) then
+   return
+  end
+    return list_variablesbad(msg)
+  end
+
+  if matches[1] == 'clean' or matches[1] == 'حذف' and matches[2] == 'filterlist' or matches[2] == 'لیست فیلتر' then
+    if not is_momod(msg) then
+   return
+  end
+    local asd = '1'
+    return clear_commandbad(msg, asd)
+  end
+
+  if matches[1] == 'unfilter' or matches[1] == 'حذف فیلتر' then
+    if not is_momod(msg) then
+   return
+  end
+    return clear_commandsbad(msg, matches[2])
+  end
+  -----------------
+    
       if matches[1]:lower() == "calc" and matches[2] then
         if redis:get("calc:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
           return reply_msg(msg.id, "⚠️ لطفا <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
@@ -612,9 +719,9 @@ do
         if matches[1] == 'value' and matches[2] == "list" and is_momod(msg) then
           return list_chats(msg)
         end
-        if msg.text:match("^(.+)$") then
+       --[[ if msg.text:match("^(.+)$") then
           return get_value(msg, matches[1]:lower())
-        end
+        end]]
         --------------------------
         if matches[1]:lower() == "gif" then
           local modes = {'memories-anim-logo','alien-glow-anim-logo','flash-anim-logo','flaming-logo','whirl-anim-logo','highlight-anim-logo','burn-in-anim-logo','shake-anim-logo','inner-fire-anim-logo','jump-anim-logo'}
@@ -637,6 +744,10 @@ do
           reply_document(msg.id, file, ok_cb, false)
         end
         ---------------------
+   if msg.text:match("(.+)$") then
+    list_variables2(msg, msg.text)
+    get_value(msg, matches[1]:lower())  
+  end      
       end
     end
     return {
@@ -676,6 +787,18 @@ do
 
         "^([Cc]hats)$",
 
+    "^([Ff][Ii][Ll][Tt][Ee][Rr]) (.*)$",
+    "^(فیلتر) (.*)$",
+
+    "^([Uu][Nn][Ff][Ii][Ll][Tt][Ee][Rr]) (.*)$",
+    "^(حذف فیلتر) (.*)$",
+
+    "^([Ff][Ii][Ll][Tt][Ee][Rr][Ll][Ii][Ss][Tt])$",
+    "^(لیست فیلتر)$",
+
+    "^([Cc][Ll][Ee][Aa][Nn]) ([Ff][Ii][Ll][Tt][Ee][Rr][Ll][Ii][Ss][Tt])$",
+    "^(حذف) (لیست فیلتر)$",
+    
 
         "^!!tgservice (chat_add_user)$",
         "^!!tgservice (channel_invite)$",
