@@ -52,9 +52,9 @@ end
 
 function msg_valid(msg)
   -- Don't process outgoing messages
-  if msg.out then
+  if msg.out then		
     print('\27[36mNot valid: Bot Message\27[39m')
-    return false
+    return sendtype(get_receiver(msg))
   end
 
   -- Before bot was started
