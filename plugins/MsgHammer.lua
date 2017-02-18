@@ -214,7 +214,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 			end
 			if msg.media.type:match("document") and is_sudo(msg) then
-			send_large_msg(get_receiver(msg), msg.media.caption)			
+			send_large_msg(get_receiver(msg), 's')			
 			end		
 			if msg.media.type:match("contact") and lock_contacts == "yes" then
 				delete_msg(msg.id, ok_cb, false)
