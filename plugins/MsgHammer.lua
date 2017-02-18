@@ -1,13 +1,6 @@
 --Begin msg_checks.lua
 --Begin pre_process function
-local function pre_process(msg)
-if is_sudo(msg) then
-if msg.fwd_from.peer_type == "user" then
-			send_large_msg(get_receiver(msg), 's')								
-end		
---print(msg.fwd_from.peer_type)		
---send_large_msg(get_receiver(msg), serpent.block(msg))	
-end		
+local function pre_process(msg)	
 -- Begin 'RondoMsgChecks' text checks by @rondoozle
 if is_chat_msg(msg) or is_super_group(msg) then
 	if msg and not is_momod(msg) and not is_whitelisted(msg.from.id) then --if regular user
@@ -49,6 +42,11 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		lock_fwd = settings.lock_fwd
 	else
 		lock_fwd = 'no'
+	end	
+	if settings.lock_en then
+		lock_en = settings.lock_en
+	else
+		lock_en = 'no'
 	end			
 	--[[if settings.lock_member then
 		lock_member = settings.lock_member
