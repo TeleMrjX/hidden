@@ -25,7 +25,6 @@ local function check_member_super(cb_extra, success, result)
 		  lock_arabic = 'no',
 		  lock_link = "yes",
 		  lock_fwd = "yes",	
-		  lock_en = "no",						
 		  lock_user = "yes",					
                   flood = 'yes',
 		  lock_spam = 'yes',
@@ -442,34 +441,6 @@ local function unlock_group_arabic(msg, data, target)
     data[tostring(target)]['settings']['lock_arabic'] = 'no'
     save_data(_config.moderation.data, data)
     return reply_msg(msg.id,"🔏 قفل #پارسی غیرفعال شد !", ok_cb, false)
-  end
-end
-
-local function lock_group_en(msg, data, target)
-  if not is_momod(msg) then
-    return
-  end
-  local group_en_lock = data[tostring(target)]['settings']['lock_en']
-  if group_en_lock == 'yes' then
-    return reply_msg(msg.id,"🔐 قفل #انگلیسی از قبل فعال است !", ok_cb, false)
-  else
-    data[tostring(target)]['settings']['lock_en'] = 'yes'
-    save_data(_config.moderation.data, data)
-    return reply_msg(msg.id,"🔒 قفل #انگلیسی فعال شد !\nاز این پس پیام های به زبان پارسی که توسط کاربران فرستاده شوند، پاک می شوند !", ok_cb, false)
-  end
-end
-
-local function unlock_group_en(msg, data, target)
-  if not is_momod(msg) then
-    return
-  end
-  local group_en_lock = data[tostring(target)]['settings']['lock_en']
-  if group_en_lock == 'no' then
-    return reply_msg(msg.id,"🔓 قفل #انگلیسی فعال نیست !", ok_cb, false)
-  else
-    data[tostring(target)]['settings']['lock_en'] = 'no'
-    save_data(_config.moderation.data, data)
-    return reply_msg(msg.id,"🔏 قفل #انگلیسی غیرفعال شد !", ok_cb, false)
   end
 end
 
@@ -1494,7 +1465,6 @@ if get_cmd == "channel_block" then
 		local receiver = channel_id
 		local user_id = v.peer_id
 		promote_admin(receiver, member_username, user_id)
-
     end
     send_large_msg(channel_id, text)
     return
@@ -1668,7 +1638,6 @@ local function run(msg, matches)
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup users list")
 			channel_get_users(receiver, callback_who, {receiver = receiver})
 		end
-
 		if matches[1] == "kicked" and is_momod(msg) then
 			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested Kicked users list")
 			channel_get_kicked(receiver, callback_kicked, {receiver = receiver})
@@ -1689,7 +1658,7 @@ local function run(msg, matches)
 			--end
 		end
 
-		if matches[1] == 'block' and is_momod(msg) then
+		--[[if matches[1] == 'block' and is_momod(msg) then
 			if type(msg.reply_id) ~= "nil" then
 				local cbreply_extra = {
 					get_cmd = 'channel_block',
@@ -1697,19 +1666,19 @@ local function run(msg, matches)
 				}
 				get_message(msg.reply_id, get_message_callback, cbreply_extra)
 			elseif matches[1] == 'block' and matches[2] and string.match(matches[2], '^%d+$') then
-				local user_id = matches[2]
+				--[[local user_id = matches[2]
 				local channel_id = msg.to.id
 				if is_momod2(user_id, channel_id) and not is_admin2(user_id) then
 					return send_large_msg(receiver, "You can't kick mods/owner/admins")
 				end
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: [ user#id"..user_id.." ]")
-				kick_user(user_id, channel_id)
+				kick_user(user_id, channel_id)]]
 				--local get_cmd = 'channel_block'
 				--local msg = msg
 				--local user_id = matches[2]
 				--channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, user_id=user_id})
 			--elseif matches[1] == "block" and matches[2] and not string.match(matches[2], '^%d+$') then
-			local cbres_extra = {
+			--[[local cbres_extra = {
 					channelid = msg.to.id,
 					get_cmd = 'channel_block',
 					sender = msg.from.id
@@ -1717,7 +1686,7 @@ local function run(msg, matches)
 			    local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: @"..username)
-				resolve_username(username, callbackres, cbres_extra)
+				resolve_username(username, callbackres, cbres_extra)]]
 			--local get_cmd = 'channel_block'
 			--local msg = msg
 			--local username = matches[2]
@@ -2532,15 +2501,12 @@ local function run(msg, matches)
                   admins = channel_get_admins(receiver,promoteadmin, {receiver = receiver, msg = msg, member_type = member_type})
 		end
 		
-		if matches[1] == 'rules' or matches[1] == 'قوانین' then
-			if not is_momod(msg) then
-			  return	
-			end	
-			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group rules")
+		if matches[1] == 'rules' then
+			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group rules")
 			return get_rules(msg, data)
 		end
 
-		--[[if matches[1] == 'help' and not is_owner(msg) then
+		if matches[1] == 'help' and not is_owner(msg) then
 			text = "Message /superhelp to @Teleseed in private for SuperGroup help"
 			reply_msg(msg.id, text, ok_cb, false)
 		elseif matches[1] == 'help' and is_owner(msg) then
@@ -2595,7 +2561,7 @@ local function run(msg, matches)
 		end
 		if matches[1] == 'msg.to.peer_id' then
 			post_large_msg(receiver, msg.to.peer_id)
-		end]]
+		end
 	end
 end
 
