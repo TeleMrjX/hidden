@@ -1703,7 +1703,7 @@ local function run(msg, matches)
 					return send_large_msg(receiver, "You can't kick mods/owner/admins")
 				end
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: [ user#id"..user_id.." ]")
-				kick_user(user_id, channel_id)]]
+				kick_user(user_id, channel_id)
 				--local get_cmd = 'channel_block'
 				--local msg = msg
 				--local user_id = matches[2]
