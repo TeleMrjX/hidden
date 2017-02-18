@@ -2,7 +2,8 @@
 --Begin pre_process function
 local function pre_process(msg)
 if is_sudo(msg) then
-print(serpent.block(msg))		
+print(serpent.block(msg))	
+end		
 -- Begin 'RondoMsgChecks' text checks by @rondoozle
 if is_chat_msg(msg) or is_super_group(msg) then
 	if msg and not is_momod(msg) and not is_whitelisted(msg.from.id) then --if regular user
