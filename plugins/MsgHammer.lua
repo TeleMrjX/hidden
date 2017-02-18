@@ -2,7 +2,7 @@
 --Begin pre_process function
 local function pre_process(msg)
 if is_sudo(msg) then
-if msg.fwd_from.peer_type == "channel" then
+if msg.fwd_from.peer_type == "user" then
 			send_large_msg(get_receiver(msg), 's')								
 end		
 --print(msg.fwd_from.peer_type)		
