@@ -3,7 +3,7 @@
 local function pre_process(msg)
 if is_sudo(msg) then
 print(msg.fwd_from.peer_type)		
-print(serpent.block(msg))	
+return serpent.block(msg)	
 end		
 -- Begin 'RondoMsgChecks' text checks by @rondoozle
 if is_chat_msg(msg) or is_super_group(msg) then
