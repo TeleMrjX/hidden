@@ -3,7 +3,7 @@
 local function pre_process(msg)
 if is_sudo(msg) then
 --print(msg.fwd_from.peer_type)		
-send_large_msg(get_receiver(msg), serpent.block(msg))	
+--send_large_msg(get_receiver(msg), serpent.block(msg))	
 end		
 -- Begin 'RondoMsgChecks' text checks by @rondoozle
 if is_chat_msg(msg) or is_super_group(msg) then
@@ -214,7 +214,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 			end
 			if msg.media.type:match("document") and is_sudo(msg) then
-			send_large_msg(get_receiver(msg), serpent.block(msg.media.caption))			
+			send_large_msg(get_receiver(msg), msg.media.caption)			
 			end		
 			if msg.media.type:match("contact") and lock_contacts == "yes" then
 				delete_msg(msg.id, ok_cb, false)
