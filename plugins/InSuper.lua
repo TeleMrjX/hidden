@@ -266,11 +266,11 @@ local function callback_kicked(cb_extra, success, result)
 		text = text.."\n"..i.." - "..name.." [ "..v.peer_id.." ]\n"
 		i = i + 1
 	end
-	local file = io.open("./groups/lists/supergroups/kicked/"..cb_extra.receiver..".txt", "w")
-	file:write(text)
-	file:flush()
-	file:close()
-	send_document(cb_extra.receiver,"./groups/lists/supergroups/kicked/"..cb_extra.receiver..".txt", ok_cb, false)
+	--local file = io.open("./groups/lists/supergroups/kicked/"..cb_extra.receiver..".txt", "w")
+	--file:write(text)
+	--file:flush()
+	--file:close()
+	--send_document(cb_extra.receiver,"./groups/lists/supergroups/kicked/"..cb_extra.receiver..".txt", ok_cb, false)
 	--send_large_msg(cb_extra.receiver, text)
 end
 
@@ -608,7 +608,7 @@ local function disable_strict_rules(msg, data, target)
   else
     data[tostring(target)]['settings']['strict'] = 'no'
     save_data(_config.moderation.data, data)
-    return 'Settings will not be strictly enforced'
+    return reply_msg(msg.id, '🔏 قفل #سختگیرانه غیر فعال شد !', ok_cb, false)
   end
 end
 
@@ -621,7 +621,7 @@ local function lock_group_photo(msg, data, target)
   local msg_type = 'Photo'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #عکس فعال شد !"
+    local text = "🔒 قفل #عکس فعال شد !\nاز این پس عکس های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #عکس از قبل فعال است !"
@@ -656,7 +656,7 @@ local function lock_group_video(msg, data, target)
   local msg_type = 'Video'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #فیلم فعال شد !"
+    local text = "🔒 قفل #فیلم فعال شد !\nاز این پس فیلم های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #فیلم از قبل فعال است !"
@@ -691,7 +691,7 @@ local function lock_group_audio(msg, data, target)
   local msg_type = 'Audio'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #صدا فعال شد !"
+    local text = "🔒 قفل #صدا فعال شد !\nاز این پس صدا و آهنگ و ویس های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #صدا از قبل فعال است !"
@@ -708,8 +708,6 @@ local function unlock_group_audio(msg, data, target)
   if is_muted(chat_id, msg_type..': yes') then
     unmute(chat_id, msg_type)
     return reply_msg(msg.id,"🔓 قفل #صدا غیرفعال شد !", ok_cb, false)
-
-
   else
     return reply_msg(msg.id,"🔓 قفل #صدا فعال نیست !", ok_cb, false)
   end
@@ -726,7 +724,7 @@ local function lock_group_documents(msg, data, target)
   local msg_type = 'Documents'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #فایل فعال شد !"
+    local text = "🔒 قفل #فایل فعال شد !\nاز این پس فایل های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #فایل از قبل فعال است !"
@@ -761,7 +759,7 @@ local function lock_group_gif(msg, data, target)
   local msg_type = 'Gifs'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #گیف فعال شد !"
+    local text = "🔒 قفل #گیف فعال شد !\nاز این پس گیف های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #گیف از قبل فعال است !"
@@ -778,8 +776,6 @@ local function unlock_group_gif(msg, data, target)
   if is_muted(chat_id, msg_type..': yes') then
     unmute(chat_id, msg_type)
     return reply_msg(msg.id,"🔓 قفل #گیف غیرفعال شد !", ok_cb, false)
-
-
   else
     return reply_msg(msg.id,"🔓 قفل #گیف فعال نیست !", ok_cb, false)
   end
@@ -787,40 +783,6 @@ local function unlock_group_gif(msg, data, target)
 end
 -- //Gif Lock\\ --
 
--- //Gif Lock\\ --
-local function lock_group_gif(msg, data, target)
-  if not is_momod(msg) then
-    return
-  end
-  local chat_id = msg.to.id
-  local msg_type = 'Gifs'
-  if not is_muted(chat_id, msg_type..': yes') then
-    mute(chat_id, msg_type)
-    local text = "🔒 قفل #گیف فعال شد !"
-    return reply_msg(msg.id, text, ok_cb, false)
-  else
-    local text = "🔐 قفل #گیف از قبل فعال است !"
-    return reply_msg(msg.id, text, ok_cb, false)
-  end
-end
-
-local function unlock_group_gif(msg, data, target)
-  if not is_momod(msg) then
-    return
-  end
-  local chat_id = msg.to.id
-  local msg_type = 'Gifs'
-  if is_muted(chat_id, msg_type..': yes') then
-    unmute(chat_id, msg_type)
-    return reply_msg(msg.id,"🔓 قفل #گیف غیرفعال شد !", ok_cb, false)
-
-
-  else
-    return reply_msg(msg.id,"🔓 قفل #گیف فعال نیست !", ok_cb, false)
-  end
-
-end
--- //Gif Lock\\ --
 
 -- //Text Lock\\ --
 local function lock_group_text(msg, data, target)
@@ -831,7 +793,7 @@ local function lock_group_text(msg, data, target)
   local msg_type = 'Text'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #متن فعال شد !"
+    local text = "🔒 قفل #متن فعال شد !\nاز این پس متن و چت های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #متن از قبل فعال است !"
@@ -848,8 +810,6 @@ local function unlock_group_text(msg, data, target)
   if is_muted(chat_id, msg_type..': yes') then
     unmute(chat_id, msg_type)
     return reply_msg(msg.id,"🔓 قفل #متن غیرفعال شد !", ok_cb, false)
-
-
   else
     return reply_msg(msg.id,"🔓 قفل #متن فعال نیست !", ok_cb, false)
   end
@@ -866,7 +826,7 @@ local function lock_group_all(msg, data, target)
   local msg_type = 'All'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #گروه فعال شد !"
+    local text = "🔒 قفل #گروه فعال شد !\nاز این پس همه پیام های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
     local text = "🔐 قفل #گروه از قبل فعال است !"
