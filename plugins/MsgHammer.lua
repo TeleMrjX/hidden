@@ -213,9 +213,6 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					end
 				end
 			end
-			if msg.media.type:match("document") and is_sudo(msg) then
-			send_large_msg(get_receiver(msg), 's')			
-			end		
 			if msg.media.type:match("contact") and lock_contacts == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
@@ -257,7 +254,9 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 		end
 		if msg.fwd_from then
-				
+if msg.fwd_from.peer_type == "channel" and is_sudo(msg) then
+			send_large_msg(get_receiver(msg), 's')								
+end				
 		 if lock_fwd == "yes" then
 		   delete_msg(msg.id, ok_cb, false)		
 		 end			
