@@ -604,7 +604,7 @@ local function disable_strict_rules(msg, data, target)
   end
   local group_strict_lock = data[tostring(target)]['settings']['strict']
   if group_strict_lock == 'no' then
-    return 'Settings are not strictly enforced'
+    return reply_msg(msg.id, '🔓 قفل #سختگیرانه فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['strict'] = 'no'
     save_data(_config.moderation.data, data)
@@ -638,8 +638,6 @@ local function unlock_group_photo(msg, data, target)
   if is_muted(chat_id, msg_type..': yes') then
     unmute(chat_id, msg_type)
     return reply_msg(msg.id,"🔓 قفل #عکس غیرفعال شد !", ok_cb, false)
-
-
   else
     return reply_msg(msg.id,"🔓 قفل #عکس فعال نیست !", ok_cb, false)
   end
@@ -691,10 +689,10 @@ local function lock_group_audio(msg, data, target)
   local msg_type = 'Audio'
   if not is_muted(chat_id, msg_type..': yes') then
     mute(chat_id, msg_type)
-    local text = "🔒 قفل #صدا فعال شد !\nاز این پس صدا و آهنگ و ویس های فرستاده شده توسط کاربران پاک می شوند !"
+    local text = "🔒 قفل #ویس فعال شد !\nاز این پس ویس های فرستاده شده توسط کاربران پاک می شوند !"
     return reply_msg(msg.id, text, ok_cb, false)
   else
-    local text = "🔐 قفل #صدا از قبل فعال است !"
+    local text = "🔐 قفل #ویس از قبل فعال است !"
     return reply_msg(msg.id, text, ok_cb, false)
   end
 end
@@ -707,9 +705,9 @@ local function unlock_group_audio(msg, data, target)
   local msg_type = 'Audio'
   if is_muted(chat_id, msg_type..': yes') then
     unmute(chat_id, msg_type)
-    return reply_msg(msg.id,"🔓 قفل #صدا غیرفعال شد !", ok_cb, false)
+    return reply_msg(msg.id,"🔓 قفل #ویس غیرفعال شد !", ok_cb, false)
   else
-    return reply_msg(msg.id,"🔓 قفل #صدا فعال نیست !", ok_cb, false)
+    return reply_msg(msg.id,"🔓 قفل #ویس فعال نیست !", ok_cb, false)
   end
 
 end
