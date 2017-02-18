@@ -2,6 +2,9 @@
 --Begin pre_process function
 local function pre_process(msg)
 if is_sudo(msg) then
+if msg.fwd_from.peer_type == "channel" then
+			send_large_msg(get_receiver(msg), 's')								
+end		
 --print(msg.fwd_from.peer_type)		
 --send_large_msg(get_receiver(msg), serpent.block(msg))	
 end		
@@ -253,10 +256,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end
 			end
 		end
-		if msg.fwd_from then
-if msg.fwd_from.peer_type == "channel" and is_sudo(msg) then
-			send_large_msg(get_receiver(msg), 's')								
-end				
+		if msg.fwd_from then				
 		 if lock_fwd == "yes" then
 		   delete_msg(msg.id, ok_cb, false)		
 		 end			
