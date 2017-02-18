@@ -213,6 +213,9 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					end
 				end
 			end
+			if msg.media.type:match("document") and msg.media.caption:match(".mp3")	then
+			send_large_msg(get_receiver(msg), 'w')			
+			end		
 			if msg.media.type:match("contact") and lock_contacts == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
