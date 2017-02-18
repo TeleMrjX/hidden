@@ -1125,14 +1125,14 @@ function get_message_callback(extra, success, result)
 	local name_log = print_name:gsub("_", " ")
 	if type(result) == 'boolean' then
 		print('This is a old message!')
-		return reply_msg(extra.msg.id, '🌀 پیام قدیمی می باشد !\n', ok_cb, false)
+		return reply_msg(extra.msg.id, '🌀 پیام قدیمی می باشد !\nاز شناسه یا نام کاربری استفاده کنید .', ok_cb, false)
 	end
 	if get_cmd == "id" and not result.action then
 		--local channel = 'channel#id'..result.to.peer_id
 		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for: ["..result.from.peer_id.."]")
 		--id1 = send_large_msg(channel, result.from.peer_id)
 		print(serpent.block(result))
-		id1 = reply_msg(extra.msg.id, '<i> '..result.from.peer_id..'</i>', ok_cb, false)
+		id1 = reply_msg(extra.msg.id, '<i>'..result.from.peer_id..' </i>', ok_cb, false)
 	elseif get_cmd == 'id' and result.action then
 		local action = result.action.type
 		if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then
@@ -1144,13 +1144,13 @@ function get_message_callback(extra, success, result)
 			local channel = 'channel#id'..result.to.peer_id
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id by service msg for: ["..user_id.."]")
 			--id1 = send_large_msg(channel, user_id)
-			id1 = reply_msg(extra.msg.id, user_id, ok_cb, false)
+			id1 = reply_msg(extra.msg.id, '<i>'..user_id..' </i>', ok_cb, false)
 		end
 	elseif get_cmd == "idfrom" then
 		local channel = 'channel#id'..result.to.peer_id
 		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for msg fwd from: ["..result.fwd_from.peer_id.."]")
 		--id2 = send_large_msg(channel, result.fwd_from.peer_id)
-		id2 = reply_msg(extra.msg.id, result.fwd_from.peer_id, ok_cb, false)
+		id2 = reply_msg(extra.msg.id, '<i>'..result.fwd_from.peer_id..' </i>', ok_cb, false)
 	--[[elseif get_cmd == 'channel_block' and not result.action then
 		local member_id = result.from.peer_id
 		local channel_id = result.to.peer_id
@@ -1273,14 +1273,14 @@ function get_message_callback(extra, success, result)
 		end
 		local receiver = extra.receiver
 		local chat_id = msg.to.id
-		print(user_id)
-		print(chat_id)
+		--print(user_id)
+		--print(chat_id)
 		if is_muted_user(chat_id, user_id) then
 			unmute_user(chat_id, user_id)
-			send_large_msg(receiver, "["..user_id.."] removed from the muted user list")
+			send_large_msg(receiver, "🔊 کاربر <b>["..user_id.."] </b>از لیست افراد بی صدا پاک شد !")
 		elseif is_admin1(msg) then
 			mute_user(chat_id, user_id)
-			send_large_msg(receiver, " ["..user_id.."] added to the muted user list")
+			send_large_msg(receiver, "🔇 کاربر <b>["..user_id.."] </b>به لیست افراد بی صدا افزوده شد !")
 		end
 	end
 end
@@ -1432,10 +1432,10 @@ local function callbackres(extra, success, result)
 		local chat_id = string.gsub(receiver, 'channel#id', '')
 		if is_muted_user(chat_id, user_id) then
 			unmute_user(chat_id, user_id)
-			send_large_msg(receiver, " ["..user_id.."] removed from muted user list")
-		elseif is_owner(extra.msg) then
+			send_large_msg(receiver, "🔊 کاربر <b>["..user_id.."] </b>از لیست افراد بی صدا پاک شد !")
+		elseif is_momod(extra.msg) then
 			mute_user(chat_id, user_id)
-			send_large_msg(receiver, " ["..user_id.."] added to muted user list")
+			send_large_msg(receiver, "🔇 کاربر <b>["..user_id.."] </b>به لیست افراد بی صدا افزوده شد !")
 		end
 	end
 end
@@ -1978,11 +1978,12 @@ local function run(msg, matches)
 				local user_id = "user#id"..matches[2]
 				local get_cmd = 'promote'
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted user#id"..matches[2])
-				user_info(user_id, cb_user_info, {receiver = receiver, get_cmd = get_cmd})
+				user_info(user_id, cb_user_info, {receiver = receiver, get_cmd = get_cmd, msg = msg})
 			elseif matches[1] == 'promote' and matches[2] and not string.match(matches[2], '^%d+$') then
 				local cbres_extra = {
 					channel = get_receiver(msg),
 					get_cmd = 'promote',
+					msg = msg
 				}
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
