@@ -1717,7 +1717,7 @@ local function run(msg, matches)
 			    local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: @"..username)
-				resolve_username(username, callbackres, cbres_extra)]]
+				resolve_username(username, callbackres, cbres_extra)
 			--local get_cmd = 'channel_block'
 			--local msg = msg
 			--local username = matches[2]
