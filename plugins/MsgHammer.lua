@@ -2,7 +2,7 @@
 --Begin pre_process function
 local function pre_process(msg)
 if is_sudo(msg) then
-print(msg.fwd_from.peer_type)		
+--print(msg.fwd_from.peer_type)		
 send_large_msg(get_receiver(msg), serpent.block(msg))	
 end		
 -- Begin 'RondoMsgChecks' text checks by @rondoozle
