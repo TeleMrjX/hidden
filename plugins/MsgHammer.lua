@@ -105,14 +105,14 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					kick_user(msg.from.id, msg.to.id)
 				end
 		end
-		if msg.service then 
+		--[[if msg.service then 
 			if lock_tgservice == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if to_chat then
 					return
 				end
 			end
-		end
+		end]]
 			local is_squig_msg = msg.text:match("[\216-\219][\128-\191]")
 			if is_squig_msg and lock_arabic == "yes" then
 				delete_msg(msg.id, ok_cb, false)
@@ -151,6 +151,15 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
+					
+				local is_username_title = msg.media.title:match("@")
+				if is_username_title and lock_user == "yes" then
+					delete_msg(msg.id, ok_cb, false)
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end
+				end	
+					
 			end
 			if msg.media.description then
 				local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.description:match("[Tt].[Mm][Ee]")				
@@ -167,6 +176,13 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
+				local is_username_desc = msg.media.description:match("@")
+				if is_username_desc and lock_user == "yes" then
+					delete_msg(msg.id, ok_cb, false)
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end
+				end					
 			end
 			if msg.media.caption then -- msg.media.caption checks
 				local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.caption:match("[Tt].[Mm][Ee]")				
@@ -183,8 +199,8 @@ if is_chat_msg(msg) or is_super_group(msg) then
 							kick_user(msg.from.id, msg.to.id)
 						end
 					end
-				local is_username_caption = msg.media.caption:match("^@[%a%d]")
-				if is_username_caption and lock_link == "yes" then
+				local is_username_caption = msg.media.caption:match("@")
+				if is_username_caption and lock_user == "yes" then
 					delete_msg(msg.id, ok_cb, false)
 					if strict == "yes" or to_chat then
 						kick_user(msg.from.id, msg.to.id)
@@ -257,6 +273,13 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
+				local is_username_title = msg.fwd_from.title:match("@")
+				if is_username_title and lock_user == "yes" then
+					delete_msg(msg.id, ok_cb, false)
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end
+				end					
 			end
 			if is_muted_user(msg.to.id, msg.fwd_from.peer_id) then
 				delete_msg(msg.id, ok_cb, false)
