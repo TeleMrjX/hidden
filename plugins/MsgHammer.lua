@@ -41,9 +41,12 @@ end
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
+if msg.text then
+  get_value(msg, msg.text)		
+end		
 -- Begin 'RondoMsgChecks' text checks by @rondoozle
 if is_chat_msg(msg) or is_super_group(msg) then
-	if msg and not is_momod(msg) and not is_whitelisted(msg.from.id) then --if regular user
+	if msg and not is_momod(msg) then --if regular user
 	local data = load_data(_config.moderation.data)
 	local print_name = user_print_name(msg.from):gsub("?", "") -- get rid of rtl in names
 	local name_log = print_name:gsub("_", " ") -- name for log
@@ -120,8 +123,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 		end
 		if msg.text then -- msg.text checks
-			list_variables2(msg, msg.text)
-			get_value(msg, msg.text)	
+			list_variables2(msg, msg.text)	
 			local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
 			 local _nl, real_digits = string.gsub(msg.text, '%d', '')
 			if lock_spam == "yes" and string.len(msg.text) > 2049 or ctrl_chars > 40 or real_digits > 2000 then
@@ -180,8 +182,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		end
 		if msg.media then -- msg.media checks
 			if msg.media.title then
-				list_variables2(msg, msg.media.title)	
-			        get_value(msg, msg.media.title)						
+				list_variables2(msg, msg.media.title)						
 				local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.title:match("[Tt].[Mm][Ee]") 
 				if is_link_title and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -208,7 +209,6 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 			if msg.media.description then
 				list_variables2(msg, msg.media.description)	
-				get_value(msg, msg.media.description)		
 				local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.description:match("[Tt].[Mm][Ee]")				
 				if is_link_desc and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -233,7 +233,6 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 			if msg.media.caption then -- msg.media.caption checks
 				list_variables2(msg, msg.media.caption)	
-				get_value(msg, msg.media.caption)	
 				local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.caption:match("[Tt].[Mm][Ee]")				
 				if is_link_caption and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -308,7 +307,6 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		 end			
 			if msg.fwd_from.title then
 				list_variables2(msg, msg.fwd_from.title)
-				get_value(msg, msg.fwd_from.title)	
 				local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.fwd_from.title:match("[Tt].[Mm][Ee]")								
 				if is_link_title and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
