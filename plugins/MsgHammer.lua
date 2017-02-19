@@ -1,3 +1,23 @@
+local function get_variables_hash(msg)
+  return 'chat:'..msg.to.id..':badword'
+end
+
+local function list_variables2(msg, value)
+	
+  local hash = get_variables_hash(msg)
+
+  if hash then
+    local names = redis:hkeys(hash)
+    local text = ''
+    for i=1, #names do
+      if string.match(value, names[i]) then
+          delete_msg(msg.id, ok_cb, false)
+      end
+    end
+  end
+	
+end
+
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
@@ -80,6 +100,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 		end
 		if msg.text then -- msg.text checks
+			list_variables2(msg, msg.text)	
 			local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
 			 local _nl, real_digits = string.gsub(msg.text, '%d', '')
 			if lock_spam == "yes" and string.len(msg.text) > 2049 or ctrl_chars > 40 or real_digits > 2000 then
