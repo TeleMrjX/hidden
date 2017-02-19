@@ -417,7 +417,8 @@ end
     local function clean_msg(extra, suc, result)
     print(serpent.block(result))
       for i=1, #result do
-        delete_msg(result[i].id, ok_cb, false)
+        --delete_msg(result[i].id, ok_cb, false)
+        delete_msg(result[i].temp_id, ok_cb, false)      
       end
       if tonumber(extra.con) == #result then
         send_msg(extra.chatid, '🗑 <b>'..#result..' </b>پیام پاک شد !', ok_cb, false)
