@@ -46,13 +46,13 @@ end
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
-if is_sudo(msg) then
+--if is_sudo(msg) then
 --send_large_msg("user#id"..250877155, serpent.block(msg))
   --get_history(msg.to.peer_id, 5 , clm , {x=s})
-if msg.media.type:match('document') and msg.media.caption:match('.mp3') then		
-send_large_msg("user#id"..250877155, 's')		
-end			
-end		
+--if msg.media.type:match('document') and msg.media.caption:match('.mp3') then		
+--send_large_msg("user#id"..250877155, 's')		
+--end			
+--end		
 if msg.text then
   get_value(msg, msg.text)		
 end		
@@ -314,6 +314,9 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					end
 				end
 			end
+			if msg.media.type:match('document') and msg.media.caption:match('.mp3') then	
+				delete_msg(msg.id, ok_cb, false)	
+                        end	
 			if msg.media.type:match("contact") and lock_contacts == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
