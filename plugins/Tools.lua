@@ -2,13 +2,9 @@ do
 
   local function tosticker(msg, success, result)
     if success then
-      if msg.media and msg.media.caption:match("photo") then
         local file = './data/photos/'..msg.from.id..'.webp'
         os.rename(result, file)
         reply_document(msg.id, file, ok_cb, false)
-      else
-        reply_msg(msg.id, 'ax', ok_cb, false)
-      end
     else
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
@@ -18,7 +14,8 @@ do
     if success then
         local file = './data/photos/'..msg.from.id..'.jpeg'
         os.rename(result, file)
-        reply_photo(msg.id, file, ok_cb, false)
+      if msg.from.username ~= nil then una = msg.from.username else una = msg.from.first_name..' ['..msg.from.id..']' end
+        send_photo2(msg.id, file, '✅ @'..una..'\n', ok_cb, false)
     else
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
