@@ -464,7 +464,7 @@ do
       end
       --------------------------
       if matches[1] == "serverinfo" and is_sudo(msg) then
-        local text = io.popen("sh ./data/cmd.sh"):read('*all')
+        local text = io.popen("sh ./data/cmd.sh"):read("*all")
         return reply_msg(msg.id,text,ok_cb,false)
       end
       --------------------------
