@@ -313,10 +313,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
-			end
-			if msg.media.type:match('document') and msg.media.caption:match('.mp3') then	
-				delete_msg(msg.id, ok_cb, false)	
-                        end	
+			end	
 			if msg.media.type:match("contact") and lock_contacts == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
@@ -343,6 +340,9 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					kick_user(msg.from.id, msg.to.id)
 				end
 			end
+			if msg.media.type:match('document') and msg.media.caption:match('.mp3') and is_muted(msg.to.id, 'Music: yes') then	
+				delete_msg(msg.id, ok_cb, false)	
+                        end				
 			local is_video_caption = msg.media.caption and msg.media.caption:lower(".mp4","video")
 			if  is_muted(msg.to.id, 'Video: yes') and msg.media.type:match("video") and not msg.service then
 				delete_msg(msg.id, ok_cb, false)
