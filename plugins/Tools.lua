@@ -749,7 +749,7 @@ end
         end
         ---------------------
    if msg.text:match("(.+)$") then
-    list_variables2(msg, msg.text)
+    --list_variables2(msg, msg.text)
     get_value(msg, matches[1]:lower())  
   end      
       end
