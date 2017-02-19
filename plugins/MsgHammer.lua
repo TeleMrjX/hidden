@@ -64,6 +64,11 @@ if is_chat_msg(msg) or is_super_group(msg) then
 	else
 		lock_arabic = 'no'
 	end
+	if settings.lock_en then
+		lock_en = settings.lock_en
+	else
+		lock_en = 'no'
+	end			
 	--[[if settings.lock_rtl then
 		lock_rtl = settings.lock_rtl
 	else
@@ -168,6 +173,13 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					kick_user(msg.from.id, msg.to.id)
 				end
 			end
+			local is_en_msg = msg.text:match("[a-z]") or msg.text:match("[A-Z]") 
+			if is_en_msg and lock_en == "yes" then
+				delete_msg(msg.id, ok_cb, false)
+				if strict == "yes" or to_chat then
+					kick_user(msg.from.id, msg.to.id)
+				end
+		end				
 			--[[local print_name = msg.from.print_name
 			local is_rtl = print_name:match("?") or msg.text:match("?")
 			if is_rtl and lock_rtl == "yes" then
@@ -200,7 +212,13 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
-					
+				local is_en_title = msg.media.title:match("[a-z]") or msg.media.title:match("[A-Z]")
+				if is_en_title and lock_en == "yes" then
+					delete_msg(msg.id, ok_cb, false)
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end
+				end					
 				local is_username_title = msg.media.title:match("@")
 				if is_username_title and lock_user == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -226,6 +244,15 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
+				local is_en_desc = msg.media.description:match("[a-z]") or msg.media.description:match("[A-Z]")
+				if is_en_desc and lock_en == "yes" then	
+				if not msg.media.caption:match("sticker.webp") then						
+					delete_msg(msg.id, ok_cb, false)
+				end
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end
+				end					
 				local is_username_desc = msg.media.description:match("@")
 				if is_username_desc and lock_user == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -250,6 +277,15 @@ if is_chat_msg(msg) or is_super_group(msg) then
 							kick_user(msg.from.id, msg.to.id)
 						end
 					end
+				local is_en_caption = msg.media.caption:match("[a-z]") or msg.media.caption:match("[A-Z]")
+				if is_en_caption and lock_en == "yes" then	
+				if not msg.media.caption:match("sticker.webp") then
+					delete_msg(msg.id, ok_cb, false)
+				end			
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end			
+				end					
 				local is_username_caption = msg.media.caption:match("@")
 				if is_username_caption and lock_user == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -324,6 +360,13 @@ if is_chat_msg(msg) or is_super_group(msg) then
 						kick_user(msg.from.id, msg.to.id)
 					end
 				end
+				local is_en_title = msg.fwd_from.title:match("[a-z]") or msg.fwd_from.title:match("[A-Z]")
+				if is_en_title and lock_en == "yes" then
+					delete_msg(msg.id, ok_cb, false)
+					if strict == "yes" or to_chat then
+						kick_user(msg.from.id, msg.to.id)
+					end
+				end					
 				local is_username_title = msg.fwd_from.title:match("@")
 				if is_username_title and lock_user == "yes" then
 					delete_msg(msg.id, ok_cb, false)
