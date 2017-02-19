@@ -809,7 +809,7 @@ end
         "^!!tgservice (chat_add_user_link)$",
 
         "%[(photo)%]",
-        "(.+)$"
+        --"(.+)$"
       },
       run = run,
       moderated = true, -- set to moderator mode
