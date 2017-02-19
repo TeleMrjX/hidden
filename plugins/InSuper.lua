@@ -119,20 +119,19 @@ member_type = member_type:gsub("Bots","📋 ربات")
 local text = member_type.." های گروه <i>"..chat_name.." </i>:\n"
 print(serpent.block(result))	
 for k,v in pairsByKeys(result) do
-if not v.first_name then
-	name = " "
-else			
-	vname = v.first_name:gsub("‮", "")
-	name = vname:gsub("_", " ")
+if not v.first_name and not v.last_name then
+
+else
+	name = v.first_name
 if v.username then
   x = v.username
  else
-  x = name.." ["..v.peer_id.."]"				
-end				
-	end
+  x = name.." ["..v.peer_id.."]"								
+end
 		text = text.."\n"..i.." - "..x
 		i = i + 1
 	end
+end	
     --send_large_msg(cb_extra.receiver, text)
     reply_msg(cb_extra.msg.id, text, ok_cb,false)
 end
