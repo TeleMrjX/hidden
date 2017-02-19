@@ -16,13 +16,9 @@ do
 ---------------
     local function tophoto(msg, success, result)
     if success then
-      if msg.media then
         local file = './data/photos/'..msg.from.id..'.jpeg'
         os.rename(result, file)
         reply_photo(msg.id, file, ok_cb, false)
-      else
-        reply_msg(msg.id, 'ax', ok_cb, false)
-      end
     else
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
