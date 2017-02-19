@@ -136,6 +136,24 @@ end
     reply_msg(cb_extra.msg.id, text, ok_cb,false)
 end
 
+local function owner_info (extra, success, result)
+	if result.first_name then
+		
+	 if result.last_name then
+	        name = result.first_name..' '..result.last_name	
+	 else	
+		name = result.first_name
+	 end
+		
+	end
+	if result.username then
+		username = "@"..result.username
+	else
+		username = "ندارد"
+	end
+	reply_msg(extra.msg.id, '📉 اطلاعات صاحب گروه :\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n🔹 شناسه : '..result.peer_id..'\n', ok_cb, false)
+end	
+
 local function callback_clean_bots (extra, success, result)
 	local msg = extra.msg
 	local receiver = 'channel#id'..msg.to.id
@@ -1615,12 +1633,16 @@ local function run(msg, matches)
 		end
 
 		if matches[1]:lower() == "owner" then
+		 if not is_momod(msg) then
+		  return
+		 end	
 			local group_owner = data[tostring(msg.to.id)]['set_owner']
 			if not group_owner then
 				return "no owner,ask admins in support groups to set owner for your SuperGroup"
 			end
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] used /owner")
-			return "SuperGroup owner is ["..group_owner..']'
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] used /owner")
+			--return "SuperGroup owner is ["..group_owner..']'
+			user_info("user#id"..group_owner, owner_info, {msg = msg})
 		end
 
 		if matches[1]:lower() == "modlist" then
@@ -2592,7 +2614,9 @@ return {
 	"^([Aa][Dd][Mm][Ii][Nn][Ss])$",
 	"^(ادمین ها)$",
 		
-	"^([Oo]wner)$",
+	"^([Oo][Ww][Nn][Ee][Rr])$",
+	"^(صاحب گروه)$",
+		
 	"^([Mm]odlist)$",
 	"^([Bb]ots)$",
 		
