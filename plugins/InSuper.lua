@@ -121,11 +121,16 @@ print(serpent.block(result))
 for k,v in pairsByKeys(result) do
 if not v.first_name then
 	name = " "
-else
+else			
 	vname = v.first_name:gsub("‮", "")
 	name = vname:gsub("_", " ")
+if v.username then
+  x = v.username
+ else
+  x = name.." ["..v.peer_id.."]"				
+end				
 	end
-		text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
+		text = text.."\n"..i.." - "..x
 		i = i + 1
 	end
     --send_large_msg(cb_extra.receiver, text)
