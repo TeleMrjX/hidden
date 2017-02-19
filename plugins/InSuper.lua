@@ -151,7 +151,7 @@ local function owner_info (extra, success, result)
 	else
 		username = "ندارد"
 	end
-	reply_msg(extra.msg.id, '📉 اطلاعات صاحب گروه :\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n🔹 شناسه : '..result.peer_id..'\n', ok_cb, false)
+	reply_msg(extra.msg.id, '📉 اطلاعات صاحب گروه :\n🔹 نام : <i>'..name..' </i>\n🔹 نام کاربری : '..username..'\n🔹 شناسه : <b>'..result.peer_id..' </b>\n', ok_cb, false)
 end	
 
 local function callback_clean_bots (extra, success, result)
