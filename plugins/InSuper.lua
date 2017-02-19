@@ -1959,7 +1959,7 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1]:lower() == 'promote' then
+		if matches[1]:lower() == 'promote' or matches[1] == 'ترفیع' then
 			if not is_owner(msg) then
 				return
 			end
@@ -1969,13 +1969,16 @@ local function run(msg, matches)
 					msg = msg
 				}
 				promote = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-			elseif matches[1]:lower() == 'promote' and matches[2] and string.match(matches[2], '^%d+$') then
+			elseif string.match(matches[2], '^%d+$') then
+				if matches[1]:lower() == 'promote' and matches[2] or matches[1] == 'ترفیع' and matches[2] then
 				local receiver = get_receiver(msg)
 				local user_id = "user#id"..matches[2]
 				local get_cmd = 'promote'
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted user#id"..matches[2])
 				user_info(user_id, cb_user_info, {receiver = receiver, get_cmd = get_cmd, msg = msg})
-			elseif matches[1]:lower() == 'promote' and matches[2] and not string.match(matches[2], '^%d+$') then
+				end	
+			elseif not string.match(matches[2], '^%d+$') then
+				if matches[1]:lower() == 'promote' and matches[2] or matches[1] == 'ترفیع' and matches[2] then
 				local cbres_extra = {
 					channel = get_receiver(msg),
 					get_cmd = 'promote',
@@ -1985,6 +1988,7 @@ local function run(msg, matches)
 				local username = string.gsub(matches[2], '@', '')
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted @"..username)
 				return resolve_username(username, callbackres, cbres_extra)
+				end	
 			end
 		end
 
@@ -2681,8 +2685,11 @@ return {
 	"^(تنظیم صاحب) (.*)$",
 	"^(تنظیم صاحب)$",
 		
-	"^([Pp]romote) (.*)$",
-	"^([Pp]romote)",
+	"^([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
+	"^([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
+	"^(ترفیع) (.*)$",
+	"^(ترفیع)",
+		
 	"^([Dd]emote) (.*)$",
 	"^([Dd]emote)",
 		
