@@ -117,6 +117,7 @@ local member_type = cb_extra.member_type
 member_type = member_type:gsub("Admins","📋 ادمین")
 member_type = member_type:gsub("Bots","📋 ربات")	
 local text = member_type.." های گروه <i>"..chat_name.." </i>:\n"
+print(serpent.block(result))	
 for k,v in pairsByKeys(result) do
 if not v.first_name then
 	name = " "
