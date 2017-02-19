@@ -13,6 +13,20 @@ do
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
   end
+---------------
+    local function tophoto(msg, success, result)
+    if success then
+      if msg.media then
+        local file = './data/photos/'..msg.from.id..'.jpeg'
+        os.rename(result, file)
+        reply_photo(msg.id, file, ok_cb, false)
+      else
+        reply_msg(msg.id, 'ax', ok_cb, false)
+      end
+    else
+      reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
+    end
+  end
   -------------------------------------
   local function get_variables_hash2(msg)
     if msg.to.type == 'channel' then
@@ -615,6 +629,9 @@ do
       if matches[1]:lower()== "sticker" and msg.reply_id then
         load_photo(msg.reply_id, tosticker, msg)
       end
+      if matches[1]:lower()== "photo" and msg.reply_id then
+        load_document(msg.reply_id, tophoto, msg)
+      end    
       ---------------------
       if matches[1]:lower()== "chats" and is_sudo(msg) then
         return chat_list(msg)
@@ -801,7 +818,8 @@ do
             "^([Vv][Oo][Ii][Cc][Ee]) +(.*)$",
             --"^([Mm]ean) (.*)$",
             "^([Ss]hort) (.*)$",
-    
+                "^(photo)$",
+
             "^([Mm][Ee])$",
             "^(اطلاعات من)$",
     
