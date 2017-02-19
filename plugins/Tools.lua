@@ -582,15 +582,16 @@ do
         if res ~= 200 then
           return
         end
-        local colors = {'blue','green','yellow','magenta','Orange','DarkOrange','red'}
-        local fonts = {'mathbf','mathit','mathfrak','mathrm'}
-        local jdat = json:decode(url)
-        local url = 'http://latex.codecogs.com/png.download?'..'\\dpi{600}%20\\huge%20\\'..fonts[math.random(#fonts)]..'{{\\color{'..colors[math.random(#colors)]..'}'..jdat.ENtime..'}}'
-        local file = download_to_file(url,'time.jpeg')
+        --local colors = {'blue','green','yellow','magenta','Orange','DarkOrange','red'}
+        --local fonts = {'mathbf','mathit','mathfrak','mathrm'}
+        --local jdat = json:decode(url)
+        --local url = 'http://latex.codecogs.com/png.download?'..'\\dpi{600}%20\\huge%20\\'..fonts[math.random(#fonts)]..'{{\\color{'..colors[math.random(#colors)]..'}'..jdat.ENtime..'}}'
+        --local file = download_to_file(url,'time.jpeg')
+       	io.popen('curl -o date.jpeg https://api.feelthecode.xyz/sticker/date/')
         --send_document(get_receiver(msg) , file, ok_cb, false)
         --reply_document(msg.id , file, ok_cb, false)
         local a = '▪️ ساعت : '..jdat.FAtime..'\n🔹 تاریخ شمسی : '..jdat.FAdate..'\n🔸 تاریخ میلادی : '..jdat.ENdate..'\n'
-        send_photo2(get_receiver(msg), file, a, ok_cb, false)
+        send_photo2(get_receiver(msg),  './date.jpeg', a, ok_cb, false)
       end
       --------------------
       if matches[1]:lower():lower() == "sticker" and msg.reply_id then
@@ -624,7 +625,7 @@ do
           local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey=6RNRDCM1NKEPD74&Text="..ent.."&Speaker=Female1&Format=mp3%2F32%2Fm&GainLevel=0&PitchLevel=0&PunctuationLevel=0&SpeechSpeedLevel=0&ToneLevel=0"
           --local url = "https://irapi.ir/aryana/api.php?text="..matches[2]
           --local file = download_to_file(url,'voice.ogg')
-          --send_audio('channel#id'..msg.to.id, file, ok_cb , false)
+          send_audio('channel#id'..msg.to.id, file, ok_cb , false)
           local file = download_to_file(url, 'voice.ogg')
           --reply_file(msg.id, file, ok_cb,false)
           send_audio(get_receiver(msg), file, ok_cb, false)
@@ -746,8 +747,8 @@ do
               local jdat = json:decode(title)
               local gif = jdat.src
               local file = download_to_file(gif,'t2g.gif')
-              send_document(get_receiver(msg), file, ok_cb, false)
-              --reply_document(msg.id, file, ok_cb, false)
+              --send_document(get_receiver(msg), file, ok_cb, false)
+              reply_document(msg.id, file, ok_cb, false)
             end
             --------------------------
             if matches[1]:lower():lower() == "love" then
@@ -786,7 +787,7 @@ do
             "^(love) (.+) (.+)$",
             "^[Uu][Pp][Dd][Aa][Tt][Ee]$",
             "^([Ll][Ee][Aa][Vv][Ee])$",
-            "^serverinfo$",
+           -- "^serverinfo$",
             "^[Pp]$",
             "^[Pp]? (+) ([%w_%.%-]+)$",
             "^[Pp]? (-) ([%w_%.%-]+)$",
