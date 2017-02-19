@@ -589,7 +589,7 @@ do
           local gif = jdat.src
           local file = download_to_file(gif,'sticker.webp') 
           reply_document(msg.id, file, ok_cb, false)
-          redis:setex("me:"..msg.to.id..":"..msg.from.id, 60, true)      
+          redis:setex("me:"..msg.to.id..":"..msg.from.id, 30, true)      
       end
       ---------------------
       if matches[1]:lower()== 'time' or matches[1] == 'زمان' then
@@ -661,10 +661,9 @@ do
           end
           --------------------------
           if matches[1]:lower()== 'leave' and is_admin1(msg) then
-            local bot_id = our_id
-            local receiver = get_receiver(msg)
-            chat_del_user("chat#id"..msg.to.id, 'user#id'..bot_id, ok_cb, false)
-            leave_channel(receiver, ok_cb, false)
+            --local bot_id = our_id
+            --chat_del_user("chat#id"..msg.to.id, 'user#id'..bot_id, ok_cb, false)
+            leave_channel(get_receiver(msg), ok_cb, false)
           end
           --------------------------
           if matches[1]:lower()== 'short' and is_sudo(msg) then
@@ -795,10 +794,14 @@ do
             "^(block) (.*)$",
             "^(unblock) (.*)$",
             "^(addme) (.*)$",
+    
             "^([Tt][Ii][Mm][Ee])$",
+            "^(زمان)$",
+    
             "^([Vv][Oo][Ii][Cc][Ee]) +(.*)$",
-            "^([Mm]ean) (.*)$",
+            --"^([Mm]ean) (.*)$",
             "^([Ss]hort) (.*)$",
+    
             "^([Mm][Ee])$",
             "^(اطلاعات من)$",
     
