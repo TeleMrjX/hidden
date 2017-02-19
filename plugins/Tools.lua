@@ -415,7 +415,7 @@ end
     end
     -----------------------
     local function clean_msg(extra, suc, result)
-    print(serpent.block(result))
+    --print(serpent.block(result))
       for i=1, #result do
         --delete_msg(result[i].id, ok_cb, false)
         delete_msg(result[i].temp_id, ok_cb, false)      
