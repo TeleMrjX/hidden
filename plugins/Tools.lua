@@ -568,7 +568,6 @@ do
         if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
           return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
-        redis:setex("me:"..msg.to.id..":"..msg.from.id, 60, true)
         local chat_id = msg.to.id
         resolve_username(msg.from.username, rsusername_cb, {msg=msg})
          if is_sudo(msg) then
@@ -590,6 +589,7 @@ do
           local gif = jdat.src
           local file = download_to_file(gif,'sticker.webp') 
           reply_document(msg.id, file, ok_cb, false)
+          redis:setex("me:"..msg.to.id..":"..msg.from.id, 60, true)      
       end
       ---------------------
       if matches[1]:lower()== 'time' or matches[1] == 'زمان' then
