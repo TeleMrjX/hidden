@@ -420,7 +420,7 @@ end
       if result.service then
        else
         delete_msg(result[i].id, ok_cb, false)
-        --delete_msg(result[i].temp_id, ok_cb, false)  
+        delete_msg(result[i].temp_id, ok_cb, false)  
        end 
       end
       if tonumber(extra.con) == #result then
