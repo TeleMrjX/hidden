@@ -467,6 +467,35 @@ local function unlock_group_arabic(msg, data, target)
   end
 end
 
+local function lock_group_en(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_en_lock = data[tostring(target)]['settings']['lock_en']
+  if group_en_lock == 'yes' then
+    return reply_msg(msg.id,"🔐 قفل #انگلیسی از قبل فعال است !", ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_en'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id,"🔒 قفل #انگلیسی فعال شد !\nاز این پس پیام های به زبان انگلیسی که توسط کاربران فرستاده شوند، پاک می شوند !", ok_cb, false)
+  end
+end
+
+local function unlock_group_en(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_en_lock = data[tostring(target)]['settings']['lock_en']
+  if group_en_lock == 'no' then
+    return reply_msg(msg.id,"🔓 قفل #پارسی فعال نیست !", ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_en'] = 'no'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id,"🔏 قفل #پارسی غیرفعال شد !", ok_cb, false)
+  end
+end
+
+
 local function lock_group_membermod(msg, data, target)
   if not is_momod(msg) then
     return
@@ -2214,6 +2243,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
 				return lock_group_arabic(msg, data, target)
 			end
+			if matches[2]:lower() == 'english' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
+				return lock_group_en(msg, data, target)
+			end			
 			--[[if matches[2]:lower() == 'member' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked member ")
 				return lock_group_membermod(msg, data, target)
@@ -2292,6 +2325,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked Arabic")
 				return unlock_group_arabic(msg, data, target)
 			end
+			if matches[2]:lower() == 'english' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked Arabic")
+				return unlock_group_en(msg, data, target)
+			end			
 			--[[if matches[2]:lower() == 'member' then
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked member ")
 				return unlock_group_membermod(msg, data, target)
