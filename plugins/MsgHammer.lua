@@ -46,10 +46,10 @@ end
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
-if is_sudo(msg) then
+--if is_sudo(msg) then
  --send_large_msg("user#id"..250877155, serpent.block(msg))	
-  get_history(msg.to.peer_id, 5 , clm , {x=s})		
-end		
+--  get_history(msg.to.peer_id, 5 , clm , {x=s})		
+--end		
 if msg.text then
   get_value(msg, msg.text)		
 end		
