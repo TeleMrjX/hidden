@@ -26,7 +26,8 @@ local function check_member_super(cb_extra, success, result)
 		  lock_en = "no",					
 		  lock_link = "yes",
 		  lock_fwd = "yes",	
-		  lock_user = "no",					
+		  lock_user = "no",	
+		  lock_bot = "yes",										
                   flood = "yes",
 		  lock_spam = "yes",
 		  lock_sticker = "no",
@@ -412,6 +413,35 @@ local function unlock_group_user(msg, data, target)
     return reply_msg(msg.id, '🔏 قفل #یوزرنیم غیر فعال شد !', ok_cb, false)
   end
 end
+
+local function lock_group_bot(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_bot_lock = data[tostring(target)]['settings']['lock_bot']
+  if group_bot_lock == 'yes' then
+    return reply_msg(msg.id, '🔐 قفل #ربات از قبل فعال است !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_bot'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔒 قفل #ربات فعال شد !\n🔸از این ربات هایی که توسط کاربران عضو شوند، اخراج می شوند !', ok_cb, false)
+  end
+end
+
+local function unlock_group_bot(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_link_lock = data[tostring(target)]['settings']['lock_bot']
+  if group_bot_lock == 'no' then
+    return reply_msg(msg.id, '🔓 قفل #ربات فعال نیست !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_bot'] = 'no'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔏 قفل #ربات غیر فعال شد !', ok_cb, false)
+  end
+end
+
 
 local function lock_group_spam(msg, data, target)
   if not is_momod(msg) then
