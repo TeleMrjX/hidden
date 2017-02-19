@@ -443,16 +443,20 @@ do
     --------------------------
 
     function run(msg, matches, callback, extra)
-
+      if msg.from.username ~= nil then
+       uname = msg.from.username
+      else
+       uname = msg.from.first_name..' ['..msg.from.id..']'
+      end
       --------------------------
-      if matches[1]:lower() == "rmsg" and msg.to.type == "channel" or matches[1] == "حذف" and msg.to.type == "channel" then
+      if matches[1]:lower():lower() == "rmsg" and msg.to.type == "channel" or matches[1]:lower() == "حذف" and msg.to.type == "channel" then
       if not is_momod(msg) then
         return
       end  
         if redis:get("rmsg:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
           local n = redis:get("rmsg:"..msg.to.id..":"..msg.from.id)
           local date = redis:ttl("rmsg:"..msg.to.id..":"..msg.from.id)
-          local text = "⚠️ شما <b>"..date.." </b>ثانیه دیگر میتوانید پیام ها را پاک کنید !"
+          local text = "⚠️ کاربر "..uname.."، شما <b>"..date.." </b>ثانیه دیگر میتوانید پیام ها را پاک کنید !"
           return reply_msg(msg.id, text, ok_cb, false)
         end
         if tonumber(matches[2]) > 50000 or tonumber(matches[2]) < 1 then
@@ -463,42 +467,44 @@ do
         get_history(msg.to.peer_id, matches[2] + 1 , clean_msg , { msg = msg,con = matches[2]})
       end
       --------------------------
-      if matches[1] == "serverinfo" and is_sudo(msg) then
+      if matches[1]:lower() == "serverinfo" and is_sudo(msg) then
         local text = io.popen("sh ./data/cmd.sh"):read("*all")
         return text
       end
       --------------------------
-      if matches[1] == "addme" and is_sudo(msg) then
+      if matches[1]:lower() == "addme" and is_sudo(msg) then
         local user = 'user#id'..250877155
         local channel = 'channel#id'..matches[2]
         channel_invite(channel, user, ok_cb, false)
       end
       --------------------------
-      if matches[1] == 'block' and is_sudo(msg) then
+      if matches[1]:lower() == 'block' and is_sudo(msg) or matches[1]:lower() == 'مسدود' and is_sudo(msg) then
         block_user("user#id"..matches[2],ok_cb,false)
+        reply_msg(msg.id, '🚫 کاربر مسدود شد !', ok_cb, false)
       end
-      if matches[1] == 'unblock' and is_sudo(msg) then
-        unblock_user("user#id"..matches[2],ok_cb,false)
+      if matches[1]:lower() == 'unblock' and is_sudo(msg) or matches[1]:lower() == 'حذف مسدود' and is_sudo(msg) then
+        unblock_user("user#id"..matches[2], ok_cb,false)
+        reply_msg(msg.id, '✅ کاربر از مسدودی در آمد !', ok_cb, false)
       end
       --------------------------
 
-      if matches[1] == 'chat_add_user' or matches[1] == 'chat_add_user_link' or matches[1] == 'channel_invite' and redis:hget('group:'..msg.to.id,'welcome') then
+      if matches[1]:lower() == 'chat_add_user' or matches[1]:lower() == 'chat_add_user_link' or matches[1]:lower() == 'channel_invite' and redis:hget('group:'..msg.to.id,'welcome') then
 
         if not msg.service then
-          return reply_msg(msg.id,"داداچ داری اشتباه میزنی 😐",ok_cb,false)
+          return reply_msg(msg.id,"داداچ کرم نریز 😐",ok_cb,false)
         end
 
-        local url , res = http.request('http://api.gpmod.ir/time/')
-        if res ~= 200 then
-          return
-        end
-        local jdat = json:decode(url)
+        --local url , res = http.request('http://api.gpmod.ir/time/')
+        --if res ~= 200 then
+        --  return
+       -- end
+       -- local jdat = json:decode(url)
         local hash = 'group:'..msg.to.id
         local group_welcome = redis:hget(hash,'welcome')
         return reply_msg(msg.id, group_welcome, ok_cb, false)
       end
       --------------------------
-      if matches[1]:lower() == 'setwlc' and matches[2] and is_momod(msg) then
+      if matches[1]:lower():lower() == 'setwlc' and matches[2] and is_momod(msg) or matches[1] == 'تنظیم خوشامد گویی' and matches[2] and is_momod(msg) then
         local hash = 'group:'..msg.to.id
         local group_welcome = redis:hget(hash,'welcome')
         redis:hset(hash,'welcome', matches[2])
@@ -506,7 +512,10 @@ do
         return reply_msg(msg.id,text, ok_cb, false)
       end
       --------------------------
-      if matches[1]:lower() == 'clean' and matches[2] == 'welcome' and is_momod(msg) then
+      if matches[1]:lower():lower() == 'clean' and matches[2] == 'welcome' or matches[1] == 'حذف' and matches[1] == 'خوشامد گویی' then
+      if not is_momod(msg) then
+       return
+      end  
         local hash = 'group:'..msg.to.id
         local group_welcome = redis:hget(hash,'welcome')
         redis:hdel(hash,'welcome')
@@ -514,7 +523,7 @@ do
         return reply_msg(msg.id,text, ok_cb, false)
       end
       --------------------------
-      if matches[1]:lower() == 'filter' or matches[1] == 'فیلتر' then
+      if matches[1]:lower():lower() == 'filter' or matches[1]:lower() == 'فیلتر' then
         if not is_momod(msg) then
           return
         end
@@ -523,14 +532,14 @@ do
         return text
       end
 
-      if matches[1] == 'filterlist' or matches[1] == 'لیست فیلتر' then
+      if matches[1]:lower() == 'filterlist' or matches[1]:lower() == 'لیست فیلتر' then
         if not is_momod(msg) then
           return
         end
         return list_variablesbad(msg)
       end
 
-      if matches[1] == 'clean' or matches[1] == 'حذف' and matches[2] == 'filterlist' or matches[2] == 'لیست فیلتر' then
+      if matches[1]:lower() == 'clean' or matches[1]:lower() == 'حذف' and matches[2] == 'filterlist' or matches[2] == 'لیست فیلتر' then
         if not is_momod(msg) then
           return
         end
@@ -538,7 +547,7 @@ do
         return clear_commandbad(msg, asd)
       end
 
-      if matches[1] == 'unfilter' or matches[1] == 'حذف فیلتر' then
+      if matches[1]:lower() == 'unfilter' or matches[1]:lower() == 'حذف فیلتر' then
         if not is_momod(msg) then
           return
         end
@@ -546,16 +555,16 @@ do
       end
       -----------------
 
-      if matches[1]:lower() == "calc" and matches[2] then
+      if matches[1]:lower():lower() == "calc" and matches[2] then
         if redis:get("calc:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
-          return reply_msg(msg.id, "⚠️ لطفا <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          return reply_msg(msg.id, "⚠️ کاربر "..uname.."، <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
         redis:setex("calc:"..msg.to.id..":"..msg.from.id, 30, true)
         local text = calc(matches[2])
         return reply_msg(msg.id, text, ok_cb, false)
       end
       ---------------------
-      if matches[1]:lower() == 'me' then
+      if matches[1]:lower():lower() == 'me' then
         if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
           return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
@@ -564,7 +573,7 @@ do
         resolve_username(msg.from.username, rsusername_cb, {msg=msg})
       end
       ---------------------
-      if matches[1]:lower() == 'time' then
+      if matches[1]:lower():lower() == 'time' then
         if redis:get("time:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
           return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
@@ -584,16 +593,16 @@ do
         send_photo2(get_receiver(msg), file, a, ok_cb, false)
       end
       --------------------
-      if matches[1]:lower() == "sticker" and msg.reply_id then
+      if matches[1]:lower():lower() == "sticker" and msg.reply_id then
         load_photo(msg.reply_id, tosticker, msg)
       end
       ---------------------
-      if matches[1]:lower() == "chats" and is_sudo(msg) then
+      if matches[1]:lower():lower() == "chats" and is_sudo(msg) then
         return chat_list(msg)
       end
 
       --------------------
-      if matches[1]:lower() == 'voice' then
+      if matches[1]:lower():lower() == 'voice' then
         if string.len(matches[2]) > 20 and not is_momod(msg) then
           return reply_msg(msg.id, "داداچ داری اشتباه میزنی", ok_cb, false)
         end
@@ -626,20 +635,20 @@ do
             --end
           end
           --------------------------
-          if matches[1]:lower() == "update" and is_sudo(msg) then
+          if matches[1]:lower():lower() == "update" and is_sudo(msg) then
             text = io.popen("git pull "):read('*all')
             --return text
             return reply_msg(msg.id, text, ok_cb, false)
           end
           --------------------------
-          if matches[1]:lower() == 'leave' and is_admin1(msg) then
+          if matches[1]:lower():lower() == 'leave' and is_admin1(msg) then
             local bot_id = our_id
             local receiver = get_receiver(msg)
             chat_del_user("chat#id"..msg.to.id, 'user#id'..bot_id, ok_cb, false)
             leave_channel(receiver, ok_cb, false)
           end
           --------------------------
-          if matches[1]:lower() == 'short' and is_sudo(msg) then
+          if matches[1]:lower():lower() == 'short' and is_sudo(msg) then
             local yon = http.request('http://api.yon.ir/?url='..URL.escape(matches[2]))
             local jdat = json:decode(yon)
             local bitly = https.request('https://api-ssl.bitly.com/v3/shorten?access_token=f2d0b4eabb524aaaf22fbc51ca620ae0fa16753d&longUrl='..URL.escape(matches[2]))
@@ -652,7 +661,7 @@ do
           end
           --------------------------
 
-          if matches[1]:lower() == "sticker" then
+          if matches[1]:lower():lower() == "sticker" then
             local modes = {'comics-logo','water-logo','3d-logo','blackbird-logo','runner-logo','graffiti-burn-logo','electric','standing3d-logo','style-logo','steel-logo','fluffy-logo','surfboard-logo','orlando-logo','fire-logo','clan-logo','chrominium-logo','harry-potter-logo','amped-logo','inferno-logo','uprise-logo','winner-logo','star-wars-logo'}
             local text = URL.escape(matches[2])
             local url = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
@@ -669,13 +678,13 @@ do
           end
           --------------------------
           -- Show the available plugins
-          if matches[1]:lower() == 'p' and is_sudo(msg) then
+          if matches[1]:lower():lower() == 'p' and is_sudo(msg) then
             local text = list_all_plugins()
             return reply_msg(msg.id, text, ok_cb, false)
           end
 
           -- Re-enable a plugin for this chat
-          if matches[1]:lower() == '+' and matches[3] == 'chat' and is_sudo(msg) then
+          if matches[1]:lower():lower() == '+' and matches[3] == 'chat' and is_sudo(msg) then
             local receiver = get_receiver(msg)
             local plugin = matches[2]
             --print("enable "..plugin..' on this chat')
@@ -684,7 +693,7 @@ do
           end
 
           -- Enable a plugin
-          if matches[1]:lower() == '+' and is_sudo(msg) then
+          if matches[1]:lower():lower() == '+' and is_sudo(msg) then
             local plugin_name = matches[2]
             --print("enable: "..matches[2])
             local text = enable_plugin(plugin_name)
@@ -692,7 +701,7 @@ do
           end
 
           -- Disable a plugin on a chat
-          if matches[1]:lower() == '-' and matches[3] == 'chat' and is_sudo(msg) then
+          if matches[1]:lower():lower() == '-' and matches[3] == 'chat' and is_sudo(msg) then
             local plugin = matches[2]
             local receiver = get_receiver(msg)
             --print("disable "..plugin..' on this chat')
@@ -701,35 +710,35 @@ do
           end
 
           -- Disable a plugin
-          if matches[1]:lower() == '-' and is_sudo(msg) then
+          if matches[1]:lower():lower() == '-' and is_sudo(msg) then
             --print("disable: "..matches[2])
             local text = disable_plugin(matches[2])
             return reply_msg(msg.id, text, ok_cb, false)
           end
 
           -- Reload all the plugins!
-          if matches[1]:lower() == 'r' and is_sudo(msg) then
+          if matches[1]:lower():lower() == 'r' and is_sudo(msg) then
             local text = reload_plugins(true)
             return reply_msg(msg.id, text, ok_cb, false)
           end
           --------------------------
-          if matches[1] == "value" and matches[2] == "+" and is_momod(msg) then
+          if matches[1]:lower() == "value" and matches[2] == "+" and is_momod(msg) then
             return save_value(msg, matches[3], matches[4])
           end
-          if matches[1] == "value" and matches[2] == "-" and is_momod(msg) then
+          if matches[1]:lower() == "value" and matches[2] == "-" and is_momod(msg) then
             return del_value(msg, matches[3])
           end
-          if matches[1] == "value" and matches[2] == 'clean' and is_owner(msg) then
+          if matches[1]:lower() == "value" and matches[2] == 'clean' and is_owner(msg) then
             return delallchats(msg)
           end
-          if matches[1] == 'value' and matches[2] == "list" and is_momod(msg) then
+          if matches[1]:lower() == 'value' and matches[2] == "list" and is_momod(msg) then
             return list_chats(msg)
           end
           --[[ if msg.text:match("^(.+)$") then
-            return get_value(msg, matches[1]:lower())
+            return get_value(msg, matches[1]:lower():lower())
             end]]
             --------------------------
-            if matches[1]:lower() == "gif" then
+            if matches[1]:lower():lower() == "gif" then
               local modes = {'memories-anim-logo','alien-glow-anim-logo','flash-anim-logo','flaming-logo','whirl-anim-logo','highlight-anim-logo','burn-in-anim-logo','shake-anim-logo','inner-fire-anim-logo','jump-anim-logo'}
               local text = URL.escape(matches[2])
               local url2 = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
@@ -741,7 +750,7 @@ do
               --reply_document(msg.id, file, ok_cb, false)
             end
             --------------------------
-            if matches[1]:lower() == "love" then
+            if matches[1]:lower():lower() == "love" then
               local text1 = matches[2]
               local text2 = matches[3]
               local url = "http://www.iloveheartstudio.com/-/p.php?t="..text1.."%20%EE%BB%AE%20"..text2.."&bc=FFFFFF&tc=000000&hc=ff0000&f=c&uc=true&ts=true&ff=PNG&w=500&ps=sq"
@@ -752,7 +761,7 @@ do
             ---------------------
             if msg.text:match("(.+)$") then
               --list_variables2(msg, msg.text)
-              get_value(msg, matches[1]:lower())
+              get_value(msg, matches[1]:lower():lower())
             end
           end
         end
@@ -760,7 +769,10 @@ do
           patterns = {
             "^([Rr][Mm][Ss][Gg]) (%d*)$",
             "^(پاک) (%d*)$",
+    
             "^([Cc][Aa][Ll][Cc]) (.*)$",
+            "^(ماشین حساب) (.*)$",
+
             "^(block) (.*)$",
             "^(unblock) (.*)$",
             "^(addme) (.*)$",
