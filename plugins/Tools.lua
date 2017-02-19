@@ -444,7 +444,7 @@ do
 
     function run(msg, matches, callback, extra)
       if msg.from.username ~= nil then
-       uname = msg.from.username
+       uname = '@'..msg.from.username
       else
        uname = msg.from.first_name..' ['..msg.from.id..']'
       end
@@ -557,7 +557,7 @@ do
 
       if matches[1]:lower():lower() == "calc" and matches[2] then
         if redis:get("calc:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
-          return reply_msg(msg.id, "⚠️ کاربر "..uname.."، <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          return reply_msg(msg.id, "⚠️ کاربر "..uname.."، شما <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
         redis:setex("calc:"..msg.to.id..":"..msg.from.id, 30, true)
         local text = calc(matches[2])
