@@ -334,7 +334,7 @@ local function lock_group_fwd(msg, data, target)
   end
   local group_fwd_lock = data[tostring(target)]['settings']['lock_fwd']
   if group_fwd_lock == 'yes' then
-    return reply_msg(msg.id, '🔐 قفل #فروارد از قبل فعال است !', ok_cb, false)
+    return reply_msg(msg.id, '🔐 قفل #فروارد از کاربر از قبل فعال است !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_fwd'] = 'yes'
     save_data(_config.moderation.data, data)
@@ -824,6 +824,40 @@ local function unlock_group_audio(msg, data, target)
 
 end
 -- //Audio Lock\\ --
+
+-- //Music Lock\\ --
+local function lock_group_music(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Music'
+  if not is_muted(chat_id, msg_type..': yes') then
+    mute(chat_id, msg_type)
+    local text = "🔒 قفل #آهنگ فعال شد !\nاز این پس آهنگ های فرستاده شده توسط کاربران پاک می شوند !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  else
+    local text = "🔐 قفل #آهنگ از قبل فعال است !"
+    return reply_msg(msg.id, text, ok_cb, false)
+  end
+end
+
+local function unlock_group_music(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local chat_id = msg.to.id
+  local msg_type = 'Music'
+  if is_muted(chat_id, msg_type..': yes') then
+    unmute(chat_id, msg_type)
+    return reply_msg(msg.id,"🔓 قفل #آهنگ غیرفعال شد !", ok_cb, false)
+  else
+    return reply_msg(msg.id,"🔓 قفل #آهنگ فعال نیست !", ok_cb, false)
+  end
+
+end
+-- //Music Lock\\ --
+
 
 -- //File Lock\\ --
 local function lock_group_documents(msg, data, target)
@@ -2814,17 +2848,23 @@ return {
 	"^([Ss]etphoto)$",
 		
 	--"^([Ss]etusername) (.*)$",
-	"^([Dd]el)$",
+	"^([Dd][Ee][Ll])$",
+	"^(حذف)$",
 		
-	"^([Ll]ock) (.*)$",
-	"^([Uu]nlock) (.*)$",
+	"^([Ll][Oo][Cc][Kk]) (.*)$",
+	"^(قفل) (.*)$",
+		
+	"^([Uu][Nn][ll][Oo][Cc][Kk]) (.*)$",
+	"^(باز کردن) (.*)$",
 		
 	--"^([Mm]ute) ([^%s]+)$",
 	--"^([Uu]nmute) ([^%s]+)$",
 	"^([Mm]uteuser)$",
 	"^([Mm]uteuser) (.*)$",
 	--"^([Pp]ublic) (.*)$",
-	"^([Ss]ettings)$",
+	"^([Ss][Ee][Tt][Ii][Nn][Gg][Ss])$",
+	"^(تنظیمات)$",
+		
 	"^([Rr]ules)$",
 	"^([Ss]etflood) (%d+)$",
 	"^([Cc]lean) (.*)$",
