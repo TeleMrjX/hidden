@@ -586,12 +586,11 @@ do
         --local fonts = {'mathbf','mathit','mathfrak','mathrm'}
         --local jdat = json:decode(url)
         --local url = 'http://latex.codecogs.com/png.download?'..'\\dpi{600}%20\\huge%20\\'..fonts[math.random(#fonts)]..'{{\\color{'..colors[math.random(#colors)]..'}'..jdat.ENtime..'}}'
-        --local file = download_to_file(url,'time.jpeg')
-       	io.popen('curl -o date.jpeg https://api.feelthecode.xyz/sticker/date/')
+        local file = download_to_file('https://api.feelthecode.xyz/sticker/date/','time.jpeg')
         --send_document(get_receiver(msg) , file, ok_cb, false)
         --reply_document(msg.id , file, ok_cb, false)
         local a = '▪️ ساعت : '..jdat.FAtime..'\n🔹 تاریخ شمسی : '..jdat.FAdate..'\n🔸 تاریخ میلادی : '..jdat.ENdate..'\n'
-        send_photo2(get_receiver(msg),  './date.jpeg', a, ok_cb, false)
+        send_photo2(get_receiver(msg),  file, a, ok_cb, false)
       end
       --------------------
       if matches[1]:lower():lower() == "sticker" and msg.reply_id then
