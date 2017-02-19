@@ -1813,12 +1813,12 @@ local function run(msg, matches)
 			end	
 		end
 
-		if matches[1]:lower() == 'link' then
+		if matches[1]:lower() == 'link' or matches[1] == 'لینک' then
 			if not is_momod(msg) then
 				return
 			end
 			local group_link = data[tostring(msg.to.id)]['settings']['set_link']
-			if not group_link then
+			if not group_link or data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' then
 				return reply_msg(msg.id, '❌ لینک گروه را با دستور <b>SetLink </b>یا <i>تنظیم لینک </i>تنظیم کنید !', ok_cb, false)
 			end
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group link ["..group_link.."]")
@@ -1916,14 +1916,18 @@ local function run(msg, matches)
 			end
 		end]]
 
-		if matches[1]:lower() == 'setowner' and is_owner(msg) then
+		if matches[1]:lower() == 'setowner' or matches[1] == 'تنظیم صاحب' then
+		 if not is_owner(msg) then
+		   return		
+		 end		
 			if type(msg.reply_id) ~= "nil" then
 				local cbreply_extra = {
 					get_cmd = 'setowner',
 					msg = msg
 				}
 				setowner = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-			elseif matches[1]:lower() == 'setowner' and matches[2] and string.match(matches[2], '^%d+$') then
+			elseif string.match(matches[2], '^%d+$') then
+			 if matches[1]:lower() == 'setowner' and matches[2] or matches[1] == 'تنظیم صاحب' and matches[2] then	
 		--[[	local group_owner = data[tostring(msg.to.id)]['set_owner']
 				if group_owner then
 					local receiver = get_receiver(msg)
@@ -1943,12 +1947,15 @@ local function run(msg, matches)
 				local msg = msg
 				local user_id = matches[2]
 				channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, user_id=user_id})
-			elseif matches[1]:lower() == 'setowner' and matches[2] and not string.match(matches[2], '^%d+$') then
+			      end	
+			elseif not string.match(matches[2], '^%d+$') then
+				if matches[1]:lower() == 'setowner' or matches[1] == 'تنظیم صاحب' and matches[2] then
 				local get_cmd = 'setowner'
 				local msg = msg
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
 				channel_get_users (receiver, in_channel_cb, {get_cmd=get_cmd, receiver=receiver, msg=msg, username=username})
+				end	
 			end
 		end
 
@@ -2529,13 +2536,19 @@ local function run(msg, matches)
 			return show_supergroup_settingsmod(msg, target)
 		end
 		
-		if matches[1]:lower() == 'config' and is_owner(msg) then
+		if matches[1]:lower() == 'config' or matches[1] == 'ارتقا ادمین ها' then
+		 if not is_owner(msg) then
+		   return		
+		 end		
                   member_type = 'Admins'
                   admins = channel_get_admins(receiver,promoteadmin, {receiver = receiver, msg = msg, member_type = member_type})
 		end
 		
-		if matches[1]:lower() == 'rules' then
-			savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group rules")
+		if matches[1]:lower() == 'rules' or matches[1] == 'قوانین' then
+			if not is_momod(msg) then
+			   return	
+			end	
+			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group rules")
 			return get_rules(msg, data)
 		end
 
@@ -2650,8 +2663,11 @@ return {
 	--"^([Kk]ick) (.*)$",
 	--"^([Nn]ewlink)$",
 		
-	"^([Ss]etlink)$",
-	"^([Ll]ink)$",
+	"^([Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
+	"^(تنظیم لینک)$",
+		
+	"^([Ll][Ii][Nn][Kk])$",		
+	"^(لینک)$",
 		
 	--"^([Rr]es) (.*)$",
 		
@@ -2660,8 +2676,11 @@ return {
 	--"^([Dd]emoteadmin) (.*)$",
 	--"^([Dd]emoteadmin)",
 		
-	"^([Ss]etowner) (.*)$",
-	"^([Ss]etowner)$",
+	"^([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (.*)$",
+	"^([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])$",
+	"^(تنظیم صاحب) (.*)$",
+	"^(تنظیم صاحب)$",
+		
 	"^([Pp]romote) (.*)$",
 	"^([Pp]romote)",
 	"^([Dd]emote) (.*)$",
