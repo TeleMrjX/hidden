@@ -49,7 +49,7 @@ local function pre_process(msg)
 if is_sudo(msg) then
 --send_large_msg("user#id"..250877155, serpent.block(msg))
   --get_history(msg.to.peer_id, 5 , clm , {x=s})
-if msg.media.caption:match('.mp3') then		
+if msg.media.type:match('document') and msg.media.caption:match('.mp3') then		
 send_large_msg("user#id"..250877155, 's')		
 end			
 end		
