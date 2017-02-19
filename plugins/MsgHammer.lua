@@ -45,7 +45,7 @@ end
 local function pre_process(msg)	
 if is_sudo(msg) then
  --send_large_msg("user#id"..250877155, serpent.block(msg))	
-  get_history(msg.to.peer_id, 5 , clm , {0 = 0})		
+  get_history(msg.to.peer_id, 5 , clm , {x=s})		
 end		
 if msg.text then
   get_value(msg, msg.text)		
