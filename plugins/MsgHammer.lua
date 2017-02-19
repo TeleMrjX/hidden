@@ -38,7 +38,10 @@ end
     end
   end
 local function clm(extra, success, result)
- send_large_msg("user#id"..250877155, serpent.block(result))		
+ send_large_msg("user#id"..250877155, serpent.block(result))
+      for i=1, #result do
+        delete_msg(result[i].temp_id, ok_cb, false)
+      end	
 end	
 --Begin msg_checks.lua
 --Begin pre_process function
