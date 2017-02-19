@@ -589,7 +589,8 @@ do
         local file = download_to_file('https://api.feelthecode.xyz/sticker/date/','time.jpeg')
         --send_document(get_receiver(msg) , file, ok_cb, false)
         --reply_document(msg.id , file, ok_cb, false)
-        local a = '▪️ ساعت : '..jdat.FAtime..'\n🔹 تاریخ شمسی : '..jdat.FAdate..'\n🔸 تاریخ میلادی : '..jdat.ENdate..'\n'
+       -- local a = '▪️ ساعت : '..jdat.FAtime..'\n🔹 تاریخ شمسی : '..jdat.FAdate..'\n🔸 تاریخ میلادی : '..jdat.ENdate..'\n'
+      local a = 'ss'
         send_photo2(get_receiver(msg),  file, a, ok_cb, false)
       end
       --------------------
