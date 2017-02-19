@@ -22,16 +22,17 @@ local function check_member_super(cb_extra, success, result)
                 set_owner = member_id ,
         settings = {
           set_name = string.gsub(msg.to.title, '_', ' '),
-		  lock_arabic = 'no',
+		  lock_arabic = "no",
+		  lock_en = "no",					
 		  lock_link = "yes",
 		  lock_fwd = "yes",	
-		  lock_user = "yes",					
-                  flood = 'yes',
-		  lock_spam = 'yes',
-		  lock_sticker = 'no',
-		  lock_tgservice = 'yes',
-		  lock_contacts = 'no',
-		  strict = 'no'
+		  lock_user = "no",					
+                  flood = "yes",
+		  lock_spam = "yes",
+		  lock_sticker = "no",
+		  lock_tgservice = "yes",
+		  lock_contacts = "no",
+		  strict = "no"
         }
       }
       save_data(_config.moderation.data, data)
@@ -336,7 +337,7 @@ local function lock_group_fwd(msg, data, target)
   else
     data[tostring(target)]['settings']['lock_fwd'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id, '🔒 قفل #فروارد فعال شد !\n🔸از این پس پیام های فرواردی فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
+    return reply_msg(msg.id, '🔒 قفل #فروارد از کاربر فعال شد !\n🔸از این پس پیام های فروارد شده از کاربران پاک می شوند !', ok_cb, false)
   end
 end
 
@@ -344,13 +345,42 @@ local function unlock_group_fwd(msg, data, target)
   if not is_momod(msg) then
     return
   end
-  local group_link_lock = data[tostring(target)]['settings']['lock_fwd']
+  local group_fwd_lock = data[tostring(target)]['settings']['lock_fwd']
   if group_fwd_lock == 'no' then
-    return reply_msg(msg.id, '🔓 قفل #فروارد فعال نیست !', ok_cb, false)
+    return reply_msg(msg.id, '🔓 قفل #فروارد از کاربر فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_fwd'] = 'no'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id, '🔏 قفل #فروارد غیر فعال شد !', ok_cb, false)
+    return reply_msg(msg.id, '🔏 قفل #فروارد از کاربر غیر فعال شد !', ok_cb, false)
+  end
+end
+
+
+local function lock_group_cfwd(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_cfwd_lock = data[tostring(target)]['settings']['lock_cfwd']
+  if group_cfwd_lock == 'yes' then
+    return reply_msg(msg.id, '🔐 قفل #فروارد از کانال از قبل فعال است !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_cfwd'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔒 قفل #فروارد از کانال از کاربر فعال شد !\n🔸از این پس پیام های فروارد شده از کانال ها پاک می شوند !', ok_cb, false)
+  end
+end
+
+local function unlock_group_cfwd(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_cfwd_lock = data[tostring(target)]['settings']['lock_cfwd']
+  if group_cfwd_lock == 'no' then
+    return reply_msg(msg.id, '🔓 قفل #فروارد از کانال از کاربر فعال نیست !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_cfwd'] = 'no'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔏 قفل #فروارد از کانال از کاربر غیر فعال شد !', ok_cb, false)
   end
 end
 
@@ -2227,6 +2257,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_fwd(msg, data, target)
 			end	
+			if matches[2]:lower() == 'cfwd' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
+				return lock_group_cfwd(msg, data, target)
+			end				
 			if matches[2]:lower() == 'username' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_user(msg, data, target)
@@ -2309,6 +2343,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_fwd(msg, data, target)
 			end	
+			if matches[2]:lower() == 'cfwd' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
+				return unlock_group_cfwd(msg, data, target)
+			end			
 			if matches[2]:lower() == 'username' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked link posting")
 				return unlock_group_user(msg, data, target)
