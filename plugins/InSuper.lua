@@ -1128,10 +1128,10 @@ function get_message_callback(extra, success, result)
 			id1 = reply_msg(extra.msg.id, '<i>'..user_id..' </i>', ok_cb, false)
 		end
 	elseif get_cmd == "idfrom" then
-		local channel = 'channel#id'..result.to.peer_id
+		--local channel = 'channel#id'..result.to.peer_id
 		--savelog(msg.to.id, name_log.." ["..msg.from.id.."] obtained id for msg fwd from: ["..result.fwd_from.peer_id.."]")
 		--id2 = send_large_msg(channel, result.fwd_from.peer_id)
-		id2 = reply_msg(extra.msg.id, '<i>'..result.fwd_from.peer_id..' </i>', ok_cb, false)
+		id2 = reply_msg(extra.msg.id, '<b>'..result.fwd_from.peer_id..' </b>', ok_cb, false)
 	--[[elseif get_cmd == 'channel_block' and not result.action then
 		local member_id = result.from.peer_id
 		local channel_id = result.to.peer_id
