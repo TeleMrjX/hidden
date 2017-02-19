@@ -147,7 +147,7 @@ local function owner_info (extra, success, result)
 		
 	end
 	if result.username then
-		username = "@"..result.username
+		username = "t.me/"..result.username
 	else
 		username = "ندارد"
 	end
