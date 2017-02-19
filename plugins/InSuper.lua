@@ -151,7 +151,7 @@ local function owner_info (extra, success, result)
 	else
 		username = "ندارد"
 	end
-	reply_msg(extra.msg.id, '📉 اطلاعات صاحب گروه :\n🔹 نام : <i>'..name..' </i>\n🔹 نام کاربری : '..username..'\n🔹 شناسه : <b>'..result.peer_id..' </b>\n', ok_cb, false)
+	reply_msg(extra.msg.id, '📉 اطلاعات صاحب گروه :\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n🔹 شناسه : '..result.peer_id..'\n', ok_cb, false)
 end	
 
 local function callback_clean_bots (extra, success, result)
@@ -1632,20 +1632,24 @@ local function run(msg, matches)
 			admins = channel_get_admins(receiver,callback, {receiver = receiver, msg = msg, member_type = member_type})
 		end
 
-		if matches[1]:lower() == "owner" then
+		if matches[1]:lower() == "owner" or matches[1] == "صاحب گروه" then
 		 if not is_momod(msg) then
 		  return
 		 end	
 			local group_owner = data[tostring(msg.to.id)]['set_owner']
 			if not group_owner then
-				return "no owner,ask admins in support groups to set owner for your SuperGroup"
-			end
+				return reply_msg(msg.id, '❌ صاحب گروه مشخص نشده است !', ok_cb, false)
+			  else	
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] used /owner")
 			--return "SuperGroup owner is ["..group_owner..']'
 			user_info("user#id"..group_owner, owner_info, {msg = msg})
+			end				
 		end
 
-		if matches[1]:lower() == "modlist" then
+		if matches[1]:lower() == "modlist" or matches[1] == "مدیران" then
+			if not is_momod(msg) then
+			  return	
+			end
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group modlist")
 			return modlist(msg)
 			-- channel_get_admins(receiver,callback, {receiver = receiver})
@@ -1723,13 +1727,17 @@ local function run(msg, matches)
 		--end
 
 		if matches[1]:lower() == 'id' or matches[1]:lower() == 'شناسه' then
-			if type(msg.reply_id) ~= "nil" and is_momod(msg) and not matches[2] then
+			if not is_momod(msg) then
+			   return	
+			end	
+			if type(msg.reply_id) ~= "nil" and not matches[2] then
 				local cbreply_extra = {
 					get_cmd = 'id',
 					msg = msg
 				}
 				get_message(msg.reply_id, get_message_callback, cbreply_extra)
-			elseif type(msg.reply_id) ~= "nil" and matches[2] == "from" or matches[1]:lower() == "از" then
+			elseif type(msg.reply_id) ~= "nil" then
+			  if matches[2]:lower() == "from" or matches[2] == "از" then	
 				if not is_momod(msg) then
 			          return
 				end	
@@ -1738,10 +1746,8 @@ local function run(msg, matches)
 					msg = msg
 				}
 				get_message(msg.reply_id, get_message_callback, cbreply_extra)
+			  end	
 			elseif msg.text:match("@[%a%d]") then
-				if not is_momod(msg) then
-					return
-				end	
 				local cbres_extra = {
 					channelid = msg.to.id,
 					get_cmd = 'id'
@@ -1753,11 +1759,11 @@ local function run(msg, matches)
 			else
 				--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup ID")
 				if msg.from.username ~= nil then
-				 user = msg.from.username
+				 user = "t.me/"..msg.from.username
 				else
-				 user = "--"
+				 user = "ندارید"
 				end	
-				return reply_msg(msg.id, "» نام شما : <b>"..msg.from.first_name.." </b>\n» شناسه شما : <b>"..msg.to.id.." </b>\n» نام کاربری شما : t.me/"..user.."\n» نام گروه : <b>"..msg.to.title.." </b>\n» شناسه گروه : <b>"..msg.to.id.." </b>\n", ok_cb, false)
+				return reply_msg(msg.id, "» نام شما : <b>"..msg.from.first_name.." </b>\n» شناسه شما : <b>"..msg.to.id.." </b>\n» نام کاربری شما : "..user.."\n» نام گروه : <b>"..msg.to.title.." </b>\n» شناسه گروه : <b>"..msg.to.id.." </b>\n", ok_cb, false)
 			end
 		end
 
@@ -2617,13 +2623,17 @@ return {
 	"^([Oo][Ww][Nn][Ee][Rr])$",
 	"^(صاحب گروه)$",
 		
-	"^([Mm]odlist)$",
-	"^([Bb]ots)$",
+	"^([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
+	"^(مدیران)$",
+		
+	"^([Bb][Oo][Tt][Ss])$",
+	"^(ربات ها)$",
 		
 	--"^([Ww]ho)$",
 	--"^([Kk]icked)$",
 		
-	"^(config)$",		
+	"^([Cc][Oo][Nn][Ff][Ii][Gg])$",	
+	"^(ارتقا ادمین ها)$",				
 		
         --"^([Bb]lock) (.*)",
 	--"^([Bb]lock)",
@@ -2632,6 +2642,9 @@ return {
 		
 	"^([Ii][Dd])$",
 	"^([Ii][Dd]) (.*)$",
+		
+	"^(شناسه)$",
+	"^(شناسه) (.*)$",		
 		
 	--"^([Kk]ickme)$",
 	--"^([Kk]ick) (.*)$",
