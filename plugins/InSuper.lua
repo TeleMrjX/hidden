@@ -124,7 +124,7 @@ if not v.first_name and not v.last_name then
 else
 	name = v.first_name
 if v.username then
-  x = v.username
+  x = "@"..v.username
  else
   x = name.." ["..v.peer_id.."]"								
 end
