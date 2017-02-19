@@ -159,6 +159,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		end
 		if msg.media then -- msg.media checks
 			if msg.media.title then
+				list_variables2(msg, msg.media.title)	
 				local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.title:match("[Tt].[Mm][Ee]") 
 				if is_link_title and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -184,6 +185,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					
 			end
 			if msg.media.description then
+				list_variables2(msg, msg.media.description)	
 				local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.description:match("[Tt].[Mm][Ee]")				
 				if is_link_desc and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -207,6 +209,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 				end					
 			end
 			if msg.media.caption then -- msg.media.caption checks
+				list_variables2(msg, msg.media.caption)	
 				local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.media.caption:match("[Tt].[Mm][Ee]")				
 				if is_link_caption and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
@@ -280,6 +283,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 		   delete_msg(msg.id, ok_cb, false)		
 		 end			
 			if msg.fwd_from.title then
+				list_variables2(msg, msg.fwd_from.title)		
 				local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or msg.fwd_from.title:match("[Tt].[Mm][Ee]")								
 				if is_link_title and lock_link == "yes" then
 					delete_msg(msg.id, ok_cb, false)
