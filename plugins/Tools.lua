@@ -564,9 +564,9 @@ do
         return reply_msg(msg.id, text, ok_cb, false)
       end
       ---------------------
-      if matches[1]:lower()== 'me' then
+      if matches[1]:lower()== 'me' or matches[1] == 'اطلاعات من' then
         if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
-          return reply_msg(msg.id, "⚠️ کاربر لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
         redis:setex("me:"..msg.to.id..":"..msg.from.id, 60, true)
         local chat_id = msg.to.id
@@ -800,6 +800,8 @@ do
             "^([Mm]ean) (.*)$",
             "^([Ss]hort) (.*)$",
             "^([Mm][Ee])$",
+            "^(اطلاعات من)$",
+    
             "^([Gg][Ii][Ff]) (.*)$",
             "^([Ss][Tt][Ii][Cc][Kk][Ee][Rr]) (.*)$",
             "^(love) (.+) (.+)$",
