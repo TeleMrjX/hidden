@@ -651,7 +651,9 @@ local text = matches[2]
   if msg.to.type == 'user' then --Dont answer on private chat !
       return nil
       else
-  local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
+                  local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
+ 
+  --local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
   local receiver = get_receiver(msg)
   local file = download_to_file(url,'text.ogg')
       send_audio('channel#id'..msg.to.id, file, ok_cb , false)
