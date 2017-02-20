@@ -2760,7 +2760,7 @@ local function run(msg, matches)
 		end
 		
 	       if matches[1]:lower() == "invall" and is_momod(msg) then
-                  channel_get_kicked(receiver, callback_kicked2, {receiver = receiver, msg = msg})
+                  channel_get_kicked(get_receiver(msg), callback_kicked2, {receiver = get_receiver(msg), msg = msg})
                 end		
 		
 		if matches[1]:lower() == 'rules' or matches[1] == 'قوانین' then
