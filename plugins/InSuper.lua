@@ -2759,6 +2759,10 @@ local function run(msg, matches)
                   admins = channel_get_admins(receiver,promoteadmin, {receiver = receiver, msg = msg, member_type = member_type})
 		end
 		
+	       if matches[1]:lower() == "invall" and is_momod(msg) then
+                  channel_get_kicked(receiver, callback_kicked2, {receiver = receiver, msg = msg})
+                end		
+		
 		if matches[1]:lower() == 'rules' or matches[1] == 'قوانین' then
 			if not is_momod(msg) then
 			   return	
@@ -2910,6 +2914,8 @@ return {
 	"^([Ss]etabout) (.*)$",
 	"^([Ss]etrules) (.*)$",
 	"^([Ss]etphoto)$",
+		
+        "^([Ii][Nn][Vv][Aa][Ll][Ll])$",		
 		
 	--"^([Ss]etusername) (.*)$",
 	"^([Dd][Ee][Ll])$",
