@@ -2372,6 +2372,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
 				return lock_group_flood(msg, data, target)
 			end
+			if matches[2]:lower() == 'music' or matches[2] == 'آهنگ' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
+				return lock_group_music(msg, data, target)
+			end			
 			if matches[2]:lower() == 'persian' or matches[2] == 'پارسی' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
 				return lock_group_arabic(msg, data, target)
@@ -2462,6 +2466,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
 				return unlock_group_flood(msg, data, target)
 			end
+			if matches[2]:lower() == 'music' or matches[2] == 'آهنگ' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked flood ")
+				return unlock_group_music(msg, data, target)
+			end			
 			if matches[2]:lower() == 'persian' or matches[2] == 'پارسی' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked arabic ")
 				return unlock_group_arabic(msg, data, target)
