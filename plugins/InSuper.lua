@@ -2901,7 +2901,7 @@ return {
 	--"^([Mm]uteuser)$",
 	--"^([Mm]uteuser) (.*)$",
 	--"^([Pp]ublic) (.*)$",
-	"^([Ss][Ee][Tt][Ii][Nn][Gg][Ss])$",
+	"^([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss])$",
 	"^(تنظیمات)$",
 		
 	"^([Rr]ules)$",
