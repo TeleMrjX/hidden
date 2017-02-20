@@ -138,6 +138,20 @@ end
     reply_msg(cb_extra.msg.id, text, ok_cb,false)
 end
 
+local function callback_kicked2(cb_extra, success, result)
+  --local text = "اعضای اخراج شده "..cb_extra.receiver.."\n\n"
+  local i = 1
+  for k,v in pairsByKeys(result) do
+    if v.first_name or v.last_name or v.username then
+      channel_invite(cb_extra.receiver, "user#id"..v.peer_id,ok_cb,false)
+      text = "🔰 <b>"..i.." </b>نفر از لیست مسدود ها به گروه دعوت شدند !"
+      i = i + 1
+    end
+  end
+  --send_large_msg(cb_extra.receiver, text)
+  reply_msg(cb_extra.msg.id, text, ok_cb,false)		
+end
+
 local function owner_info (extra, success, result)
 	if result.first_name then
 		
