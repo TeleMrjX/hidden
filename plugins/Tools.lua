@@ -630,7 +630,7 @@ do
         end
 
         --------------------
-        if matches[1]:lower()== 'voice' then
+        if matches[1]:lower()== 'voice' or matches[1] == 'ویس' then
           if string.len(matches[2]) > 20 and not is_momod(msg) then
             return reply_msg(msg.id, "داداچ داری اشتباه میزنی", ok_cb, false)
           end
@@ -791,6 +791,8 @@ do
           "^(زمان)$",
 
           "^([Vv][Oo][Ii][Cc][Ee]) +(.*)$",
+          "^(ویس) +(.*)$",
+    
           --"^([Mm]ean) (.*)$",
           "^([Ss]hort) (.*)$",
           "^(photo)$",
