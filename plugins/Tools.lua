@@ -639,23 +639,40 @@ do
           return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
         end
         redis:setex("voice:"..msg.to.id..":"..msg.from.id, 60, true)
+local text = matches[2]
 
-        local text = matches[2]
+  local b = 1
+
+  while b ~= 0 do
+    textc = text:trim()
+    text,b = text:gsub(' ','.') -- Fixing space problem ;)
+    
+    
+  if msg.to.type == 'user' then --Dont answer on private chat !
+      return nil
+      else
+  local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
+  local receiver = get_receiver(msg)
+  local file = download_to_file(url,'text.ogg')
+      send_audio('channel#id'..msg.to.id, file, ok_cb , false)
+end
+end
+        --local text = matches[2]
         --local b = 1
         --while b ~= 0 do
-            textc = text:trim()
-            textc = textc:gsub(' ','.')
+           -- textc = text:trim()
+           -- textc = textc:gsub(' ','.')
 
           --local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
-          local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
+         -- local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
           --local ent = urlencode(text)
          -- local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey=6RNRDCM1NKEPD74&Text="..ent.."&Speaker=Female1&Format=mp3%2F32%2Fm&GainLevel=0&PitchLevel=0&PunctuationLevel=0&SpeechSpeedLevel=0&ToneLevel=0"
           --local url = "https://irapi.ir/aryana/api.php?text="..matches[2]
           --local file = download_to_file(url,'voice.ogg')
         --  send_audio('channel#id'..msg.to.id, file, ok_cb , false)
-          local file = download_to_file(url, 'voice.ogg')
+          --local file = download_to_file(url, 'voice.ogg')
           --reply_file(msg.id, file, ok_cb,false)
-          send_audio(get_receiver(msg), file, ok_cb, false)
+          --send_audio(get_receiver(msg), file, ok_cb, false)
           --if not msg.reply_id then
             --reply_file(msg.id, file, ok_cb, false)
             --else
