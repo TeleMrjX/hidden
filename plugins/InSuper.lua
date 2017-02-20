@@ -2720,7 +2720,10 @@ local function run(msg, matches)
 			return muted_user_list(chat_id)
 		end
 
-		if matches[1]:lower() == 'settings' and is_momod(msg) then
+		if matches[1]:lower() == 'settings' or matches[1] == 'تنظیمات' then
+			if not is_momod(msg) then
+			 return
+			end	
 			local target = msg.to.id
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup settings ")
 			return show_supergroup_settingsmod(msg, target)
