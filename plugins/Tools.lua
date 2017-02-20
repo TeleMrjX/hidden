@@ -643,16 +643,16 @@ do
         local text = matches[2]
         --local b = 1
         --while b ~= 0 do
-          -- textc = text:trim()
-          --  text,b = text:gsub(' ','.')
+            textc = text:trim()
+            textc = textc:gsub(' ','.')
 
           --local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
-          --local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
-          local ent = urlencode(text)
-          local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey=6RNRDCM1NKEPD74&Text="..ent.."&Speaker=Female1&Format=mp3%2F32%2Fm&GainLevel=0&PitchLevel=0&PunctuationLevel=0&SpeechSpeedLevel=0&ToneLevel=0"
+          local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
+          --local ent = urlencode(text)
+         -- local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey=6RNRDCM1NKEPD74&Text="..ent.."&Speaker=Female1&Format=mp3%2F32%2Fm&GainLevel=0&PitchLevel=0&PunctuationLevel=0&SpeechSpeedLevel=0&ToneLevel=0"
           --local url = "https://irapi.ir/aryana/api.php?text="..matches[2]
           --local file = download_to_file(url,'voice.ogg')
-          send_audio('channel#id'..msg.to.id, file, ok_cb , false)
+        --  send_audio('channel#id'..msg.to.id, file, ok_cb , false)
           local file = download_to_file(url, 'voice.ogg')
           --reply_file(msg.id, file, ok_cb,false)
           send_audio(get_receiver(msg), file, ok_cb, false)
