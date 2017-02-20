@@ -2,19 +2,19 @@ do
 
   local function tosticker(msg, success, result)
     if success then
-        local file = './data/photos/'..msg.from.id..'.webp'
-        os.rename(result, file)
-        reply_document(msg.id, file, ok_cb, false)
+      local file = './data/photos/'..msg.from.id..'.webp'
+      os.rename(result, file)
+      reply_document(msg.id, file, ok_cb, false)
     else
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
   end
----------------
-    local function tophoto(msg, success, result)
+  ---------------
+  local function tophoto(msg, success, result)
     if success then
-        local file = './data/photos/'..msg.from.id..'.jpeg'
-        os.rename(result, file)
-        reply_photo(msg.id, file, ok_cb, false)
+      local file = './data/photos/'..msg.from.id..'.jpeg'
+      os.rename(result, file)
+      reply_photo(msg.id, file, ok_cb, false)
     else
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
@@ -47,7 +47,7 @@ do
 
   local function get_variables_hash(msg)
     if msg.to.type == 'channel' then
-    return 'chat:'..msg.to.id..':badword'
+      return 'chat:'..msg.to.id..':badword'
     end
   end
 
@@ -428,7 +428,7 @@ do
           delete_msg(result[i].temp_id, ok_cb, false)
         end
       end
-        reply_msg(extra.msg.id, '🗑 '..extra.con..' پیام پاک شد !', ok_cb, false)
+      reply_msg(extra.msg.id, '🗑 '..extra.con..' پیام پاک شد !', ok_cb, false)
     end
     --------------------------
     local function calc(exp)
@@ -450,15 +450,15 @@ do
 
     function run(msg, matches, callback, extra)
       if msg.from.username ~= nil then
-       uname = '@'..msg.from.username
+        uname = '@'..msg.from.username
       else
-       uname = msg.from.first_name..' ['..msg.from.id..']'
+        uname = msg.from.first_name..' ['..msg.from.id..']'
       end
       --------------------------
       if matches[1]:lower()== "rmsg" and msg.to.type == "channel" or matches[1]:lower() == "حذف" and msg.to.type == "channel" then
-      if not is_momod(msg) then
-        return
-      end  
+        if not is_momod(msg) then
+          return
+        end
         if redis:get("rmsg:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
           local n = redis:get("rmsg:"..msg.to.id..":"..msg.from.id)
           local date = redis:ttl("rmsg:"..msg.to.id..":"..msg.from.id)
@@ -502,385 +502,349 @@ do
 
         --local url , res = http.request('http://api.gpmod.ir/time/')
         --if res ~= 200 then
-        --  return
-       -- end
-       -- local jdat = json:decode(url)
-        local hash = 'group:'..msg.to.id
-        local group_welcome = redis:hget(hash,'welcome')
-        return reply_msg(msg.id, group_welcome, ok_cb, false)
-      end
-      --------------------------
-      if matches[1]:lower()== 'setwlc' and matches[2] and is_momod(msg) or matches[1] == 'تنظیم خوشامد گویی' and matches[2] and is_momod(msg) then
-        local hash = 'group:'..msg.to.id
-        local group_welcome = redis:hget(hash,'welcome')
-        redis:hset(hash,'welcome', matches[2])
-        local text = '📋 متن خوش آمد گویی گروه تنظیم شد !\n<b>'..matches[2]..' </b>\n'
-        return reply_msg(msg.id,text, ok_cb, false)
-      end
-      --------------------------
-      if matches[1]:lower()== 'clean' and matches[2] == 'welcome' or matches[1] == 'حذف' and matches[1] == 'خوشامد گویی' then
-      if not is_momod(msg) then
-       return
-      end  
-        local hash = 'group:'..msg.to.id
-        local group_welcome = redis:hget(hash,'welcome')
-        redis:hdel(hash,'welcome')
-        local text = '🗑 متن خوش آمد گویی حذف شد !'
-        return reply_msg(msg.id,text, ok_cb, false)
-      end
-      --------------------------
-      if matches[1]:lower()== 'filter' or matches[1]:lower() == 'فیلتر' then
-        if not is_momod(msg) then
-          return
+          --  return
+          -- end
+          -- local jdat = json:decode(url)
+          local hash = 'group:'..msg.to.id
+          local group_welcome = redis:hget(hash,'welcome')
+          return reply_msg(msg.id, group_welcome, ok_cb, false)
         end
-        local name = string.sub(matches[2], 1, 50)
-        local text = addword(msg, name)
-        return text
-      end
+        --------------------------
+        if matches[1]:lower()== 'setwlc' and matches[2] and is_momod(msg) or matches[1] == 'تنظیم خوشامد گویی' and matches[2] and is_momod(msg) then
+          local hash = 'group:'..msg.to.id
+          local group_welcome = redis:hget(hash,'welcome')
+          redis:hset(hash,'welcome', matches[2])
+          local text = '📋 متن خوش آمد گویی گروه تنظیم شد !\n<b>'..matches[2]..' </b>\n'
+          return reply_msg(msg.id,text, ok_cb, false)
+        end
+        --------------------------
+        if matches[1]:lower()== 'clean' and matches[2] == 'welcome' or matches[1] == 'حذف' and matches[1] == 'خوشامد گویی' then
+          if not is_momod(msg) then
+            return
+          end
+          local hash = 'group:'..msg.to.id
+          local group_welcome = redis:hget(hash,'welcome')
+          redis:hdel(hash,'welcome')
+          local text = '🗑 متن خوش آمد گویی حذف شد !'
+          return reply_msg(msg.id,text, ok_cb, false)
+        end
+        --------------------------
+        if matches[1]:lower()== 'filter' or matches[1]:lower() == 'فیلتر' then
+          if not is_momod(msg) then
+            return
+          end
+          local name = string.sub(matches[2], 1, 50)
+          local text = addword(msg, name)
+          return text
+        end
 
-      if matches[1]:lower() == 'filterlist' or matches[1]:lower() == 'لیست فیلتر' then
-        if not is_momod(msg) then
-          return
+        if matches[1]:lower() == 'filterlist' or matches[1]:lower() == 'لیست فیلتر' then
+          if not is_momod(msg) then
+            return
+          end
+          return list_variablesbad(msg)
         end
-        return list_variablesbad(msg)
-      end
 
-      if matches[1]:lower() == 'clean' or matches[1]:lower() == 'حذف' and matches[2] == 'filterlist' or matches[2] == 'لیست فیلتر' then
-        if not is_momod(msg) then
-          return
+        if matches[1]:lower() == 'clean' or matches[1]:lower() == 'حذف' and matches[2] == 'filterlist' or matches[2] == 'لیست فیلتر' then
+          if not is_momod(msg) then
+            return
+          end
+          local asd = '1'
+          return clear_commandbad(msg, asd)
         end
-        local asd = '1'
-        return clear_commandbad(msg, asd)
-      end
 
-      if matches[1]:lower() == 'unfilter' or matches[1]:lower() == 'حذف فیلتر' then
-        if not is_momod(msg) then
-          return
+        if matches[1]:lower() == 'unfilter' or matches[1]:lower() == 'حذف فیلتر' then
+          if not is_momod(msg) then
+            return
+          end
+          return clear_commandsbad(msg, matches[2])
         end
-        return clear_commandsbad(msg, matches[2])
-      end
-      -----------------
+        -----------------
 
-      if matches[1]:lower()== "calc" or matches[1] == "ماشین حساب" then
-        if redis:get("calc:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
-          return reply_msg(msg.id, "⚠️ کاربر "..uname.."، شما می توانید <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
+        if matches[1]:lower()== "calc" or matches[1] == "ماشین حساب" then
+          if redis:get("calc:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
+            return reply_msg(msg.id, "⚠️ کاربر "..uname.."، شما می توانید <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          end
+          redis:setex("calc:"..msg.to.id..":"..msg.from.id, 30, true)
+          local text = calc(matches[2])
+          return reply_msg(msg.id, text, ok_cb, false)
         end
-        redis:setex("calc:"..msg.to.id..":"..msg.from.id, 30, true)
-        local text = calc(matches[2])
-        return reply_msg(msg.id, text, ok_cb, false)
-      end
-      ---------------------
-      if matches[1]:lower()== 'me' or matches[1] == 'اطلاعات من' then
-        if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
-          return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
-        end
-        local chat_id = msg.to.id
-        resolve_username(msg.from.username, rsusername_cb, {msg=msg})
-         if is_sudo(msg) then
-           tt = "سازنده ربات"
+        ---------------------
+        if matches[1]:lower()== 'me' or matches[1] == 'اطلاعات من' then
+          if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
+            return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          end
+          local chat_id = msg.to.id
+          resolve_username(msg.from.username, rsusername_cb, {msg=msg})
+          if is_sudo(msg) then
+            tt = "سازنده ربات"
           elseif is_admin1(msg) then
-          tt = "ادمین ربات"
+            tt = "ادمین ربات"
           elseif is_owner(msg) then
-           tt = "صاحب گروه"
+            tt = "صاحب گروه"
           elseif is_momod(msg) then
-           tt = "مدیر گروه"
+            tt = "مدیر گروه"
           else
-          tt = "کاربر"
-         end        
+            tt = "کاربر"
+          end
           local modes = {'comics-logo','water-logo','3d-logo','blackbird-logo','runner-logo','graffiti-burn-logo','electric','standing3d-logo','style-logo','steel-logo','fluffy-logo','surfboard-logo','orlando-logo','fire-logo','clan-logo','chrominium-logo','harry-potter-logo','amped-logo','inferno-logo','uprise-logo','winner-logo','star-wars-logo'}
           local text = URL.escape(tt)
           local url = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
           local title , res = http.request(url)
           local jdat = json:decode(title)
           local gif = jdat.src
-          local file = download_to_file(gif,'sticker.webp') 
+          local file = download_to_file(gif,'sticker.webp')
           reply_document(msg.id, file, ok_cb, false)
-          redis:setex("me:"..msg.to.id..":"..msg.from.id, 30, true)      
-      end
-      ---------------------
-      if matches[1]:lower()== 'time' or matches[1] == 'زمان' then
-        if redis:get("time:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
-          return reply_msg(msg.id, "⚠️ کاربر "..uname.."،خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          redis:setex("me:"..msg.to.id..":"..msg.from.id, 30, true)
         end
-        redis:setex("time:"..msg.to.id..":"..msg.from.id, 60, true)
-        local url , res = http.request('http://api.gpmod.ir/time/')
-        if res ~= 200 then
-          return
+        ---------------------
+        if matches[1]:lower()== 'time' or matches[1] == 'زمان' then
+          if redis:get("time:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
+            return reply_msg(msg.id, "⚠️ کاربر "..uname.."،خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          end
+          redis:setex("time:"..msg.to.id..":"..msg.from.id, 60, true)
+          local url , res = http.request('http://api.gpmod.ir/time/')
+          if res ~= 200 then
+            return
+          end
+          local colors = {'blue','green','yellow','magenta','Orange','DarkOrange','red'}
+          local fonts = {'mathbf','mathit','mathfrak','mathrm'}
+          local jdat = json:decode(url)
+          local url = 'http://latex.codecogs.com/png.download?'..'\\dpi{600}%20\\huge%20\\'..fonts[math.random(#fonts)]..'{{\\color{'..colors[math.random(#colors)]..'}'..jdat.ENtime..'}}'
+          local file = download_to_file(url,'time.jpeg')
+          local a = '▪️ ساعت : '..jdat.FAtime..'\n🔹 تاریخ شمسی : '..jdat.FAdate..'\n🔸 تاریخ میلادی : '..jdat.ENdate..'\n'
+          send_photo2(get_receiver(msg), file, a, ok_cb, false)
+          --send_document(get_receiver(msg) , file, ok_cb, false)
+          --reply_document(msg.id , file, ok_cb, false)
         end
-        local colors = {'blue','green','yellow','magenta','Orange','DarkOrange','red'}
-        local fonts = {'mathbf','mathit','mathfrak','mathrm'}
-        local jdat = json:decode(url)
-        local url = 'http://latex.codecogs.com/png.download?'..'\\dpi{600}%20\\huge%20\\'..fonts[math.random(#fonts)]..'{{\\color{'..colors[math.random(#colors)]..'}'..jdat.ENtime..'}}'
-        local file = download_to_file(url,'time.jpeg')
-        local a = '▪️ ساعت : '..jdat.FAtime..'\n🔹 تاریخ شمسی : '..jdat.FAdate..'\n🔸 تاریخ میلادی : '..jdat.ENdate..'\n'
-        send_photo2(get_receiver(msg), file, a, ok_cb, false)
-        --send_document(get_receiver(msg) , file, ok_cb, false)
-        --reply_document(msg.id , file, ok_cb, false)      
-      end
-      --------------------
-      if matches[1]:lower()== "sticker" and msg.reply_id then
-        load_photo(msg.reply_id, tosticker, msg)
-      end
-      if matches[1]:lower()== "photo" and msg.reply_id then
-        load_document(msg.reply_id, tophoto, msg)
-      end    
-      ---------------------
-      if matches[1]:lower()== "chats" and is_sudo(msg) then
-        return chat_list(msg)
-      end
-
-      --------------------
-      if matches[1]:lower()== 'voice' then
-        if string.len(matches[2]) > 20 and not is_momod(msg) then
-          return reply_msg(msg.id, "داداچ داری اشتباه میزنی", ok_cb, false)
+        --------------------
+        if matches[1]:lower()== "sticker" and msg.reply_id then
+          load_photo(msg.reply_id, tosticker, msg)
+        end
+        if matches[1]:lower()== "photo" and msg.reply_id then
+          load_document(msg.reply_id, tophoto, msg)
+        end
+        ---------------------
+        if matches[1]:lower()== "chats" and is_sudo(msg) then
+          return chat_list(msg)
         end
 
-        if redis:get("voice:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
-          return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+        --------------------
+        if matches[1]:lower()== 'voice' then
+          if string.len(matches[2]) > 20 and not is_momod(msg) then
+            return reply_msg(msg.id, "داداچ داری اشتباه میزنی", ok_cb, false)
+          end
+
+          if redis:get("voice:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
+            return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          end
+          redis:setex("voice:"..msg.to.id..":"..msg.from.id, 60, true)
+          local text = urlencode(matches[2])
+          local apikey = "5BC8LX8QRFCUOMO"
+          local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey="..apikey.."&Text="..text.."&Speaker=Female1&Format=ogg/32/m&GainLevel=4&PitchLevel=5&PunctuationLevel=2&SpeechSpeedLevel=5&ToneLevel=10"
+          local file = download_to_file(url, 'voice.ogg')
+           reply_file(msg.id, file, ok_cb, false)
         end
-        redis:setex("voice:"..msg.to.id..":"..msg.from.id, 60, true)
-local text = matches[2]
+        --------------------------
+        if matches[1]:lower()== "update" and is_sudo(msg) then
+          text = io.popen("git pull "):read('*all')
+          --return text
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
+        --------------------------
+        if matches[1]:lower()== 'leave' and is_admin1(msg) then
+          --local bot_id = our_id
+          --chat_del_user("chat#id"..msg.to.id, 'user#id'..bot_id, ok_cb, false)
+          leave_channel(get_receiver(msg), ok_cb, false)
+        end
+        --------------------------
+        if matches[1]:lower()== 'short' and is_sudo(msg) then
+          local yon = http.request('http://api.yon.ir/?url='..URL.escape(matches[2]))
+          local jdat = json:decode(yon)
+          local bitly = https.request('https://api-ssl.bitly.com/v3/shorten?access_token=f2d0b4eabb524aaaf22fbc51ca620ae0fa16753d&longUrl='..URL.escape(matches[2]))
+          local data = json:decode(bitly)
+          local yeo = http.request('http://yeo.ir/api.php?url='..URL.escape(matches[2])..'=')
+          local opizo = http.request('http://api.gpmod.ir/shorten/?url='..URL.escape(matches[2])..'&username=mersad565@gmail.com')
+          local u2s = http.request('http://u2s.ir/?api=1&return_text=1&url='..URL.escape(matches[2]))
+          local llink = http.request('http://llink.ir/yourls-api.php?signature=a13360d6d8&action=shorturl&url='..URL.escape(matches[2])..'&format=simple')
+          return ' 🌐لینک اصلی :\n'..data.data.long_url..'\n\nلینکهای کوتاه شده با 6 سایت کوتاه ساز لینک : \n》کوتاه شده با bitly :\n___________________________\n'..data.data.url..'\n___________________________\n》کوتاه شده با yeo :\n'..yeo..'\n___________________________\n》کوتاه شده با اوپیزو :\n'..opizo..'\n___________________________\n》کوتاه شده با u2s :\n'..u2s..'\n___________________________\n》کوتاه شده با llink : \n'..llink..'\n___________________________\n》لینک کوتاه شده با yon : \nyon.ir/'..jdat.output..'\n____________________\n'
+        end
+        --------------------------
 
-  local b = 1
+        if matches[1]:lower()== "sticker" or matches[1] == "استیکر" then
+          local modes = {'comics-logo','water-logo','3d-logo','blackbird-logo','runner-logo','graffiti-burn-logo','electric','standing3d-logo','style-logo','steel-logo','fluffy-logo','surfboard-logo','orlando-logo','fire-logo','clan-logo','chrominium-logo','harry-potter-logo','amped-logo','inferno-logo','uprise-logo','winner-logo','star-wars-logo'}
+          local text = URL.escape(matches[2])
+          local url = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
+          local title , res = http.request(url)
+          local jdat = json:decode(title)
+          local gif = jdat.src
+          local file = download_to_file(gif,'sticker.webp')
+          --send_document(get_receiver(msg), file, ok_cb, false)
+          if not msg.reply_id then
+            reply_document(msg.id, file, ok_cb, false)
+          else
+            reply_document(msg.reply_id, file, ok_cb, false)
+          end
+        end
+        --------------------------
+        -- Show the available plugins
+        if matches[1]:lower()== 'p' and is_sudo(msg) then
+          local text = list_all_plugins()
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
 
-  while b ~= 0 do
-    textc = text:trim()
-    text,b = text:gsub(' ','.') -- Fixing space problem ;)
-    
-    
-  if msg.to.type == 'user' then --Dont answer on private chat !
-      return nil
-      else
-                --  local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
- 
-  local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
-  local receiver = get_receiver(msg)
-  local file = download_to_file(url,'text.ogg')
-      send_audio('channel#id'..msg.to.id, file, ok_cb , false)
-end
-end
-        --local text = matches[2]
-        --local b = 1
-        --while b ~= 0 do
-           -- textc = text:trim()
-           -- textc = textc:gsub(' ','.')
+        -- Re-enable a plugin for this chat
+        if matches[1]:lower()== '+' and matches[3] == 'chat' and is_sudo(msg) then
+          local receiver = get_receiver(msg)
+          local plugin = matches[2]
+          --print("enable "..plugin..' on this chat')
+          local text = reenable_plugin_on_chat(receiver, plugin)
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
 
-          --local url = "http://tts.baidu.com/text2audio?lan=en&ie=UTF-8&text="..textc
-         -- local url = "http://translate.google.com/translate_tts?ie=UTF-8&q="..textc.."&tl=en-us"
-          --local ent = urlencode(text)
-         -- local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey=6RNRDCM1NKEPD74&Text="..ent.."&Speaker=Female1&Format=mp3%2F32%2Fm&GainLevel=0&PitchLevel=0&PunctuationLevel=0&SpeechSpeedLevel=0&ToneLevel=0"
-          --local url = "https://irapi.ir/aryana/api.php?text="..matches[2]
-          --local file = download_to_file(url,'voice.ogg')
-        --  send_audio('channel#id'..msg.to.id, file, ok_cb , false)
-          --local file = download_to_file(url, 'voice.ogg')
-          --reply_file(msg.id, file, ok_cb,false)
-          --send_audio(get_receiver(msg), file, ok_cb, false)
-          --if not msg.reply_id then
-            --reply_file(msg.id, file, ok_cb, false)
-            --else
-            -- reply_file(msg.reply_id, file, ok_cb, false)
-            --end
-          end
-          --------------------------
-          if matches[1]:lower()== "update" and is_sudo(msg) then
-            text = io.popen("git pull "):read('*all')
-            --return text
-            return reply_msg(msg.id, text, ok_cb, false)
-          end
-          --------------------------
-          if matches[1]:lower()== 'leave' and is_admin1(msg) then
-            --local bot_id = our_id
-            --chat_del_user("chat#id"..msg.to.id, 'user#id'..bot_id, ok_cb, false)
-            leave_channel(get_receiver(msg), ok_cb, false)
-          end
-          --------------------------
-          if matches[1]:lower()== 'short' and is_sudo(msg) then
-            local yon = http.request('http://api.yon.ir/?url='..URL.escape(matches[2]))
-            local jdat = json:decode(yon)
-            local bitly = https.request('https://api-ssl.bitly.com/v3/shorten?access_token=f2d0b4eabb524aaaf22fbc51ca620ae0fa16753d&longUrl='..URL.escape(matches[2]))
-            local data = json:decode(bitly)
-            local yeo = http.request('http://yeo.ir/api.php?url='..URL.escape(matches[2])..'=')
-            local opizo = http.request('http://api.gpmod.ir/shorten/?url='..URL.escape(matches[2])..'&username=mersad565@gmail.com')
-            local u2s = http.request('http://u2s.ir/?api=1&return_text=1&url='..URL.escape(matches[2]))
-            local llink = http.request('http://llink.ir/yourls-api.php?signature=a13360d6d8&action=shorturl&url='..URL.escape(matches[2])..'&format=simple')
-            return ' 🌐لینک اصلی :\n'..data.data.long_url..'\n\nلینکهای کوتاه شده با 6 سایت کوتاه ساز لینک : \n》کوتاه شده با bitly :\n___________________________\n'..data.data.url..'\n___________________________\n》کوتاه شده با yeo :\n'..yeo..'\n___________________________\n》کوتاه شده با اوپیزو :\n'..opizo..'\n___________________________\n》کوتاه شده با u2s :\n'..u2s..'\n___________________________\n》کوتاه شده با llink : \n'..llink..'\n___________________________\n》لینک کوتاه شده با yon : \nyon.ir/'..jdat.output..'\n____________________\n'
-          end
-          --------------------------
+        -- Enable a plugin
+        if matches[1]:lower()== '+' and is_sudo(msg) then
+          local plugin_name = matches[2]
+          --print("enable: "..matches[2])
+          local text = enable_plugin(plugin_name)
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
 
-          if matches[1]:lower()== "sticker" or matches[1] == "استیکر" then
-            local modes = {'comics-logo','water-logo','3d-logo','blackbird-logo','runner-logo','graffiti-burn-logo','electric','standing3d-logo','style-logo','steel-logo','fluffy-logo','surfboard-logo','orlando-logo','fire-logo','clan-logo','chrominium-logo','harry-potter-logo','amped-logo','inferno-logo','uprise-logo','winner-logo','star-wars-logo'}
+        -- Disable a plugin on a chat
+        if matches[1]:lower()== '-' and matches[3] == 'chat' and is_sudo(msg) then
+          local plugin = matches[2]
+          local receiver = get_receiver(msg)
+          --print("disable "..plugin..' on this chat')
+          local text = disable_plugin_on_chat(receiver, plugin)
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
+
+        -- Disable a plugin
+        if matches[1]:lower()== '-' and is_sudo(msg) then
+          --print("disable: "..matches[2])
+          local text = disable_plugin(matches[2])
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
+
+        -- Reload all the plugins!
+        if matches[1]:lower()== 'r' and is_sudo(msg) then
+          local text = reload_plugins(true)
+          return reply_msg(msg.id, text, ok_cb, false)
+        end
+        --------------------------
+        if matches[1]:lower() == "value" and matches[2] == "+" and is_momod(msg) then
+          return save_value(msg, matches[3], matches[4])
+        end
+        if matches[1]:lower() == "value" and matches[2] == "-" and is_momod(msg) then
+          return del_value(msg, matches[3])
+        end
+        if matches[1]:lower() == "value" and matches[2] == 'clean' and is_owner(msg) then
+          return delallchats(msg)
+        end
+        if matches[1]:lower() == 'value' and matches[2] == "list" and is_momod(msg) then
+          return list_chats(msg)
+        end
+        --[[ if msg.text:match("^(.+)$") then
+          return get_value(msg, matches[1]:lower():lower())
+          end]]
+          --------------------------
+          if matches[1]:lower()== "gif" then
+            local modes = {'memories-anim-logo','alien-glow-anim-logo','flash-anim-logo','flaming-logo','whirl-anim-logo','highlight-anim-logo','burn-in-anim-logo','shake-anim-logo','inner-fire-anim-logo','jump-anim-logo'}
             local text = URL.escape(matches[2])
-            local url = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
-            local title , res = http.request(url)
+            local url2 = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
+            local title , res = http.request(url2)
             local jdat = json:decode(title)
             local gif = jdat.src
-            local file = download_to_file(gif,'sticker.webp')
+            local file = download_to_file(gif,'t2g.gif')
             --send_document(get_receiver(msg), file, ok_cb, false)
-            if not msg.reply_id then
-              reply_document(msg.id, file, ok_cb, false)
-            else
-              reply_document(msg.reply_id, file, ok_cb, false)
-            end
+            reply_document(msg.id, file, ok_cb, false)
           end
           --------------------------
-          -- Show the available plugins
-          if matches[1]:lower()== 'p' and is_sudo(msg) then
-            local text = list_all_plugins()
-            return reply_msg(msg.id, text, ok_cb, false)
+          if matches[1]:lower()== "love" then
+            local text1 = matches[2]
+            local text2 = matches[3]
+            local url = "http://www.iloveheartstudio.com/-/p.php?t="..text1.."%20%EE%BB%AE%20"..text2.."&bc=FFFFFF&tc=000000&hc=ff0000&f=c&uc=true&ts=true&ff=PNG&w=500&ps=sq"
+            local file = download_to_file(url,'love.webp')
+            --send_document(get_receiver(msg), file, ok_cb, false)
+            reply_document(msg.id, file, ok_cb, false)
           end
-
-          -- Re-enable a plugin for this chat
-          if matches[1]:lower()== '+' and matches[3] == 'chat' and is_sudo(msg) then
-            local receiver = get_receiver(msg)
-            local plugin = matches[2]
-            --print("enable "..plugin..' on this chat')
-            local text = reenable_plugin_on_chat(receiver, plugin)
-            return reply_msg(msg.id, text, ok_cb, false)
-          end
-
-          -- Enable a plugin
-          if matches[1]:lower()== '+' and is_sudo(msg) then
-            local plugin_name = matches[2]
-            --print("enable: "..matches[2])
-            local text = enable_plugin(plugin_name)
-            return reply_msg(msg.id, text, ok_cb, false)
-          end
-
-          -- Disable a plugin on a chat
-          if matches[1]:lower()== '-' and matches[3] == 'chat' and is_sudo(msg) then
-            local plugin = matches[2]
-            local receiver = get_receiver(msg)
-            --print("disable "..plugin..' on this chat')
-            local text = disable_plugin_on_chat(receiver, plugin)
-            return reply_msg(msg.id, text, ok_cb, false)
-          end
-
-          -- Disable a plugin
-          if matches[1]:lower()== '-' and is_sudo(msg) then
-            --print("disable: "..matches[2])
-            local text = disable_plugin(matches[2])
-            return reply_msg(msg.id, text, ok_cb, false)
-          end
-
-          -- Reload all the plugins!
-          if matches[1]:lower()== 'r' and is_sudo(msg) then
-            local text = reload_plugins(true)
-            return reply_msg(msg.id, text, ok_cb, false)
-          end
-          --------------------------
-          if matches[1]:lower() == "value" and matches[2] == "+" and is_momod(msg) then
-            return save_value(msg, matches[3], matches[4])
-          end
-          if matches[1]:lower() == "value" and matches[2] == "-" and is_momod(msg) then
-            return del_value(msg, matches[3])
-          end
-          if matches[1]:lower() == "value" and matches[2] == 'clean' and is_owner(msg) then
-            return delallchats(msg)
-          end
-          if matches[1]:lower() == 'value' and matches[2] == "list" and is_momod(msg) then
-            return list_chats(msg)
-          end
-          --[[ if msg.text:match("^(.+)$") then
-            return get_value(msg, matches[1]:lower():lower())
-            end]]
-            --------------------------
-            if matches[1]:lower()== "gif" then
-              local modes = {'memories-anim-logo','alien-glow-anim-logo','flash-anim-logo','flaming-logo','whirl-anim-logo','highlight-anim-logo','burn-in-anim-logo','shake-anim-logo','inner-fire-anim-logo','jump-anim-logo'}
-              local text = URL.escape(matches[2])
-              local url2 = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
-              local title , res = http.request(url2)
-              local jdat = json:decode(title)
-              local gif = jdat.src
-              local file = download_to_file(gif,'t2g.gif')
-              --send_document(get_receiver(msg), file, ok_cb, false)
-              reply_document(msg.id, file, ok_cb, false)
-            end
-            --------------------------
-            if matches[1]:lower()== "love" then
-              local text1 = matches[2]
-              local text2 = matches[3]
-              local url = "http://www.iloveheartstudio.com/-/p.php?t="..text1.."%20%EE%BB%AE%20"..text2.."&bc=FFFFFF&tc=000000&hc=ff0000&f=c&uc=true&ts=true&ff=PNG&w=500&ps=sq"
-              local file = download_to_file(url,'love.webp')
-              --send_document(get_receiver(msg), file, ok_cb, false)
-              reply_document(msg.id, file, ok_cb, false)
-            end
-            ---------------------
-            if msg.text:match("(.+)$") then
-              --list_variables2(msg, msg.text)
-              get_value(msg, matches[1]:lower():lower())
-            end
+          ---------------------
+          if msg.text:match("(.+)$") then
+            --list_variables2(msg, msg.text)
+            get_value(msg, matches[1]:lower():lower())
           end
         end
-        return {
-          patterns = {
-            "^([Rr][Mm][Ss][Gg]) (%d*)$",
-            "^(پاک) (%d*)$",
-    
-            "^([Cc][Aa][Ll][Cc]) (.*)$",
-            "^(ماشین حساب) (.*)$",
+      end
+      return {
+        patterns = {
+          "^([Rr][Mm][Ss][Gg]) (%d*)$",
+          "^(پاک) (%d*)$",
 
-            "^(block) (.*)$",
-            "^(unblock) (.*)$",
-            "^(addme) (.*)$",
-    
-            "^([Tt][Ii][Mm][Ee])$",
-            "^(زمان)$",
-    
-            "^([Vv][Oo][Ii][Cc][Ee]) +(.*)$",
-            --"^([Mm]ean) (.*)$",
-            "^([Ss]hort) (.*)$",
-                "^(photo)$",
+          "^([Cc][Aa][Ll][Cc]) (.*)$",
+          "^(ماشین حساب) (.*)$",
 
-            "^([Mm][Ee])$",
-            "^(اطلاعات من)$",
-    
-            "^([Gg][Ii][Ff]) (.*)$",
-    
-            "^([Ss][Tt][Ii][Cc][Kk][Ee][Rr]) (.*)$",
-            "^(استیکر) (.*)$",   
-    
-            "^(love) (.+) (.+)$",
-            "^[Uu][Pp][Dd][Aa][Tt][Ee]$",
-            "^([Ll][Ee][Aa][Vv][Ee])$",
-           -- "^serverinfo$",
-            "^[Pp]$",
-            "^[Pp]? (+) ([%w_%.%-]+)$",
-            "^[Pp]? (-) ([%w_%.%-]+)$",
-            "^[Pp]? (+) ([%w_%.%-]+) (chat)",
-            "^[Pp]? (-) ([%w_%.%-]+) (chat)",
-            "^[Rr]$",
+          "^(block) (.*)$",
+          "^(unblock) (.*)$",
+          "^(addme) (.*)$",
 
-            "^(value) (list)$",
-            "^(value) (clean)$",
-            "^(value) (+) ([^%s]+) (.+)$",
-            "^(value) (-) (.*)$",
+          "^([Tt][Ii][Mm][Ee])$",
+          "^(زمان)$",
 
+          "^([Vv][Oo][Ii][Cc][Ee]) +(.*)$",
+          --"^([Mm]ean) (.*)$",
+          "^([Ss]hort) (.*)$",
+          "^(photo)$",
 
-            "^([Ss][Ee][Tt][Ww][Ll][Cc]) +(.*)$",
-            "^([Cc][Ll][Ee][Aa][Nn]) (welcome)$",
+          "^([Mm][Ee])$",
+          "^(اطلاعات من)$",
 
-            "^([Cc]hats)$",
+          "^([Gg][Ii][Ff]) (.*)$",
 
-            "^([Ff][Ii][Ll][Tt][Ee][Rr]) (.*)$",
-            "^(فیلتر) (.*)$",
+          "^([Ss][Tt][Ii][Cc][Kk][Ee][Rr]) (.*)$",
+          "^(استیکر) (.*)$",
 
-            "^([Uu][Nn][Ff][Ii][Ll][Tt][Ee][Rr]) (.*)$",
-            "^(حذف فیلتر) (.*)$",
+          "^(love) (.+) (.+)$",
+          "^[Uu][Pp][Dd][Aa][Tt][Ee]$",
+          "^([Ll][Ee][Aa][Vv][Ee])$",
+          -- "^serverinfo$",
+          "^[Pp]$",
+          "^[Pp]? (+) ([%w_%.%-]+)$",
+          "^[Pp]? (-) ([%w_%.%-]+)$",
+          "^[Pp]? (+) ([%w_%.%-]+) (chat)",
+          "^[Pp]? (-) ([%w_%.%-]+) (chat)",
+          "^[Rr]$",
 
-            "^([Ff][Ii][Ll][Tt][Ee][Rr][Ll][Ii][Ss][Tt])$",
-            "^(لیست فیلتر)$",
-
-            "^([Cc][Ll][Ee][Aa][Nn]) ([Ff][Ii][Ll][Tt][Ee][Rr][Ll][Ii][Ss][Tt])$",
-            "^(حذف) (لیست فیلتر)$",
+          "^(value) (list)$",
+          "^(value) (clean)$",
+          "^(value) (+) ([^%s]+) (.+)$",
+          "^(value) (-) (.*)$",
 
 
-            "^!!tgservice (chat_add_user)$",
-            "^!!tgservice (channel_invite)$",
-            "^!!tgservice (chat_add_user_link)$",
+          "^([Ss][Ee][Tt][Ww][Ll][Cc]) +(.*)$",
+          "^([Cc][Ll][Ee][Aa][Nn]) (welcome)$",
 
-            "%[(photo)%]",
-            --"(.+)$"
-          },
-          run = run,
-          moderated = true, -- set to moderator mode
-        }
+          "^([Cc]hats)$",
+
+          "^([Ff][Ii][Ll][Tt][Ee][Rr]) (.*)$",
+          "^(فیلتر) (.*)$",
+
+          "^([Uu][Nn][Ff][Ii][Ll][Tt][Ee][Rr]) (.*)$",
+          "^(حذف فیلتر) (.*)$",
+
+          "^([Ff][Ii][Ll][Tt][Ee][Rr][Ll][Ii][Ss][Tt])$",
+          "^(لیست فیلتر)$",
+
+          "^([Cc][Ll][Ee][Aa][Nn]) ([Ff][Ii][Ll][Tt][Ee][Rr][Ll][Ii][Ss][Tt])$",
+          "^(حذف) (لیست فیلتر)$",
+
+
+          "^!!tgservice (chat_add_user)$",
+          "^!!tgservice (channel_invite)$",
+          "^!!tgservice (chat_add_user_link)$",
+
+          "%[(photo)%]",
+          --"(.+)$"
+        },
+        run = run,
+        moderated = true, -- set to moderator mode
+      }
