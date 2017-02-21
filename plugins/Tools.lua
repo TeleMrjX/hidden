@@ -640,7 +640,7 @@ do
             return reply_msg(msg.id, "داداچ داری اشتباه میزنی", ok_cb, false)
           end
 
-          if redis:get("voice:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
+          if redis:get("voice:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
             return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
           end
           redis:setex("voice:"..msg.to.id..":"..msg.from.id, 60, true)
