@@ -474,7 +474,7 @@ do
           local text = "⚠️ عددی بین <b>1 </b>تا <b>50000 </b>وارد کنید !"
           return reply_msg(msg.id, text, ok_cb, false)
         end
-        redis:setex("rmsg:"..msg.to.id..":"..msg.from.id, 30, true)
+        redis:setex("rmsg:"..msg.to.id..":"..msg.from.id, 10, true)
         get_history(msg.to.peer_id, matches[2] + 1 , clean_msg , { msg = msg,con = matches[2]})
       end
       --------------------------
