@@ -648,7 +648,12 @@ do
           local apikey = "5BC8LX8QRFCUOMO"
           local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey="..apikey.."&Text="..text.."&Speaker=Female1&Format=ogg/32/m&GainLevel=4&PitchLevel=5&PunctuationLevel=2&SpeechSpeedLevel=5&ToneLevel=10"
           local file = download_to_file(url, 'voice.ogg')
-           reply_file(msg.id, file, ok_cb, false)
+          if not msg.reply_id then
+            reply_file(msg.id, file, ok_cb, false)
+          else
+           reply_file(msg.reply_id, file, ok_cb, false)
+          end      
+           --reply_file(msg.id, file, ok_cb, false)
         end
         --------------------------
         if matches[1]:lower()== "update" and is_sudo(msg) then
