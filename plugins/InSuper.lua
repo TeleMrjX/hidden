@@ -2747,12 +2747,12 @@ local function run(msg, matches)
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup muteslist")
 			return mutes_list(chat_id)
 		end]]
-		if matches[1]:lower() == "mutelist" and is_momod(msg) then
+		if matches[1]:lower() == "mutelist" and is_momod(msg) or matches[1] == "لیست بیصدا ها" and is_momod(msg) then
 -- Returns chat_user mute list
 function muted_user_list(chat_id)
 	local hash =  'mute_user:'..chat_id
 	local list = redis:smembers(hash)
-	local text = "🔇 کاربران بیصدا گروه "..msg.to.title.." :\n"
+	local text = "🔇 کاربران بیصدا گروه <i>"..msg.to.title.." </i>:\n"
 	for k,v in pairsByKeys(list) do
   		local user_info = redis:hgetall('user:'..v)
 		if user_info and user_info.print_name then
