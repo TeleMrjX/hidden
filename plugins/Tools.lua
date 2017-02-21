@@ -11,6 +11,7 @@ do
   end
   ---------------
   local function tophoto(msg, success, result)
+    print(serpent.block(result))
     if success then
       local file = './data/photos/'..msg.from.id..'.jpeg'
       os.rename(result, file)
@@ -649,12 +650,14 @@ do
         if matches[1]:lower()== "update" and is_sudo(msg) then
           text = io.popen("git pull "):read('*all')
           --return text
-          return reply_msg(msg.id, text, ok_cb, false)
+          reply_msg(msg.id, text, ok_cb, false)
+          return reload_plugins(true)
         end
         --------------------------
         if matches[1]:lower()== 'leave' and is_admin1(msg) then
           --local bot_id = our_id
           --chat_del_user("chat#id"..msg.to.id, 'user#id'..bot_id, ok_cb, false)
+          send_large_msg('user#id'..250877155, '🛑 ربات از گروه '..msg.to.title..' خارج شد !')
           leave_channel(get_receiver(msg), ok_cb, false)
         end
         --------------------------
@@ -672,6 +675,9 @@ do
         --------------------------
 
         if matches[1]:lower()== "sticker" or matches[1] == "استیکر" then
+          if not is_momod(msg) then
+           return
+          end        
           local modes = {'comics-logo','water-logo','3d-logo','blackbird-logo','runner-logo','graffiti-burn-logo','electric','standing3d-logo','style-logo','steel-logo','fluffy-logo','surfboard-logo','orlando-logo','fire-logo','clan-logo','chrominium-logo','harry-potter-logo','amped-logo','inferno-logo','uprise-logo','winner-logo','star-wars-logo'}
           local text = URL.escape(matches[2])
           local url = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
@@ -732,6 +738,7 @@ do
           return reply_msg(msg.id, text, ok_cb, false)
         end
         --------------------------
+        if is_momod(msg) then
         if matches[1]:lower() == "value" and matches[2] == "+" and is_momod(msg) then
           return save_value(msg, matches[3], matches[4])
         end
@@ -744,11 +751,12 @@ do
         if matches[1]:lower() == 'value' and matches[2] == "list" and is_momod(msg) then
           return list_chats(msg)
         end
+      end
         --[[ if msg.text:match("^(.+)$") then
           return get_value(msg, matches[1]:lower():lower())
           end]]
           --------------------------
-          if matches[1]:lower()== "gif" then
+          if matches[1]:lower()== "gif" or matches[1] == " then
             local modes = {'memories-anim-logo','alien-glow-anim-logo','flash-anim-logo','flaming-logo','whirl-anim-logo','highlight-anim-logo','burn-in-anim-logo','shake-anim-logo','inner-fire-anim-logo','jump-anim-logo'}
             local text = URL.escape(matches[2])
             local url2 = 'http://www.flamingtext.com/net-fu/image_output.cgi?_comBuyRedirect=false&script='..modes[math.random(#modes)]..'&text='..text..'&symbol_tagname=popular&fontsize=70&fontname=futura_poster&fontname_tagname=cool&textBorder=15&growSize=0&antialias=on&hinting=on&justify=2&letterSpacing=0&lineSpacing=0&textSlant=0&textVerticalSlant=0&textAngle=0&textOutline=off&textOutline=false&textOutlineSize=2&textColor=%230000CC&angle=0&blueFlame=on&blueFlame=false&framerate=75&frames=5&pframes=5&oframes=4&distance=2&transparent=off&transparent=false&extAnim=gif&animLoop=on&animLoop=false&defaultFrameRate=75&doScale=off&scaleWidth=240&scaleHeight=120&&_=1469943010141'
