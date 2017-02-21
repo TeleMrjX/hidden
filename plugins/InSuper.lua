@@ -2200,7 +2200,7 @@ local function run(msg, matches)
 		end
 
 		if matches[1]:lower() == "setabout" or matches[1] == "تنظیم توضیحات" then
-			if not is_momod(msg)
+			if not is_momod(msg) then
 			 return
 			end	
 			local receiver = get_receiver(msg)
