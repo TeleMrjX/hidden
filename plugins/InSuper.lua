@@ -2146,7 +2146,7 @@ local function run(msg, matches)
 			return "ok"
 		end]]
 
-		if matches[1]:lower() == 'demote' then
+		if matches[1]:lower() == 'demote' or matches[1] == 'تنزل' then
 			if not is_owner(msg) then
 				return 
 			end
@@ -2954,6 +2954,7 @@ return {
 	--"%[(audio)%]",
 	--"%[(contact)%]",
 	--"^!!tgservice (.+)$",
+	"^!!tgservice (chat_rename)$",	
   },
   run = run,
   pre_process = pre_process
