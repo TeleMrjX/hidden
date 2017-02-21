@@ -209,7 +209,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 			end
 		end
 		if msg.media then -- msg.media checks
-			if msg.media.type:match("unsupported") then
+			if msg.media.type == "unsupported" then
 			  delete_msg(msg.id, ok_cb, false)		
 			end		
 			if msg.media.title then
