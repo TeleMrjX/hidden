@@ -1466,12 +1466,13 @@ local function callbackres(extra, success, result)
 	elseif get_cmd == "id" then
 		local user = result.peer_id
 		local channel = 'channel#id'..extra.channelid
-		send_large_msg(channel, user)
-		return user
-  elseif get_cmd == "invite" then
-    local receiver = extra.channel
-    local user_id = "user#id"..result.peer_id
-    channel_invite(receiver, user_id, ok_cb, false)
+		--send_large_msg(channel, user)
+		--return user
+		reply_msg(extra.msg.id, '<i>'..user..'</i>', ok_cb, false)
+  --elseif get_cmd == "invite" then
+   -- local receiver = extra.channel
+   -- local user_id = "user#id"..result.peer_id
+    --channel_invite(receiver, user_id, ok_cb, false)
 	--[[elseif get_cmd == "channel_block" then
 		local user_id = result.peer_id
 		local channel_id = extra.channelid
@@ -1894,7 +1895,8 @@ local function run(msg, matches)
 			elseif msg.text:match("@[%a%d]") then
 				local cbres_extra = {
 					channelid = msg.to.id,
-					get_cmd = 'id'
+					get_cmd = 'id',
+					msg = msg
 				}
 				local username = matches[2]
 				local username = username:gsub("@","")
@@ -2754,7 +2756,7 @@ local function run(msg, matches)
 			return show_supergroup_settingsmod(msg, target)
 		end
 		
-		if matches[1]:lower() == 'config' or matches[1] == 'ارتقا ادمین ها' then
+		if matches[1]:lower() == 'config' or matches[1] == 'ترفیع ادمین ها' then
 		 if not is_owner(msg) then
 		   return		
 		 end		
@@ -2868,7 +2870,7 @@ return {
 	--"^([Kk]icked)$",
 		
 	"^([Cc][Oo][Nn][Ff][Ii][Gg])$",	
-	"^(ارتقا ادمین ها)$",				
+	"^(ترفیع ادمین ها)$",				
 		
         --"^([Bb]lock) (.*)",
 	--"^([Bb]lock)",
