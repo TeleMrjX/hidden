@@ -2199,7 +2199,10 @@ local function run(msg, matches)
 			save_data(_config.moderation.data, data)
 		end
 
-		if matches[1]:lower() == "setabout" and is_momod(msg) then
+		if matches[1]:lower() == "setabout" or matches[1] == "تنظیم توضیحات" then
+			if not is_momod(msg)
+			 return
+			end	
 			local receiver = get_receiver(msg)
 			local about_text = matches[2]
 			local data_cat = 'description'
@@ -2208,7 +2211,7 @@ local function run(msg, matches)
 			save_data(_config.moderation.data, data)
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] set SuperGroup description to: "..about_text)
 			channel_set_about(receiver, about_text, ok_cb, false)
-			return "Description has been set.\n\nSelect the chat again to see the changes."
+			return reply_msg(msg.id, '✅ توضیحات گروه تغییر کرد !\n'..matches[2], ok_cb, false)
 		end
 
 		if matches[1]:lower() == "setusername" and is_admin1(msg) then
@@ -2224,7 +2227,7 @@ local function run(msg, matches)
 			channel_set_username(receiver, username, ok_username_cb, {receiver=receiver})
 		end
 
-		if matches[1]:lower() == 'setrules' or matches[1]:lower() == 'تنظیم قوانین' then
+		if matches[1]:lower() == 'setrules' or matches[1] == 'تنظیم قوانین' then
 		if not is_momod(msg) then
 		 return		
 		end		
@@ -2241,18 +2244,21 @@ local function run(msg, matches)
 				return
 			end
 		end
-		if matches[1]:lower() == 'setphoto' and is_momod(msg) then
+		if matches[1]:lower() == 'setphoto' or matches[1] == 'تنظیم عکس' and is_momod(msg) then
+			if not is_momod(msg) then
+			  return	
+			end	
 			data[tostring(msg.to.id)]['settings']['set_photo'] = 'waiting'
 			save_data(_config.moderation.data, data)
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] started setting new SuperGroup photo")
-			return 'Please send the new group photo now'
+			return reply_msg(msg.id, '', ok_cb, false)
 		end
 
 		if matches[1]:lower() == 'clean' or matches[1] == 'حذف' then
 			if not is_momod(msg) then
 				return
 			end
-	           if matches[2]:lower() == 'banlist' or matches[2] == 'محرومان' then
+	           if matches[2]:lower() == 'banlist' or matches[2] == 'لیست محرومان' then
                         local chat_id = msg.to.id
                         local hash = 'banned:'..chat_id
                         local data_cat = 'banlist'
@@ -2261,7 +2267,7 @@ local function run(msg, matches)
                         redis:del(hash)
                         return reply_msg(msg.id,"🗑 لیست کاربران بن شده خالی شد !",ok_cb, false)
                       end
-                      if matches[2]:lower() == 'superbanlist' or matches[2] == 'سوپر بن ها' then
+                      if matches[2]:lower() == 'superbanlist' or matches[2] == 'لیست سوپر بن' then
 			if not is_sudo(msg) then
 			 return
 			end		
@@ -2306,7 +2312,7 @@ local function run(msg, matches)
 				channel_set_about(receiver, about_text, ok_cb, false)
 				return reply_msg(msg.id, '🗑 توضیحات گروه پاک شد !', ok_cb, false)
 			end
-                      if matches[2]:lower() == 'deleted' and is_momod(msg) then
+                      if matches[2]:lower() == 'deleted' then
                         local receiver = get_receiver(msg)
                         channel_get_users(receiver, check_member_super_deleted, {receiver = receiver, msg = msg})
                       end			
@@ -2334,7 +2340,7 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1]:lower() == 'lock' then
+		if matches[1]:lower() == 'lock' or matches[1] == 'قفل' then
 			
 		if not is_momod(msg) then
 		 return
@@ -2371,7 +2377,7 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_bot(msg, data, target)
 			end			
-			if matches[2]:lower() == 'fwd' or matches[2] == 'فروارد' then
+			if matches[2]:lower() == 'fwd' or matches[2] == 'فروارد از کاربر' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_fwd(msg, data, target)
 			end	
@@ -2429,7 +2435,7 @@ local function run(msg, matches)
 			end
 		end
 
-		if matches[1]:lower() == 'unlock' then
+		if matches[1]:lower() == 'unlock' or matches[1] == 'باز کردن' then
 		if not is_momod(msg) then
 		 return
 		end
@@ -2722,7 +2728,7 @@ local function run(msg, matches)
 				end
 				end	
 			elseif not string.match(matches[2], '^%d+$') then
-				if matches[1]:lower() == "muteuser" and matches[2] or matches[1] == "بیصدا" and matches[2] then
+				if matches[1]:lower() == "mute" and matches[2] or matches[1] == "بیصدا" and matches[2] then
 				local receiver = get_receiver(msg)
 				local get_cmd = "mute_user"
 				local username = matches[2]
@@ -2915,10 +2921,17 @@ return {
 	"^(تنزل) (.*)$",
 	"^(تنزل)",
 		
-	"^([Ss]etname) (.*)$",
-	"^([Ss]etabout) (.*)$",
-	"^([Ss]etrules) (.*)$",
-	"^([Ss]etphoto)$",
+	"^([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
+	"^(تنظیم نام) (.*)$",
+		
+	"^([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
+	"^(تنظیم توضیحات) (.*)$",
+		
+	"^([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
+	"^(تنظیم قوانین) (.*)$",
+		
+	"^([Ss][Ee][Tt][Pp][Hh][Oo][Tt][Oo])$",				
+	"^(تنظیم عکس)$",
 		
         "^([Ii][Nn][Vv][Aa][Ll][Ll])$",		
 		
