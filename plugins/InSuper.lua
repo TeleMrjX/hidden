@@ -1578,9 +1578,9 @@ local function in_channel_cb(cb_extra, success, result)
   local member = cb_extra.username
   local memberid = cb_extra.user_id
   if member then
-    text = 'No user @'..member..' in this SuperGroup.'
+    text = '❌ کاربر @'..member..' در این گروه نیست !'
   else
-    text = 'No user ['..memberid..'] in this SuperGroup.'
+    text = '❌ کاربر [<b>'..memberid..'] </b>در این گروه نیست !'
   end
 if get_cmd == "channel_block" then
   for k,v in pairs(result) do
