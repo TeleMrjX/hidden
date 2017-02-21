@@ -345,6 +345,35 @@ local function unlock_group_links(msg, data, target)
   end
 end
 
+local function lock_group_inline(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_inline_lock = data[tostring(target)]['settings']['lock_inline']
+  if group_inline_lock == 'yes' then
+    return reply_msg(msg.id, '🔐 قفل #کیبورد شیشه ای از قبل فعال است !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_inline'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔒 قفل #کیبورد شیشه ای فعال شد !\n🔸از این پس کیبورد های شیشه ای فرستاده شده توسط کاربران پاک می شوند !', ok_cb, false)
+  end
+end
+
+local function unlock_group_inline(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_inline_lock = data[tostring(target)]['settings']['lock_inline']
+  if group_inline_lock == 'no' then
+    return reply_msg(msg.id, '🔓 قفل #کیبورد شیشه ای فعال نیست !', ok_cb, false)
+  else
+    data[tostring(target)]['settings']['lock_inline'] = 'no'
+    save_data(_config.moderation.data, data)
+    return reply_msg(msg.id, '🔏 قفل #کیبورد شیشه ای غیر فعال شد !', ok_cb, false)
+  end
+end
+
+
 local function lock_group_fwd(msg, data, target)
   if not is_momod(msg) then
     return
@@ -394,11 +423,11 @@ local function unlock_group_cfwd(msg, data, target)
   end
   local group_cfwd_lock = data[tostring(target)]['settings']['lock_cfwd']
   if group_cfwd_lock == 'no' then
-    return reply_msg(msg.id, '🔓 قفل #فروارد از کانال از کاربر فعال نیست !', ok_cb, false)
+    return reply_msg(msg.id, '🔓 قفل #فروارد از کانال فعال نیست !', ok_cb, false)
   else
     data[tostring(target)]['settings']['lock_cfwd'] = 'no'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id, '🔏 قفل #فروارد از کانال از کاربر غیر فعال شد !', ok_cb, false)
+    return reply_msg(msg.id, '🔏 قفل #فروارد از کانال غیر فعال شد !', ok_cb, false)
   end
 end
 
@@ -441,7 +470,7 @@ local function lock_group_bot(msg, data, target)
   else
     data[tostring(target)]['settings']['lock_bot'] = 'yes'
     save_data(_config.moderation.data, data)
-    return reply_msg(msg.id, '🔒 قفل #ربات فعال شد !\n🔸از این ربات هایی که توسط کاربران عضو شوند، اخراج می شوند !', ok_cb, false)
+    return reply_msg(msg.id, '🔒 قفل #ربات فعال شد !\n🔸از این پس ربات هایی که توسط کاربران به گروه آورده شوند، اخراج می شوند !', ok_cb, false)
   end
 end
 
@@ -2373,6 +2402,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_links(msg, data, target)
 			end
+			if matches[2]:lower() == 'inline' or matches[2] == 'کیبورد شیشه ای' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
+				return lock_group_inline(msg, data, target)
+			end			
 			if matches[2]:lower() == 'bots' or matches[2] == 'ربات' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return lock_group_bot(msg, data, target)
@@ -2467,6 +2500,10 @@ local function run(msg, matches)
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return unlock_group_links(msg, data, target)
 			end
+			if matches[2]:lower() == 'inline' or matches[2] == 'کیبورد شیشه ای' then
+				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
+				return unlock_group_inline(msg, data, target)
+			end			
 			if matches[2]:lower() == 'bots' or matches[2] == 'ربات' then
 				----savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked link posting ")
 				return unlock_group_bot(msg, data, target)
