@@ -11,7 +11,10 @@ do
   end
   ---------------
   local function tophoto(msg, success, result)
-    print(serpent.block(result))
+    if not result:match(".webp") then
+     reply_msg(msg.id, '❌ فقط عکس مجاز است !', ok_cb, false) 
+     else 
+    --print(serpent.block(result))
     if success then
       local file = './data/photos/'..msg.from.id..'.jpeg'
       os.rename(result, file)
@@ -19,6 +22,7 @@ do
     else
       reply_msg(msg.id, '❌ دوباره تلاش کنید !', ok_cb, false)
     end
+   end   
   end
   -------------------------------------
   local function get_variables_hash2(msg)
