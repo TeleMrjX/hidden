@@ -237,6 +237,7 @@ local function promoteadmin(cb_extra, success, result)
   local text = "✳️ ادمین های گروه در ربات به عنوان مدیر ذخیره شدند :"
 print(serpent.block(result))	
   for k,v in pairsByKeys(result) do
+  if v.first_name or v.last_name then		
     if v.username then
       promote(cb_extra.receiver,v.username,v.peer_id)
     elseif not v.username then
@@ -256,6 +257,7 @@ print(serpent.block(result))
     text = text.."\n"..i.." - "..name.."["..v.peer_id.."]"
     i = i + 1
   end
+ end		
   --send_large_msg(cb_extra.receiver, text)
   reply_msg(cb_extra.msg.id, text, ok_cb, false)	
 end
