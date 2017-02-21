@@ -420,7 +420,7 @@ do
     end
     -----------------------
     local function clean_msg(extra, success, result)
-      print(serpent.block(result))
+      --print(serpent.block(result))
       for i=1, #result do
         if result.service == "true" then
         else
