@@ -235,6 +235,7 @@ local function promoteadmin(cb_extra, success, result)
   local chat_name = string.gsub(cb_extra.msg.to.print_name, "_", " ")
   local member_type = cb_extra.member_type
   local text = "✳️ ادمین های گروه در ربات به عنوان مدیر ذخیره شدند :"
+print(serpent.block(result))	
   for k,v in pairsByKeys(result) do
     if v.username then
       promote(cb_extra.receiver,v.username,v.peer_id)
