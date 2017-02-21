@@ -2958,7 +2958,7 @@ return {
 	"^([Cc]lean) (.*)$",
 	--"^([Hh]elp)$",
 	--"^([Mm]uteslist)$",
-	--"^([Mm]utelist)$",
+	"^([Mm]utelist)$",
        -- "(mp) (.*)",
 	--"(md) (.*)",
 
