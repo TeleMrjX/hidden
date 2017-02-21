@@ -1909,7 +1909,7 @@ local function run(msg, matches)
 				else
 				 user = "ندارید"
 				end	
-				return reply_msg(msg.id, "» نام شما : <b>"..msg.from.first_name.." </b>\n» شناسه شما : <b>"..msg.to.id.." </b>\n» نام کاربری شما : "..user.."\n» نام گروه : <b>"..msg.to.title.." </b>\n» شناسه گروه : <b>"..msg.to.id.." </b>\n", ok_cb, false)
+				return reply_msg(msg.id, "» نام شما : <b>"..msg.from.first_name.." </b>\n» شناسه شما : <b>"..msg.from.id.." </b>\n» نام کاربری شما : "..user.."\n» نام گروه : <b>"..msg.to.title.." </b>\n» شناسه گروه : <b>"..msg.to.id.." </b>\n", ok_cb, false)
 			end
 		end
 
