@@ -2748,9 +2748,26 @@ local function run(msg, matches)
 			return mutes_list(chat_id)
 		end]]
 		if matches[1]:lower() == "mutelist" and is_momod(msg) then
+-- Returns chat_user mute list
+function muted_user_list(chat_id)
+	local hash =  'mute_user:'..chat_id
+	local list = redis:smembers(hash)
+	local text = "🔇 کاربران بیصدا گروه "..msg.to.title.." :\n"
+	for k,v in pairsByKeys(list) do
+  		local user_info = redis:hgetall('user:'..v)
+		if user_info and user_info.print_name then
+			local print_name = string.gsub(user_info.print_name, "_", " ")
+			local print_name = string.gsub(print_name, "‮", "")
+			text = text..k.." - "..print_name.." ["..v.."]\n"
+		else
+			text = text..k.." - [ "..v.." ]\n"
+		end
+	end
+	return text
+end			
 			local chat_id = msg.to.id
 			--savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested SuperGroup mutelist")
-			return muted_user_list(chat_id)
+			return reply_msg(msg.id, muted_user_list(chat_id), ok_cb, false)
 		end
 
 		if matches[1]:lower() == 'settings' or matches[1] == 'تنظیمات' then
