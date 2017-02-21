@@ -422,11 +422,11 @@ do
     local function clean_msg(extra, success, result)
       print(serpent.block(result))
       for i=1, #result do
-       -- if result.service then
-       -- else
+        if result.service == "true" then
+        else
           delete_msg(result[i].id, ok_cb, false)
           delete_msg(result[i].temp_id, ok_cb, false)
-        --end
+        end
       end
       reply_msg(extra.msg.id, '🗑 '..extra.con..' پیام پاک شد !', ok_cb, false)
     end
