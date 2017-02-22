@@ -59,8 +59,8 @@ function msg_valid(msg)
 
   -- Before bot was started
   if msg.date < os.time() - 5 then
-    print('\27[36mNot valid: Old Message\27[39m')
-    return false
+    --print('\27[36mNot valid: Old Message\27[39m')
+    --return false
   end
 
   if msg.unread == 0 then
@@ -158,7 +158,7 @@ function match_plugin(plugin, plugin_name, msg)
     local matches = match_pattern(pattern, msg.text)
     if matches then
     if is_momod(msg) then
-    if pattern == "(.+)$" or pattern == "^(.+)$" or pattern == "%[(photo)%]" then
+    if pattern == "(.+)$" or pattern == "^(.+)$" or pattern == "%[(photo)%]" or pattern == "^!!tgservice (chat_add_user_link)$" or pattern == "^!!tgservice (chat_add_user)$" or pattern == "^!!tgservice (chat_rename)$" then
      else					
       sendtype(get_receiver(msg))
      end					
