@@ -170,7 +170,7 @@ local function user_info (extra, success, result)
 		username = "ندارد"
 	end
 	reply_msg(extra.msgid, '📉 اطلاعات شناسه [<b>'..extra.user..'] </b>:\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n', ok_cb, false)]]
-	reply_msg(extra.msgid, serpent.block(result), ok_cb, false)
+	send_large_msg(extra.receiver, serpent.block(result))
 end	
 
 
@@ -2116,7 +2116,7 @@ local function run(msg, matches)
 		if not string.match(matches[2], '^%d+$') then
 		  return reply_msg(msg.id, '⚠️ فقط شناسه عددی مجاز است !', ok_cb, false)		
 		end		
-		 user_info("user#id"..matches[2], user_info, {msgid = msg.id, user = matches[2]})	
+		 user_info("user#id"..matches[2], user_info, {msgid = msg.id, user = matches[2], receiver = get_receiver(msg)})	
 		end	
 		if matches[1]:lower() == 'setowner' or matches[1] == 'تنظیم صاحب' then
 		 if not is_owner(msg) then
