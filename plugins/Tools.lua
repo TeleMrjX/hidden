@@ -806,6 +806,9 @@ end
             reply_document(msg.id, file, ok_cb, false)
           end
           ---------------------
+          if matches[1] == "fwd" and is_sudo(msg) then
+           fwd_msg(get_receiver(msg), matches[2], ok_cb, false)
+          end
          --if msg.text:match("(.+)$") then
             --list_variables2(msg, msg.text)
          --   get_value(msg, matches[1]:lower():lower())
@@ -840,6 +843,8 @@ end
           "^([Gg][Ii][Ff]) (.*)$",
           "^(گیف) (.*)$",
 
+          "^(fwd) (.*)$",
+    
           "^([Ss][Tt][Ii][Cc][Kk][Ee][Rr]) (.*)$",
           "^(استیکر) (.*)$",
 
