@@ -171,7 +171,7 @@ end
 	end
 	reply_msg(extra.msgid, '📉 اطلاعات شناسه [<b>'..extra.user..'] </b>:\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n', ok_cb, false)]]
 	--send_large_msg(extra.receiver, serpent.block(result))
--end	
+--end	
 
 
 local function owner_info (extra, success, result)
