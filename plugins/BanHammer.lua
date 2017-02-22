@@ -261,12 +261,12 @@ local support_id = msg.from.id
     return
   end
 
-  if matches[1]:lower() == "banlist" then -- Ban list !
+  if matches[1]:lower() == "banlist" or matches[1] == "کاربران محروم" then -- Ban list !
     local chat_id = msg.to.id
-    if matches[2] and is_admin1(msg) then
-      chat_id = matches[2]
-    end
-    return Ban_List(msg, chat_id)
+   -- if matches[2] and is_admin1(msg) then
+     -- chat_id = matches[2]
+   -- end
+    return reply_msg(msg.id, Ban_List(msg, chat_id), ok_cb, false)
   end
 	
   if matches[1]:lower() == 'ban' or matches[1] == 'محروم' then-- /ban
