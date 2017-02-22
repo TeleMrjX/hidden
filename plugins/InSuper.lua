@@ -154,7 +154,7 @@ local function callback_kicked2(cb_extra, success, result)
   reply_msg(cb_extra.msg.id, text, ok_cb,false)		
 end
 
-local function user_info (extra, success, result)
+--local function user_info (extra, success, result)
 	--[[if result.first_name then
 		
 	 if result.last_name then
@@ -170,8 +170,8 @@ local function user_info (extra, success, result)
 		username = "ندارد"
 	end
 	reply_msg(extra.msgid, '📉 اطلاعات شناسه [<b>'..extra.user..'] </b>:\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n', ok_cb, false)]]
-	send_large_msg(extra.receiver, serpent.block(result))
-end	
+--	send_large_msg(extra.receiver, serpent.block(result))
+--end	
 
 
 local function owner_info (extra, success, result)
