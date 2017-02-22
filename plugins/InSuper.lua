@@ -169,6 +169,25 @@ local function owner_info (extra, success, result)
 	else
 		username = "ندارد"
 	end
+	reply_msg(extra.msg.id, '📉 اطلاعات شناسه [<b>'..extra.user..'] </b>:\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n', ok_cb, false)
+end	
+
+
+local function owner_info (extra, success, result)
+	if result.first_name then
+		
+	 if result.last_name then
+	        name = result.first_name..' '..result.last_name	
+	 else	
+		name = result.first_name
+	 end
+		
+	end
+	if result.username then
+		username = "t.me/"..result.username
+	else
+		username = "ندارد"
+	end
 	reply_msg(extra.msg.id, '📉 اطلاعات صاحب گروه :\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n🔹 شناسه : '..result.peer_id..'\n', ok_cb, false)
 end	
 
@@ -2092,7 +2111,12 @@ local function run(msg, matches)
 				resolve_username(username, callbackres, cbres_extra)
 			end
 		end]]
-
+                if matches[1]:lower() == 'whois' and is_momod(msg) then
+		if not string.match(matches[2], '^%d+$') then
+		  return reply_msg(msg.id, '⚠️ فقط شناسه عددی مجاز است !', ok_cb, false)		
+		end		
+		 user_info('user#id'..matches[2], user_info, {msg = msg, user = matches[2]})	
+		end	
 		if matches[1]:lower() == 'setowner' or matches[1] == 'تنظیم صاحب' then
 		 if not is_owner(msg) then
 		   return		
@@ -2961,6 +2985,8 @@ return {
 	--"^([Ss]etadmin)",
 	--"^([Dd]emoteadmin) (.*)$",
 	--"^([Dd]emoteadmin)",
+		
+	"^([Ww][Hh][Oo][Ii][Ss]) (.*)$",
 		
 	"^([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (.*)$",
 	"^([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])$",
