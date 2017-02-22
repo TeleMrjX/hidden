@@ -377,7 +377,7 @@ end
 		return
 	end
 
- if matches[1]:lower() == 'banall' or matches[1] == 'سوپر بن' then -- Global ban
+ if matches[1]:lower() == 'superban' or matches[1] == 'سوپر بن' then -- Global ban
     if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
        get_message(msg.reply_id, Banall_reply, false)
     local user_id = matches[2]
@@ -406,7 +406,7 @@ end
       end
     end			
   end
-  if matches[1]:lower() == 'unbanall' or matches[1] == 'حذف سوپر بن' then -- Global unban
+  if matches[1]:lower() == 'unsuperban' or matches[1] == 'حذف سوپر بن' then -- Global unban
     local user_id = matches[2]
     local chat_id = msg.to.id
       if string.match(matches[2], '^%d+$') then
@@ -428,7 +428,7 @@ end
 		resolve_username(username, kick_ban_res, cbres_extra)
       end
   end
-  if matches[1]:lower() == "gbanlist" then -- Global ban list
+  if matches[1]:lower() == "superbanlist" then -- Global ban list
     return banall_list()
   end
 end
@@ -441,10 +441,11 @@ return {
     "^([Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
     "^(سوپر بن)$",
 		
-    "^([Bb]anlist) (.*)$",
+    --"^([Bb]anlist) (.*)$",
     "^([Bb]anlist)$",
+    "^(کاربران محروم)$",
 		
-    "^([Gg]banlist)$",
+    "^([Ss][Uu][Pp][Ee][Rr][Ll][Ii][Ss][Tt])$",
 		
     --"^([Kk]ickme)",
     "^([Kk][Ii][Cc][Kk])$",
