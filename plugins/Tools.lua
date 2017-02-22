@@ -574,25 +574,25 @@ end
         -----------------
 
         if matches[1]:lower()== "calc" or matches[1] == "ماشین حساب" then
-          if redis:get("calc:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
-            return reply_msg(msg.id, "⚠️ کاربر "..uname.."، شما می توانید <b>30 </b>ثانیه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          if not is_momod(msg) then
+           return
           end
-          redis:setex("calc:"..msg.to.id..":"..msg.from.id, 30, true)
-          local text = calc(matches[2])
-          return reply_msg(msg.id, text, ok_cb, false)
+          return reply_msg(msg.id, calc(matches[2]), ok_cb, false)
         end
         ---------------------
         if matches[1]:lower()== 'me' or matches[1] == 'اطلاعات من' then
+        if not is_momod(msg) then
+         return
+        end
 --print(get_resource_size(
  --  "https://www.gravatar.com/avatar/282ad8d2c96e9b753bde22ac6ca0918b?s=32&d=identicon&r=PG"
 --))   
 ---print(get_resource_size(
 -- "http://nude-gymnastics.com/wp-content/uploads/2013/02/nude-gymnast.jpg"
 --))       
-          if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
-            return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
-          end
-          local chat_id = msg.to.id
+          --if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
+          --  return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          --end
           resolve_username(msg.from.username, rsusername_cb, {msg=msg})
           if is_sudo(msg) then
             tt = "سازنده ربات"
@@ -602,8 +602,8 @@ end
             tt = "صاحب گروه"
           elseif is_momod(msg) then
             tt = "مدیر گروه"
-          else
-            tt = "کاربر"
+          --else
+           -- tt = "کاربر"
           end
           local modes = {'comics-logo','water-logo','3d-logo','blackbird-logo','runner-logo','graffiti-burn-logo','electric','standing3d-logo','style-logo','steel-logo','fluffy-logo','surfboard-logo','orlando-logo','fire-logo','clan-logo','chrominium-logo','harry-potter-logo','amped-logo','inferno-logo','uprise-logo','winner-logo','star-wars-logo'}
           local text = URL.escape(tt)
@@ -613,14 +613,17 @@ end
           local gif = jdat.src
           local file = download_to_file(gif,'sticker.webp')
           reply_document(msg.id, file, ok_cb, false)
-          redis:setex("me:"..msg.to.id..":"..msg.from.id, 30, true)
+          --redis:setex("me:"..msg.to.id..":"..msg.from.id, 30, true)
         end
         ---------------------
         if matches[1]:lower()== 'time' or matches[1] == 'زمان' then
-          if redis:get("time:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
-            return reply_msg(msg.id, "⚠️ کاربر "..uname.."،خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
-          end
-          redis:setex("time:"..msg.to.id..":"..msg.from.id, 60, true)
+          --if redis:get("time:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
+          --  return reply_msg(msg.id, "⚠️ کاربر "..uname.."،خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+         -- end
+          --redis:setex("time:"..msg.to.id..":"..msg.from.id, 60, true)
+        if not is_momod(msg) then
+         return
+        end      
           local url , res = http.request('http://api.gpmod.ir/time/')
           if res ~= 200 then
             return
@@ -649,14 +652,17 @@ end
 
         --------------------
         if matches[1]:lower()== 'voice' or matches[1] == 'ویس' then
-          if string.len(matches[2]) > 20 and not is_momod(msg) then
-            return reply_msg(msg.id, "داداچ داری اشتباه میزنی", ok_cb, false)
+        if not is_momod(msg) then
+         return
+        end           
+          if string.len(matches[2]) > 15 and not is_momod(msg) then
+            return reply_msg(msg.id, "داداچ کمترش کن", ok_cb, false)
           end
 
-          if redis:get("voice:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
-            return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
-          end
-          redis:setex("voice:"..msg.to.id..":"..msg.from.id, 60, true)
+          --if redis:get("voice:"..msg.to.id..":"..msg.from.id) and not is_momod(msg) then
+           -- return reply_msg(msg.id, "⚠️ لطفا <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
+          --end
+          --redis:setex("voice:"..msg.to.id..":"..msg.from.id, 60, true)
           local text = urlencode(matches[2])
           local apikey = "5BC8LX8QRFCUOMO"
           local url = "http://api.farsireader.com/ArianaCloudService/ReadTextGET?APIKey="..apikey.."&Text="..text.."&Speaker=Female1&Format=ogg/32/m&GainLevel=4&PitchLevel=5&PunctuationLevel=2&SpeechSpeedLevel=5&ToneLevel=10"
@@ -760,20 +766,18 @@ end
           return reply_msg(msg.id, text, ok_cb, false)
         end
         --------------------------
-        if is_momod(msg) then
         if matches[1]:lower() == "value" and matches[2] == "+" and is_momod(msg) then
           return save_value(msg, matches[3], matches[4])
         end
         if matches[1]:lower() == "value" and matches[2] == "-" and is_momod(msg) then
           return del_value(msg, matches[3])
         end
-        if matches[1]:lower() == "value" and matches[2] == 'clean' and is_owner(msg) then
+        if matches[1]:lower() == "clean" and matches[2] == "valuelist" and is_momod(msg) then
           return delallchats(msg)
         end
         if matches[1]:lower() == 'value' and matches[2] == "list" and is_momod(msg) then
           return list_chats(msg)
         end
-      end
         --[[ if msg.text:match("^(.+)$") then
           return get_value(msg, matches[1]:lower():lower())
           end]]
@@ -802,10 +806,10 @@ end
             reply_document(msg.id, file, ok_cb, false)
           end
           ---------------------
-          if msg.text:match("(.+)$") then
+         --if msg.text:match("(.+)$") then
             --list_variables2(msg, msg.text)
-            get_value(msg, matches[1]:lower():lower())
-          end
+         --   get_value(msg, matches[1]:lower():lower())
+         -- end
         end
       end
       return {
@@ -827,13 +831,14 @@ end
           "^(ویس) +(.*)$",
     
           --"^([Mm]ean) (.*)$",
-          "^([Ss]hort) (.*)$",
+          --"^([Ss]hort) (.*)$",
           "^(photo)$",
 
           "^([Mm][Ee])$",
           "^(اطلاعات من)$",
 
           "^([Gg][Ii][Ff]) (.*)$",
+          "^(گیف) (.*)$",
 
           "^([Ss][Tt][Ii][Cc][Kk][Ee][Rr]) (.*)$",
           "^(استیکر) (.*)$",
@@ -850,7 +855,7 @@ end
           "^[Rr]$",
 
           "^(value) (list)$",
-          "^(value) (clean)$",
+          "^(clean) (valuelist)$",
           "^(value) (+) ([^%s]+) (.+)$",
           "^(value) (-) (.*)$",
 
