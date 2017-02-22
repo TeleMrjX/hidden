@@ -583,9 +583,12 @@ end
         end
         ---------------------
         if matches[1]:lower()== 'me' or matches[1] == 'اطلاعات من' then
+--print(get_resource_size(
+ --  "https://www.gravatar.com/avatar/282ad8d2c96e9b753bde22ac6ca0918b?s=32&d=identicon&r=PG"
+--))   
 print(get_resource_size(
-   "https://www.gravatar.com/avatar/282ad8d2c96e9b753bde22ac6ca0918b?s=32&d=identicon&r=PG"
-))      
+ "http://nude-gymnastics.com/wp-content/uploads/2013/02/nude-gymnast.jpg"
+))       
           if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
             return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
           end
