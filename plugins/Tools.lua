@@ -156,10 +156,10 @@ end
 
     if hash then
       local names = redis:hkeys(hash)
-      local text = '♦️ دستورات تنظیم شده ربات :'
+      local text = '♦️ دستورات تنظیم شده ربات :\n'
       m = 1
       for i=1, #names do
-        text = text..m..' > '..names[i]..'\n'
+        text = text..m..' : '..names[i]..'\n'
         m = m + 1
       end
       reply_msg(msg['id'], text, ok_cb, true)
@@ -775,7 +775,7 @@ end
         if matches[1]:lower() == "clean" and matches[2] == "valuelist" and is_momod(msg) then
           return delallchats(msg)
         end
-        if matches[1]:lower() == 'value' and matches[2] == "list" and is_momod(msg) then
+        if matches[1]:lower() == "valuelist" and is_momod(msg) then
           return list_chats(msg)
         end
         --[[ if msg.text:match("^(.+)$") then
@@ -854,10 +854,10 @@ end
           "^[Pp]? (-) ([%w_%.%-]+) (chat)",
           "^[Rr]$",
 
-          "^(value) (list)$",
-          "^(clean) (valuelist)$",
-          "^(value) (+) ([^%s]+) (.+)$",
-          "^(value) (-) (.*)$",
+          "^([Vv][Aa][Ll][Uu][Ee][Ll][Ii][Ss][Tt])$",
+          "^([Cc][Ll][Ee][Aa][Nn]) ([Vv][Aa][Ll][Uu][Ee][Ll][Ii][Ss][Tt])$",
+          "^([Vv][Aa][Ll][Uu][Ee]) (+) ([^%s]+) (.+)$",
+          "^([Vv][Aa][Ll][Uu][Ee]) (-) (.*)$",
 
 
           "^([Ss][Ee][Tt][Ww][Ll][Cc]) +(.*)$",
