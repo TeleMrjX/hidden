@@ -2368,7 +2368,7 @@ local function run(msg, matches)
 				channel_set_about(receiver, about_text, ok_cb, false)
 				return reply_msg(msg.id, '🗑 توضیحات گروه پاک شد !', ok_cb, false)
 			end
-                      if matches[2]:lower() == 'deleted' then
+                      if matches[2]:lower() == 'deleted' or matches[2] == 'دلیت اکانت ها' then
                         local receiver = get_receiver(msg)
                         channel_get_users(receiver, check_member_super_deleted, {receiver = receiver, msg = msg})
                       end			
