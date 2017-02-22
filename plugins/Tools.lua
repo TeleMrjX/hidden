@@ -159,7 +159,7 @@ end
       local text = '♦️ دستورات تنظیم شده ربات :\n'
       m = 1
       for i=1, #names do
-        text = text..m..' : '..names[i]..'\n'
+        text = text..m..' - '..names[i]..'\n'
         m = m + 1
       end
       reply_msg(msg['id'], text, ok_cb, true)
