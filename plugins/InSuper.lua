@@ -1870,10 +1870,13 @@ local function run(msg, matches)
 			channel_get_kicked(receiver, callback_kicked, {receiver = receiver})
 		end]]
 
-		if matches[1]:lower() == 'del' or matches[1]:lower() == 'حذف' then
+		if matches[1]:lower() == 'del' or matches[1]:lower() == 'حذف' then	
 		if not is_momod(msg) then
 		  return	
-		end		
+		end	
+		if matches[2] ~= nil then
+		 return
+		end				
 			--if type(msg.reply_id) ~= "nil" then
 				--local cbreply_extra = {
 				--	get_cmd = 'del',
