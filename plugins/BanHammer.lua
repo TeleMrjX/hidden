@@ -97,6 +97,23 @@ local function pre_process(msg)
   return msg
 end
 
+function Ban_List(msg, chat_id)
+	local hash =  'banned:'..chat_id
+	local list = redis:smembers(hash)
+	local text = "📃 لیست کاربران محروم شده از گروه <i>"..msg.to.title.." </i>:\n"
+	for k,v in pairs(list) do
+	local user_info = redis:hgetall('user:'..v)
+		if user_info and user_info.print_name then
+			local print_name = string.gsub(user_info.print_name, "_", " ")
+			local print_name = string.gsub(print_name, "‮", "")
+			text = text..k.." - "..print_name.." ["..v.."]\n"
+		else
+			text = text..k.." - "..v.."\n"
+		end
+	end
+	return text
+end
+
 local function kick_ban_res(extra, success, result)
       local chat_id = extra.chat_id
 	  local chat_type = extra.chat_type
@@ -249,7 +266,7 @@ local support_id = msg.from.id
     if matches[2] and is_admin1(msg) then
       chat_id = matches[2]
     end
-    return ban_list(chat_id)
+    return Ban_List(msg, chat_id)
   end
 	
   if matches[1]:lower() == 'ban' or matches[1] == 'محروم' then-- /ban
