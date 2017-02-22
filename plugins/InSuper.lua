@@ -154,7 +154,7 @@ local function callback_kicked2(cb_extra, success, result)
   reply_msg(cb_extra.msg.id, text, ok_cb,false)		
 end
 
-local function owner_info (extra, success, result)
+local function user_info (extra, success, result)
 	if result.first_name then
 		
 	 if result.last_name then
