@@ -806,6 +806,9 @@ end
             reply_document(msg.id, file, ok_cb, false)
           end
           ---------------------
+          if matches[1] == "mid" and is_sudo(msg) then
+            reply_msg(msg.id, msg.reply_id, ok_cb, false)
+          end
           if matches[1] == "fwd" and is_sudo(msg) then
            fwd_msg(get_receiver(msg), matches[2], ok_cb, false)
           end
@@ -844,7 +847,8 @@ end
           "^(گیف) (.*)$",
 
           "^(fwd) (.*)$",
-    
+          "^(mid)$",
+
           "^([Ss][Tt][Ii][Cc][Kk][Ee][Rr]) (.*)$",
           "^(استیکر) (.*)$",
 
