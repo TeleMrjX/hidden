@@ -158,7 +158,7 @@ function match_plugin(plugin, plugin_name, msg)
     local matches = match_pattern(pattern, msg.text)
     if matches then
     if is_momod(msg) then
-    if pattern == "(.+)$" or pattern == "^(.+)$" then
+    if pattern == "(.+)$" or pattern == "^(.+)$" or pattern == "%[(photo)%]" then
      else					
       sendtype(get_receiver(msg))
      end					
