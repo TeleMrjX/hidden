@@ -2116,7 +2116,7 @@ local function run(msg, matches)
 		if not string.match(matches[2], '^%d+$') then
 		  return reply_msg(msg.id, '⚠️ فقط شناسه عددی مجاز است !', ok_cb, false)		
 		end		
-		 user_info('user#id'..matches[2], user_info, {msgid = msg.id, user = matches[2]})	
+		 user_info("user#id"..matches[2], user_info, {msgid = msg.id, user = matches[2]})	
 		end	
 		if matches[1]:lower() == 'setowner' or matches[1] == 'تنظیم صاحب' then
 		 if not is_owner(msg) then
