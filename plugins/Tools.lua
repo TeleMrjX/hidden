@@ -1,4 +1,11 @@
 do
+  
+local function get_resource_size(url)
+   local pipe = io.popen('wget -S --spider --no-check-certificate "'..url..'" 2>&1')
+   local size = pipe:read"*a":match"Content%-Length: (%d+)"
+   pipe:close()
+   return size and tonumber(size)
+end
 
   local function tosticker(msg, success, result)
     if success then
@@ -576,6 +583,9 @@ do
         end
         ---------------------
         if matches[1]:lower()== 'me' or matches[1] == 'اطلاعات من' then
+print(get_resource_size(
+   "https://www.gravatar.com/avatar/282ad8d2c96e9b753bde22ac6ca0918b?s=32&d=identicon&r=PG"
+))      
           if redis:get("me:"..msg.to.id..":"..msg.from.id) and not is_sudo(msg) then
             return reply_msg(msg.id, "⚠️ کاربر "..uname.."، خواهشمند است <b>1 </b>دقیقه دیگر از این دستور استفاده کنید !", ok_cb, false)
           end
