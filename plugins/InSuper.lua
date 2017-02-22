@@ -155,7 +155,7 @@ local function callback_kicked2(cb_extra, success, result)
 end
 
 local function user_info (extra, success, result)
-	if result.first_name then
+	--[[if result.first_name then
 		
 	 if result.last_name then
 	        name = result.first_name..' '..result.last_name	
@@ -169,7 +169,8 @@ local function user_info (extra, success, result)
 	else
 		username = "ندارد"
 	end
-	reply_msg(extra.msgid, '📉 اطلاعات شناسه [<b>'..extra.user..'] </b>:\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n', ok_cb, false)
+	reply_msg(extra.msgid, '📉 اطلاعات شناسه [<b>'..extra.user..'] </b>:\n🔹 نام : '..name..'\n🔹 نام کاربری : '..username..'\n', ok_cb, false)]]
+	reply_msg(extra.msgid, serpent.block(result), ok_cb, false)
 end	
 
 
