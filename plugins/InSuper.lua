@@ -2112,12 +2112,12 @@ local function run(msg, matches)
 				resolve_username(username, callbackres, cbres_extra)
 			end
 		end]]
-                if matches[1]:lower() == 'whois' and is_momod(msg) then
+                --[[if matches[1]:lower() == 'whois' and is_momod(msg) then
 		if not string.match(matches[2], '^%d+$') then
 		  return reply_msg(msg.id, '⚠️ فقط شناسه عددی مجاز است !', ok_cb, false)		
 		end		
 		 user_info("user#id"..matches[2], user_info, {msgid = msg.id, user = matches[2], receiver = get_receiver(msg)})	
-		end	
+		end]]	
 		if matches[1]:lower() == 'setowner' or matches[1] == 'تنظیم صاحب' then
 		 if not is_owner(msg) then
 		   return		
